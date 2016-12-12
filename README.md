@@ -1,1 +1,1 @@
-# Compass Omnibox [![CircleCI](https://circleci.com/gh/UrbanCompass/ngc-omnibox.svg?style=shield)](https://circleci.com/gh/UrbanCompass/ngc-omnibox)
+# Compass Omnibox [![CircleCI](https://circleci.com/gh/UrbanCompass/ngc-omnibox.svg?style=shield)](https://circleci.com/gh/UrbanCompass/ngc-omnibox) [![codecov](https://codecov.io/gh/UrbanCompass/ngc-omnibox/branch/master/graph/badge.svg)](https://codecov.io/gh/UrbanCompass/ngc-omnibox)

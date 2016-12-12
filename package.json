@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine-node tests"
+    "test": "istanbul cover --include-all-sources jasmine-node tests"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/UrbanCompass/ngc-omnibox#readme",
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "jasmine-node": "^1.14.5"
   }
 }
