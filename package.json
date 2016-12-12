@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/UrbanCompass/ngc-omnibox#readme",
   "devDependencies": {
+    "eslint": "^3.12.1",
+    "eslint-plugin-import": "^2.2.0",
     "istanbul": "^0.4.5",
     "jasmine-node": "^1.14.5"
   }

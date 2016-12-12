@@ -1,0 +1,51 @@
+{
+  "ignoreFiles": [""],
+  "rules": {
+    "block-closing-brace-newline-after": "always",
+    "block-no-single-line": true,
+    "block-opening-brace-newline-after": "always",
+    "block-opening-brace-space-before": "always",
+    "color-named": "never",
+    "color-no-hex": true,
+    "comment-whitespace-inside": "always",
+    "declaration-bang-space-after": "never",
+    "declaration-bang-space-before": "always",
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-no-shorthand-property-overrides": true,
+    "declaration-block-semicolon-newline-after": "always",
+    "declaration-block-properties-order": [
+      [
+        {"properties": ["content"]},
+        {"properties": ["display", "float", "clear"]},
+        {"properties": ["flex-flow", "flex-direction", "flex-wrap", "justify-content",
+            "align-items", "align-content"]},
+        {"properties": ["position", "top", "right", "bottom", "left"]},
+        {"properties": ["margin", "border", "padding"]},
+        {"properties": ["align-self", "flex", "flex-grow", "flex-shrink", "flex-basis", "order"]},
+        {"properties": ["width", "min-width", "max-width", "height", "min-height", "max-height"]}
+      ],
+      {"unspecified": "bottom"}
+    ],
+    "declaration-block-trailing-semicolon": "always",
+    "declaration-colon-space-after": "always",
+    "function-blacklist": ["fade"],
+    "indentation": 2,
+    "max-empty-lines": 1,
+    "max-line-length": 100,
+    "max-nesting-depth": [
+      1, {"ignore": ["at-rules-without-declaration-blocks"]}
+    ],
+    "no-eol-whitespace": true,
+    "no-missing-end-of-source-newline": true,
+    "property-blacklist": [
+      "font-family", "font-style", "font-weight"
+    ],
+    "rule-nested-empty-line-before": [
+      "always", {"except": ["first-nested"], "ignore": ["after-comment"]}
+    ],
+    "rule-non-nested-empty-line-before": ["always", {"ignore": ["after-comment"]}],
+    "selector-list-comma-newline-after": "always",
+    "string-quotes": "single",
+    "value-no-vendor-prefix": true
+  }
+}
