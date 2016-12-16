@@ -1,6 +1,10 @@
+import template from './ngcOmnibox.html';
+
 import NgcOmniboxController from './ngcOmniboxController.js';
 
 export default {
+  template,
   controller: NgcOmniboxController,
-  controllerAs: 'omnibox'
+  controllerAs: 'omnibox',
+  transclude: true
 };
