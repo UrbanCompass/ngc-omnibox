@@ -25,6 +25,15 @@ module.exports = {
           }]
         ]
       }
+    }, {
+      test: /\.html$/,
+      include: [
+        path.resolve(__dirname, 'src')
+      ],
+      exclude: [
+        path.resolve(__dirname, 'node_modules')
+      ],
+      loaders: ['html-loader']
     }]
   }
 };
