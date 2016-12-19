@@ -19,7 +19,7 @@
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
 
-      <p>Model value: {{model}}</p>
+      <p>Model value: {{demo.model}}</p>
     </main>
 
     <script src="../dist/ngc-omnibox.js"></script>
@@ -30,8 +30,8 @@
         .controller('OmniboxExampleController', function ($http, $q, $scope) {
           let fuse;
 
-          $http.get('https://api.github.com/emojis').then((response) => {
-            var emoji = Object.keys(response.data).map((id) => {
+          $http.get('https://api.github.com/emojis').then(function (response) {
+            var emoji = Object.keys(response.data).map(function (id) {
               return {
                 id,
                 url: response.data[id]
@@ -44,7 +44,6 @@
           this.model = '';
 
           this.sourceFn = function (query) {
-
             if (fuse && query) {
               var results = fuse.search(query);
               return $q.resolve(results);
