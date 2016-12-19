@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
   <body>
-    <main>
-      <ngc-omnibox></ngc-omnibox>
+    <main ng-controller="OmniboxExampleController">
+      <h1>Simple Omnibox Example</h1>
+      <button ng-click="isDisabled = !isDisabled">Toggle Disabled</button>
+      <ngc-omnibox ng-model="model" placeholder="Search here..."
+          autofocus="true" ng-disabled="isDisabled"></ngc-omnibox>
+
+      <p>Model value: {{model}}</p>
     </main>
 
     <script src="../dist/ngc-omnibox.js"></script>
     <script type="text/javascript">
-      angular.module('demoApp', ['ngc.omnibox']);
+      angular
+        .module('demoApp', ['ngc.omnibox'])
+        .controller('OmniboxExampleController', function ($scope) {
+          $scope.model = '';
+        });
     </script>
   </body>
 </html>
