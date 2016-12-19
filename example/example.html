@@ -3,6 +3,7 @@
   <body>
     <main ng-controller="OmniboxExampleController as demo">
       <h1>Simple Omnibox Example</h1>
+      <h2>Search through Github's emoji</h2>
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
           ng-model="demo.model"
@@ -13,7 +14,7 @@
 
         <ngc-omnibox-suggestions>
           <ngc-omnibox-suggestion-item ng-repeat="suggestion in omnibox.suggestions">
-            Suggestion {{::suggestion}}
+            <img ng-attr-src="{{suggestion.url}}" >
           </ngc-omnibox-suggestion-item>
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
@@ -22,15 +23,31 @@
     </main>
 
     <script src="../dist/ngc-omnibox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
     <script type="text/javascript">
       angular
         .module('demoApp', ['ngc.omnibox'])
-        .controller('OmniboxExampleController', function ($q, $scope) {
+        .controller('OmniboxExampleController', function ($http, $q, $scope) {
+          let fuse;
+
+          $http.get('https://api.github.com/emojis').then((response) => {
+            var emoji = Object.keys(response.data).map((id) => {
+              return {
+                id,
+                url: response.data[id]
+              }
+            });
+
+            fuse = new Fuse(emoji, {keys: ['id'], threshold: 0.3});
+          });
+
           this.model = '';
 
           this.sourceFn = function (query) {
-            if (query) {
-              return $q.resolve(['one', 'two', 'three']);
+
+            if (fuse && query) {
+              var results = fuse.search(query);
+              return $q.resolve(results);
             } else {
               return $q.resolve(); // Hides the suggestions
             }
