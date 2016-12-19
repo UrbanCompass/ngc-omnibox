@@ -6,11 +6,14 @@ export default {
   template,
   controller: NgcOmniboxController,
   controllerAs: 'omnibox',
-  transclude: true,
+  transclude: {
+    omniboxSuggestions: 'ngcOmniboxSuggestions'
+  },
   bindings: {
     ngModel: '=',
     placeholder: '@',
     autofocus: '@',
-    ngDisabled: '&'
+    ngDisabled: '&',
+    source: '&'
   }
 };

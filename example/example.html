@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
   <body>
-    <main ng-controller="OmniboxExampleController">
+    <main ng-controller="OmniboxExampleController as demo">
       <h1>Simple Omnibox Example</h1>
-      <button ng-click="isDisabled = !isDisabled">Toggle Disabled</button>
-      <ngc-omnibox ng-model="model" placeholder="Search here..."
-          autofocus="true" ng-disabled="isDisabled"></ngc-omnibox>
+      <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
+      <ngc-omnibox
+          ng-model="demo.model"
+          placeholder="Search here..."
+          autofocus="true"
+          ng-disabled="demo.isDisabled"
+          source="demo.sourceFn(query)">
+
+        <ngc-omnibox-suggestions>
+          <ngc-omnibox-suggestion-item ng-repeat="suggestion in omnibox.suggestions">
+            Suggestion {{::suggestion}}
+          </ngc-omnibox-suggestion-item>
+        </ngc-omnibox-suggestions>
+      </ngc-omnibox>
 
       <p>Model value: {{model}}</p>
     </main>
@@ -14,8 +25,16 @@
     <script type="text/javascript">
       angular
         .module('demoApp', ['ngc.omnibox'])
-        .controller('OmniboxExampleController', function ($scope) {
-          $scope.model = '';
+        .controller('OmniboxExampleController', function ($q, $scope) {
+          this.model = '';
+
+          this.sourceFn = function (query) {
+            if (query) {
+              return $q.resolve(['one', 'two', 'three']);
+            } else {
+              return $q.resolve(); // Hides the suggestions
+            }
+          };
         });
     </script>
   </body>
