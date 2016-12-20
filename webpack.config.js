@@ -15,16 +15,7 @@ module.exports = {
       exclude: [
         path.resolve(__dirname, 'node_modules')
       ],
-      loader: 'babel-loader',
-      options: {
-        presets: [
-          ['env', {
-            'targets': {
-              'browsers': ['last 2 versions', 'Explorer >= 11']
-            }
-          }]
-        ]
-      }
+      loader: 'babel-loader'
     }, {
       test: /\.html$/,
       include: [

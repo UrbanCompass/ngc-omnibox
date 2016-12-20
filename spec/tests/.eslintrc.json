@@ -1,0 +1,16 @@
+{
+  "env": {
+    "jasmine": true
+  },
+  "globals": {
+    "inject": false,
+    "module": false
+  },
+  "plugins": ["jasmine"],
+  "rules": {
+    "jasmine/no-focused-tests": 2,
+    "jasmine/no-suite-callback-args": 2,
+    "max-len": [2, 100, 4, {"ignorePattern": "^import\\s|^\\s*x?it\\("}],
+    "no-console": 0
+  }
+}

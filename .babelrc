@@ -1,0 +1,15 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions", "Explorer >= 11"],
+        "node": "current"
+      }
+    }]
+  ],
+  "plugins": [
+    ["babel-root-import", {
+      "rootPathSuffix": "src"
+    }]
+  ]
+}
