@@ -27,8 +27,8 @@
     <script type="text/javascript">
       angular
         .module('demoApp', ['ngc.omnibox'])
-        .controller('OmniboxExampleController', function ($http, $q, $scope) {
-          let fuse;
+        .controller('OmniboxExampleController', function ($http, $q) {
+          var fuse;
 
           $http.get('https://api.github.com/emojis').then(function (response) {
             var emoji = Object.keys(response.data).map(function (id) {
