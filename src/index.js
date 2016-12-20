@@ -7,5 +7,5 @@ import ngcOmniboxSuggestionItemDirective from './angularComponent/ngcOmniboxSugg
 export default angular.module('ngc.omnibox', [])
   .component('ngcOmnibox', ngcOmniboxComponent)
   .directive('ngcOmniboxSuggestions', ngcOmniboxSuggestionsDirective)
-  .component('ngcOmniboxSuggestionItem', ngcOmniboxSuggestionItemDirective)
+  .directive('ngcOmniboxSuggestionItem', ngcOmniboxSuggestionItemDirective)
   .name;
