@@ -6,5 +6,11 @@ export default {
   template,
   controller: NgcOmniboxController,
   controllerAs: 'omnibox',
-  transclude: true
+  transclude: true,
+  bindings: {
+    ngModel: '=',
+    placeholder: '@',
+    autofocus: '@',
+    ngDisabled: '&'
+  }
 };
