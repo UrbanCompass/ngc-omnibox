@@ -1,5 +1,10 @@
-<input type="text" role="combobox"
+<input type="text" role="combobox" aria-autocomplete="list"
+    ng-attr-aria-expanded="{{!!omnibox.suggestions && !!omnibox.suggestions.length}}"
     ng-model="omnibox.ngModel"
+    ng-change="omnibox.onInputChange()"
     ng-attr-placeholder="{{omnibox.placeholder || undefined}}"
     ng-attr-autofocus="{{::omnibox.autofocus === 'true' || undefined}}"
     ng-disabled="omnibox.ngDisabled()">
+
+<div ng-transclude="omniboxSuggestions" ng-if="omnibox.suggestions && omnibox.suggestions.length">
+</div>
