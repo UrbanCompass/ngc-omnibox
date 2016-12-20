@@ -6,7 +6,7 @@
   "scripts": {
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
-    "test": "eslint . && istanbul cover --include-all-sources jasmine-node tests"
+    "test": "eslint . && istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
