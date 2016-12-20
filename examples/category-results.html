@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+  <body>
+    <main ng-controller="OmniboxExampleController as demo">
+      <h1>Categorized Results Omnibox Example</h1>
+      <h2>Search For a Car Make by Country</h2>
+      <p>Model value: {{demo.model}}</p>
+
+      <ngc-omnibox
+          ng-model="demo.model"
+          placeholder="Enter a car make (e.g. Ford)"
+          autofocus="true"
+          source="demo.sourceFn(query)">
+
+        <ngc-omnibox-suggestions>
+          <dl ng-repeat="(country, makes) in omnibox.suggestions">
+            <dt>{{country}}</dt>
+            <ngc-omnibox-suggestion-item ng-repeat="suggestion in makes">
+              <dd>{{suggestion.make_display}}</dd>
+            </ngc-omnibox-suggestion-item>
+          </dl>
+        </ngc-omnibox-suggestions>
+      </ngc-omnibox>
+    </main>
+
+    <script src="../dist/ngc-omnibox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
+    <script type="text/javascript">
+      angular
+        .module('demoApp', ['ngc.omnibox'])
+        .config(function($sceDelegateProvider) {
+          $sceDelegateProvider.resourceUrlWhitelist([
+            'self',
+            'http://www.carqueryapi.com/api/0.3/**'
+          ]);
+        })
+        .controller('OmniboxExampleController', function ($http, $q, $scope) {
+          var demo = this;
+          var fuse;
+
+          $http.jsonp('http://www.carqueryapi.com/api/0.3/?cmd=getMakes', {
+            jsonpCallbackParam: 'callback'
+          })
+          .then(function (response) {
+            fuse = new Fuse(response.data.Makes, {keys: ['make_display'], threshold: 0.3});
+          });
+
+          this.model = '';
+
+          this.sourceFn = function (query) {
+            if (fuse && query) {
+              var byCountry = _.groupBy(fuse.search(query), 'make_country');
+              return $q.resolve(byCountry);
+            } else {
+              return $q.resolve(); // Hides the suggestions
+            }
+          };
+        });
+    </script>
+  </body>
+</html>

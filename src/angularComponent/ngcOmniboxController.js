@@ -16,4 +16,18 @@ export default class NgcOmniboxController {
       this.suggestions = suggestions;
     });
   }
+
+  hasSuggestions() {
+    const suggestions = this.suggestions;
+
+    if (!suggestions) {
+      return false;
+    } else if (Array.isArray(suggestions) && !suggestions.length) {
+      return false;
+    } else if (typeof suggestions === 'object' && !Object.keys(suggestions).length) {
+      return false;
+    }
+
+    return true;
+  }
 }
