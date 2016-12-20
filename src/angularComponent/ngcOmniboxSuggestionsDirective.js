@@ -7,7 +7,9 @@ export default function ngcOmniboxSuggestionsDirective() {
     scope: true,
     controller: NgcOmniboxSuggestionsController,
     controllerAs: '$ctrl',
-    compile: () => {
+    compile: (tElement) => {
+      tElement.attr('role', 'listbox');
+
       return {
         pre(scope, iElement, iAttrs, omnibox) {
           scope.omnibox = omnibox;

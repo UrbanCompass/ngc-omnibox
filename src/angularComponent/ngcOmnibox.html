@@ -1,4 +1,5 @@
-<input type="text" role="combobox"
+<input type="text" role="combobox" aria-autocomplete="list"
+    ng-attr-aria-expanded="{{!!omnibox.suggestions && !!omnibox.suggestions.length}}"
     ng-model="omnibox.ngModel"
     ng-change="omnibox.onInputChange()"
     ng-attr-placeholder="{{omnibox.placeholder || undefined}}"
