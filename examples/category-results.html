@@ -15,9 +15,9 @@
         <ngc-omnibox-suggestions>
           <dl ng-repeat="(country, makes) in omnibox.suggestions">
             <dt>{{country}}</dt>
-            <ngc-omnibox-suggestion-item ng-repeat="suggestion in makes">
-              <dd>{{suggestion.make_display}}</dd>
-            </ngc-omnibox-suggestion-item>
+            <dd ngc-omnibox-suggestion-item ng-repeat="suggestion in makes">
+              {{suggestion.make_display}}
+            </dd>
           </dl>
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
