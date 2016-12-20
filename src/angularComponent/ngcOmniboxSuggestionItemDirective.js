@@ -7,7 +7,7 @@ export default function ngcOmniboxSuggestionsDirective() {
     scope: true,
     controller: NgcOmniboxSuggestionItemController,
     controllerAs: '$ctrl',
-    compile: () => {
+    compile() {
       return {
         pre(scope, iElement, iAttrs, omnibox) {
           scope.omnibox = omnibox;
