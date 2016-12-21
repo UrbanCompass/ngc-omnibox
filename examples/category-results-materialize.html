@@ -24,7 +24,7 @@
           <dl ng-repeat="(country, makes) in omnibox.suggestions">
             <dt class="collection-header"><h5>{{country}}</h5></dt>
             <dd class="collection-item" ngc-omnibox-suggestion-item ng-repeat="suggestion in makes"
-                ng-class="{'active': omnibox.highlightedIndex == getIndex()}">
+                ng-class="{'active': omnibox.highlightedIndex == suggestionItem.getIndex()}">
               {{suggestion.make_display}}
             </dd>
           </dl>

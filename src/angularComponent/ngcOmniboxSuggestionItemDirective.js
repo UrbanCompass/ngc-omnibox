@@ -7,7 +7,7 @@ export default function ngcOmniboxSuggestionsDirective() {
     require: ['^^ngcOmnibox', '^^ngcOmniboxSuggestions'],
     scope: true,
     controller: NgcOmniboxSuggestionItemController,
-    controllerAs: '$ctrl',
+    controllerAs: 'suggestionItem',
     compile(tElement) {
       // Allows us to use document.getElementsByName which is fast AND returns a live-updating
       // HTMLCollection
@@ -17,7 +17,7 @@ export default function ngcOmniboxSuggestionsDirective() {
       return {
         pre(scope, iElement, iAttrs, [omnibox]) {
           scope.omnibox = omnibox;
-          scope.getIndex = () => omnibox.getSuggestionItemIndex(iElement[0]);
+          scope.suggestionItem.getIndex = () => omnibox.getSuggestionItemIndex(iElement[0]);
         }
       };
     }
