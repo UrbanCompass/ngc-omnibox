@@ -133,8 +133,17 @@ export default class NgcOmniboxController {
     this._suggestionItems.length = 0;
     this.highlightedIndex = -1;
 
-    this.source({query: this.ngModel}).then((suggestions) => {
+    this.source({query: this.query}).then((suggestions) => {
       this.suggestions = suggestions;
     });
+  }
+
+  _selectItem(item) {
+    if (this.multiple) {
+      this.ngModel = this.ngModel || [];
+      this.ngModel.push(item);
+    } else {
+      this.ngModel = item;
+    }
   }
 }
