@@ -4,6 +4,8 @@
     <main ng-controller="OmniboxExampleController as demo">
       <h1>Simple Omnibox Example</h1>
       <h2>Search through Github's emoji</h2>
+      <p>Model value: {{demo.model}}</p>
+
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
           ng-model="demo.model"
@@ -18,8 +20,6 @@
           </ngc-omnibox-suggestion-item>
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
-
-      <p>Model value: {{demo.model}}</p>
     </main>
 
     <script src="../dist/ngc-omnibox.js"></script>
