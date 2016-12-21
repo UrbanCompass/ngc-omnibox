@@ -77,7 +77,7 @@ export default class NgcOmniboxController {
    * Tries to update the index of the currently highlighted item to be the next item in the list. If
    * we've reached the end, it'll loop back around and highlight the first item.
    *
-   * @returns {Boolean} -- Index of the newly highlighted item
+   * @returns {Number} -- Index of the newly highlighted item
    */
   highlightPrevious() {
     if (this.highlightedIndex > 0) {
@@ -93,7 +93,7 @@ export default class NgcOmniboxController {
    * Tries to update the index of the currently highlighted item to be the previous item in the
    * list. If we've reached the starrt, it'll loop back and highlight the last item.
    *
-   * @returns {Boolean} -- Index of the newly highlighted item
+   * @returns {Number} -- Index of the newly highlighted item
    */
   highlightNext() {
     if (this.highlightedIndex < this._suggestionElements.length - 1) {
