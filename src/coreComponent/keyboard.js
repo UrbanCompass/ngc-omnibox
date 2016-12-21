@@ -188,3 +188,13 @@ export function isVerticalMovementKey(keyCode) {
 export function isHorizontalMovementKey(keyCode) {
   return [KEY.LEFT, KEY.RIGHT, KEY.BACKSPACE, KEY.DELETE].includes(keyCode);
 }
+
+/**
+ * Returns true if pressing this key should select a highlighted item.
+ *
+ * @param {Number} keyCode
+ * @returns {Boolean}
+ */
+export function isSelectKey(keyCode) {
+  return [KEY.ENTER, KEY.TAB].includes(keyCode);
+}
