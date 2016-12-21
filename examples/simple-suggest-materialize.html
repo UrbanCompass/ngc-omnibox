@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+  <style>
+    ngc-omnibox-suggestions {
+      display: block;
+    }
+
+    ngc-omnibox-suggestion-item {
+      display: inline-block;
+    }
+  </style>
+</head>
+  <body>
+    <main class="container" ng-controller="OmniboxExampleController as demo">
+      <h1>Simple Omnibox Example</h1>
+      <h2>Search through Github's emoji</h2>
+      <p>Model value: {{demo.model}}</p>
+
+      <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
+      <ngc-omnibox
+          ng-model="demo.model"
+          placeholder="Search here..."
+          autofocus="true"
+          ng-disabled="demo.isDisabled"
+          source="demo.sourceFn(query)">
+
+        <ngc-omnibox-suggestions class="collection">
+          <ngc-omnibox-suggestion-item class="collection-item"
+              ng-repeat="suggestion in omnibox.suggestions"
+              ng-class="{'active': omnibox.highlightedIndex == getIndex()}">
+            <img ng-attr-src="{{suggestion.url}}" >
+          </ngc-omnibox-suggestion-item>
+        </ngc-omnibox-suggestions>
+      </ngc-omnibox>
+    </main>
+
+    <script src="../dist/ngc-omnibox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <script type="text/javascript">
+      angular
+        .module('demoApp', ['ngc.omnibox'])
+        .controller('OmniboxExampleController', function ($http, $q) {
+          var fuse;
+
+          $http.get('https://api.github.com/emojis').then(function (response) {
+            var emoji = Object.keys(response.data).map(function (id) {
+              return {
+                id,
+                url: response.data[id]
+              }
+            });
+
+            fuse = new Fuse(emoji, {keys: ['id'], threshold: 0.3});
+          });
+
+          this.model = '';
+
+          this.sourceFn = function (query) {
+            if (fuse && query) {
+              var results = fuse.search(query);
+              return $q.resolve(results);
+            } else {
+              return $q.resolve(); // Hides the suggestions
+            }
+          };
+        });
+    </script>
+  </body>
+</html>
