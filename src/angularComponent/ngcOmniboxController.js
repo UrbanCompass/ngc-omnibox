@@ -1,4 +1,4 @@
-import {KEY, isVerticalMovement} from '../coreComponent/keyboard.js';
+import {KEY, isVerticalMovementKey} from '../coreComponent/keyboard.js';
 
 export const INSTANCE_ID = `ngc-omnibox-${new Date().getTime() * Math.random()}`;
 export const SUGGESTION_ITEM_NAME = `${INSTANCE_ID}-suggestion-item`;
@@ -38,7 +38,7 @@ export default class NgcOmniboxController {
 
     if (this.hasSuggestions()) {
 
-      if (isVerticalMovement(keyCode)) {
+      if (isVerticalMovementKey(keyCode)) {
         $event.preventDefault();
         $event.stopPropagation();
       }

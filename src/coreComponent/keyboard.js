@@ -140,7 +140,7 @@ export const CODE_MAP = {
  * @param {Event} event
  * @returns {Boolean}
  */
-export function isModifier(event) {
+export function isModifierKey(event) {
   const keyCode = event.which;
 
   switch (keyCode) {
@@ -175,7 +175,7 @@ export function isFunctionKey(keyCode) {
  * @param {Number} keyCode
  * @returns {Boolean}
  */
-export function isVerticalMovement(keyCode) {
+export function isVerticalMovementKey(keyCode) {
   return [KEY.UP, KEY.DOWN].includes(keyCode);
 }
 
@@ -185,6 +185,6 @@ export function isVerticalMovement(keyCode) {
  * @param {Number} keyCode
  * @returns {Boolean}
  */
-export function isHorizontalMovement(keyCode) {
+export function isHorizontalMovementKey(keyCode) {
   return [KEY.LEFT, KEY.RIGHT, KEY.BACKSPACE, KEY.DELETE].includes(keyCode);
 }
