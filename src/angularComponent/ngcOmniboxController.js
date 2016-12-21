@@ -19,8 +19,6 @@ export default class NgcOmniboxController {
   }
 
   $postLink() {
-    this.inputEl = this.$element[0].querySelector('input[role="combobox"]');
-
     this._suggestionElements = this.$document[0].getElementsByName(
       SUGGESTION_ITEM_NAME
     ); // Live HTMLCollection so it's always automatically up to date
@@ -131,11 +129,13 @@ export default class NgcOmniboxController {
   }
 
   _updateHighlightedItem() {
-    let selectedEl = this.$element[0].querySelector('[aria-selected]');
-    selectedEl && selectedEl.removeAttribute('aria-selected');
+    const selectedEls = this.$element[0].querySelectorAll('[aria-selected]');
+    selectedEls && selectedEls.forEach((el) => {
+      el.removeAttribute('aria-selected');
+    });
 
-    selectedEl = this._suggestionElements[this.highlightedIndex];
-    selectedEl && selectedEl.setAttribute('aria-selected', true);
+    const newSelection = this._suggestionElements[this.highlightedIndex];
+    newSelection && newSelection.setAttribute('aria-selected', true);
   }
 
   _updateSuggestions() {
