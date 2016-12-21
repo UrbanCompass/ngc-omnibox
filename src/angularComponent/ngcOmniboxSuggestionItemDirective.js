@@ -5,7 +5,7 @@ export default function ngcOmniboxSuggestionsDirective() {
   return {
     restrict: 'AE',
     require: ['^^ngcOmnibox', '^^ngcOmniboxSuggestions'],
-    scope: false,
+    scope: true,
     controller: NgcOmniboxSuggestionItemController,
     controllerAs: '$ctrl',
     compile(tElement) {
