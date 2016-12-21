@@ -1,5 +1,7 @@
 import {KEY, isVerticalMovement} from '../coreComponent/keyboard.js';
 
+export const INSTANCE_ID = `ngc-omnibox-${new Date().getTime() * Math.random()}`;
+export const SUGGESTION_ITEM_NAME = `${INSTANCE_ID}-suggestion-item`;
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
@@ -20,7 +22,7 @@ export default class NgcOmniboxController {
     this.inputEl = this.$element[0].querySelector('input[role="combobox"]');
 
     this._suggestionElements = this.$document[0].getElementsByName(
-      'ngc-omnibox-suggestion-item'
+      SUGGESTION_ITEM_NAME
     ); // Live HTMLCollection so it's always automatically up to date
 
     // Cached copy as an array we can do transformations on

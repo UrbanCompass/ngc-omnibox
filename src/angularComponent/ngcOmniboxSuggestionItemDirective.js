@@ -1,3 +1,4 @@
+import {SUGGESTION_ITEM_NAME} from './ngcOmniboxController.js';
 import NgcOmniboxSuggestionItemController from './ngcOmniboxSuggestionItemController.js';
 
 export default function ngcOmniboxSuggestionsDirective() {
@@ -10,7 +11,7 @@ export default function ngcOmniboxSuggestionsDirective() {
     compile(tElement) {
       // Allows us to use document.getElementsByName which is fast AND returns a live-updating
       // HTMLCollection
-      tElement.attr('name', 'ngc-omnibox-suggestion-item');
+      tElement.attr('name', SUGGESTION_ITEM_NAME);
       tElement.attr('role', 'option');
 
       return {
