@@ -146,9 +146,9 @@ export default class NgcOmniboxController {
       this.suggestions = suggestions;
 
       // Wait for DOM to update, then keep a cached copy of the HTMLCollection for indexOf lookup
-      this.$timeout(() => {}, 0).then(() => {
+      this.$timeout(() => {
         this._cachedNodeList = Array.prototype.slice.apply(this._suggestionElements);
-      });
+      }, 0);
     });
   }
 }
