@@ -6,8 +6,8 @@ export default function ngcOmniboxSuggestionsDirective() {
     require: '^^ngcOmnibox',
     scope: true,
     controller: NgcOmniboxSuggestionsController,
-    controllerAs: '$ctrl',
-    compile: (tElement) => {
+    controllerAs: 'suggestions',
+    compile(tElement) {
       tElement.attr('role', 'listbox');
 
       return {
