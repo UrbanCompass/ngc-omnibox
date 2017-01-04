@@ -3,7 +3,10 @@ import NgcOmniboxSuggestionItemController from './ngcOmniboxSuggestionItemContro
 export default function ngcOmniboxSuggestionItemDirective() {
   return {
     restrict: 'AE',
-    require: ['^^ngcOmnibox', '^^ngcOmniboxSuggestions'],
+    require: {
+      omnibox: '^^ngcOmnibox',
+      suggestions: '^^ngcOmniboxSuggestions'
+    },
     scope: true,
     bindToController: {
       suggestion: '<'
