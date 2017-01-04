@@ -49,7 +49,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    expect(getModifiedTemplate(element, [document], templateCache, 'category-tmpl'))
+    expect(getModifiedTemplate(element, [document], templateCache))
         .toBe(unCategorizedTemplateOutput);
   });
 
