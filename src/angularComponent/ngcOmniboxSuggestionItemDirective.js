@@ -17,7 +17,7 @@ export default function ngcOmniboxSuggestionItemDirective() {
       tElement.attr('role', 'option');
 
       return {
-        pre(scope, iElement, iAttrs, [omnibox]) {
+        pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
         }
       };

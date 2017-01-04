@@ -6,7 +6,7 @@
   "scripts": {
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
-    "test": "eslint . && istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine"
+    "test": "istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine && eslint ."
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "istanbul": "^0.4.5",
     "jasmine": "^2.5.2",
     "jasmine-node": "^1.14.5",
+    "jsdom": "^9.9.1",
     "webpack": "^2.2.0-rc.0"
   },
   "dependencies": {
