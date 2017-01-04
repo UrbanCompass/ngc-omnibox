@@ -1,4 +1,4 @@
-import {KEY, isVerticalMovementKey} from '../coreComponent/keyboard.js';
+import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard.js';
 
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
@@ -45,9 +45,14 @@ export default class NgcOmniboxController {
     }
   }
 
-  onKeyUp() {
+  onKeyUp($event) {
     this.$timeout.cancel(this._keyDownTimeout);
     this._keyDownTimeout = null;
+
+    if (this.hasSuggestions() && isSelectKey($event.which)) {
+      const selection = this._suggestionsUiList[this.highlightedIndex];
+      selection && this._selectItem(selection.data);
+    }
   }
 
   /**
@@ -201,6 +206,10 @@ export default class NgcOmniboxController {
   }
 
   _selectItem(item) {
+    if (!item) {
+      return null;
+    }
+
     if (this.multiple) {
       this.ngModel = this.ngModel || [];
       this.ngModel.push(item);
