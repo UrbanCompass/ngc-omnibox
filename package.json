@@ -30,6 +30,7 @@
     "istanbul": "^0.4.5",
     "jasmine": "^2.5.2",
     "jasmine-node": "^1.14.5",
+    "jsdom": "^9.9.1",
     "webpack": "^2.2.0-rc.0"
   },
   "dependencies": {
