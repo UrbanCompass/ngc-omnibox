@@ -63,6 +63,7 @@ export default function ngcOmniboxSuggestionsDirective($document, $templateCache
           itemChildrenEl.setAttribute(attr.name, attr.value);
         }
       }
+      itemChildrenEl.removeAttribute('ngc-omnibox-suggestion-item');
       itemEl.parentNode.appendChild(itemChildrenEl);
 
       categoryContainer.appendChild(categoryEl);
