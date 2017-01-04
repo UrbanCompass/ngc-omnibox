@@ -37,7 +37,8 @@ export default class NgcOmniboxController {
    * @param {Object} item
    */
   deregisterItem(item) {
-    this._suggestionItems.indexOf(item);
+    const index = this._suggestionItems.indexOf(item);
+    this._suggestionItems.splice(index, 1);
   }
 
   onInputChange() {
