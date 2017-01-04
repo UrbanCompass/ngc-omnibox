@@ -8,9 +8,9 @@
  *     recursively rendering the template
  * @returns {String} Modified template string
  */
-modifySuggestionsTemplateFactory.$inject = ['$document', '$templateCache'];
-export default function modifySuggestionsTemplateFactory($document, $templateCache) {
-  return function modifySuggestionsTemplate(element,
+ngcModifySuggestionsTemplateFactory.$inject = ['$document', '$templateCache'];
+export default function ngcModifySuggestionsTemplateFactory($document, $templateCache) {
+  return function ngcModifySuggestionsTemplate(element,
       templateCacheName = `category-tmpl-${new Date().getTime() * Math.random()}`) {
     const doc = $document[0];
 

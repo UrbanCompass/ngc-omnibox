@@ -1,6 +1,6 @@
 import jsdom from 'jsdom';
 
-import modifySuggestionsTemplateFactory from '~/angularComponent/modifySuggestionsTemplateFactory.js';
+import ngcModifySuggestionsTemplateFactory from '~/angularComponent/ngcModifySuggestionsTemplateFactory.js';
 
 /* eslint-disable indent */
 
@@ -40,9 +40,9 @@ const categorizedTemplateOutput = [
 
 /* eslint-enable indent */
 
-describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
+describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () => {
   const templateCache = {put: () => {}};
-  let modifySuggestionsTemplate;
+  let ngcModifySuggestionsTemplate;
 
   it('should modify an un-categorized element', () => {
     const elementTemplate =
@@ -50,8 +50,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    modifySuggestionsTemplate = modifySuggestionsTemplateFactory([document], templateCache);
-    expect(modifySuggestionsTemplate(element)).toBe(unCategorizedTemplateOutput);
+    ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
+    expect(ngcModifySuggestionsTemplate(element)).toBe(unCategorizedTemplateOutput);
   });
 
   it('should modify a categorized element', () => {
@@ -60,7 +60,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    modifySuggestionsTemplate = modifySuggestionsTemplateFactory([document], templateCache);
-    expect(modifySuggestionsTemplate(element, 'category-tmpl')).toBe(categorizedTemplateOutput);
+    ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
+    expect(ngcModifySuggestionsTemplate(element, 'category-tmpl')).toBe(categorizedTemplateOutput);
   });
 });

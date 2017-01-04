@@ -1,7 +1,7 @@
 import NgcOmniboxSuggestionsController from './ngcOmniboxSuggestionsController.js';
 
-ngcOmniboxSuggestionsDirective.$inject = ['modifySuggestionsTemplate'];
-export default function ngcOmniboxSuggestionsDirective(modifySuggestionsTemplate) {
+ngcOmniboxSuggestionsDirective.$inject = ['ngcModifySuggestionsTemplate'];
+export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTemplate) {
 
   return {
     restrict: 'E',
@@ -10,7 +10,7 @@ export default function ngcOmniboxSuggestionsDirective(modifySuggestionsTemplate
     controller: NgcOmniboxSuggestionsController,
     controllerAs: 'suggestions',
     compile(tElement) {
-      tElement.html(modifySuggestionsTemplate(tElement[0]));
+      tElement.html(ngcModifySuggestionsTemplate(tElement[0]));
 
       return {
         pre(scope, iElement, iAttrs, omnibox) {
