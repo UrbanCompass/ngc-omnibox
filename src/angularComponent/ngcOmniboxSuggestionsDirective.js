@@ -54,7 +54,6 @@ export default function ngcOmniboxSuggestionsDirective($document, $templateCache
       categoryEl.setAttribute('ng-if', 'suggestion.children');
 
       const itemChildrenEl = doc.createElement('div');
-      itemChildrenEl.setAttribute('ngc-omnibox-suggestion-item', '');
       itemChildrenEl.setAttribute('ng-repeat', 'suggestion in suggestion.children');
       itemChildrenEl.setAttribute('ng-include', `'${templateCacheName}'`);
       if (itemEl.hasAttributes()) {
@@ -63,7 +62,6 @@ export default function ngcOmniboxSuggestionsDirective($document, $templateCache
           itemChildrenEl.setAttribute(attr.name, attr.value);
         }
       }
-      itemChildrenEl.removeAttribute('ngc-omnibox-suggestion-item');
       itemEl.parentNode.appendChild(itemChildrenEl);
 
       categoryContainer.appendChild(categoryEl);
