@@ -1,6 +1,6 @@
 import jsdom from 'jsdom';
 
-import NgcOmniboxSuggestionsTemplateService from '~/angularComponent/ngcOmniboxSuggestionsTemplateService.js';
+import modifySuggestionsTemplateFactory from '~/angularComponent/modifySuggestionsTemplateFactory.js';
 
 /* eslint-disable indent */
 
@@ -42,7 +42,7 @@ const categorizedTemplateOutput = [
 
 describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
   const templateCache = {put: () => {}};
-  let ngcOmniboxSuggestionsTemplate;
+  let modifySuggestionsTemplate;
 
   it('should modify an un-categorized element', () => {
     const elementTemplate =
@@ -50,11 +50,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    ngcOmniboxSuggestionsTemplate = new NgcOmniboxSuggestionsTemplateService([document],
-        templateCache);
-
-    expect(ngcOmniboxSuggestionsTemplate.getModifiedTemplate(element))
-        .toBe(unCategorizedTemplateOutput);
+    modifySuggestionsTemplate = modifySuggestionsTemplateFactory([document], templateCache);
+    expect(modifySuggestionsTemplate(element)).toBe(unCategorizedTemplateOutput);
   });
 
   it('should modify a categorized element', () => {
@@ -63,10 +60,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    ngcOmniboxSuggestionsTemplate = new NgcOmniboxSuggestionsTemplateService([document],
-        templateCache);
-
-    expect(ngcOmniboxSuggestionsTemplate.getModifiedTemplate(element, 'category-tmpl'))
-        .toBe(categorizedTemplateOutput);
+    modifySuggestionsTemplate = modifySuggestionsTemplateFactory([document], templateCache);
+    expect(modifySuggestionsTemplate(element, 'category-tmpl')).toBe(categorizedTemplateOutput);
   });
 });
