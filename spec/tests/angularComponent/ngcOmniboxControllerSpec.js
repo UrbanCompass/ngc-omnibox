@@ -52,6 +52,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   describe('when navigating via the keyboard', () => {
     it('should highlight the next suggestion', () => {
+      ['test', 'me'].forEach((item) => omniboxController.registerItem(item));
+
       expect(omniboxController.highlightedIndex).toBe(-1);
 
       omniboxController.highlightNext();
@@ -62,6 +64,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should highlight the previous suggestion', () => {
+      ['test', 'me', 'too'].forEach((item) => omniboxController.registerItem(item));
+
       omniboxController.highlightedIndex = 1;
 
       omniboxController.highlightPrevious();
@@ -69,6 +73,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should wrap around the selection', () => {
+      ['test', 'me', 'again', 'please'].forEach((item) => omniboxController.registerItem(item));
       omniboxController.highlightedIndex = 0;
 
       omniboxController.highlightPrevious();
