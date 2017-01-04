@@ -116,7 +116,8 @@ export default class NgcOmniboxController {
   }
 
   isHighlighted(item) {
-    return this._suggestionItems.indexOf(item) === this.highlightedIndex;
+    const index = this._suggestionItems.indexOf(item);
+    return index >= 0 && index === this.highlightedIndex;
   }
 
   _handleKeyDown(keyCode) {
