@@ -12,11 +12,13 @@
           autofocus="true"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-suggestions>
-          <dl ng-repeat="(country, makes) in omnibox.suggestions">
-            <dt>{{country}}</dt>
-            <dd ngc-omnibox-suggestion-item ng-repeat="suggestion in makes">
-              {{suggestion.make_display}}
+        <ngc-omnibox-suggestions class="collection with-header">
+          <dl ngc-omnibox-suggestion-category>
+            <dt>
+              <h5>{{suggestion.make_country}}</h5>
+            </dt>
+            <dd>
+              <ngc-omnibox-suggestion-item>{{suggestion.make_display}}</ngc-omnibox-suggestion-item>
             </dd>
           </dl>
         </ngc-omnibox-suggestions>
@@ -50,8 +52,25 @@
 
           this.sourceFn = function (query) {
             if (fuse && query) {
-              var byCountry = _.groupBy(fuse.search(query), 'make_country');
-              return $q.resolve(byCountry);
+              const grouped = {};
+              const results = fuse.search(query);
+
+              // Populate groups with results
+              results.forEach((result) => {
+                const groupName = result.make_country;
+                if (!grouped[groupName]) {
+                  grouped[groupName] = {
+                    make_country: result.make_country,
+                    children: []
+                  };
+                }
+
+                grouped[groupName].children.push(result);
+              });
+
+              const data = Object.keys(grouped).map((groupName) => grouped[groupName]);
+
+              return $q.resolve(data);
             } else {
               return $q.resolve(); // Hides the suggestions
             }
