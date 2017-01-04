@@ -22,7 +22,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.hasSuggestions()).toBe(false);
     });
 
-    it('should return false for suggestions that aren\'t Arrays or Objects', () => {
+    it('should return false for suggestions that aren\'t an Array', () => {
       omniboxController.suggestions = 'false';
       expect(omniboxController.hasSuggestions()).toBe(false);
 
@@ -31,27 +31,26 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.suggestions = 100;
       expect(omniboxController.hasSuggestions()).toBe(false);
-    });
-
-    it('should return false for empty Arrays and Objects', () => {
-      omniboxController.suggestions = [];
-      expect(omniboxController.hasSuggestions()).toBe(false);
-
-      omniboxController.suggestions = {};
-      expect(omniboxController.hasSuggestions()).toBe(false);
-    });
-
-    it('should return true for non-empty Arrays and Objects', () => {
-      omniboxController.suggestions = ['test', 'me'];
-      expect(omniboxController.hasSuggestions()).toBe(true);
 
       omniboxController.suggestions = {test: 'me'};
+      expect(omniboxController.hasSuggestions()).toBe(false);
+    });
+
+    it('should return false for empty Arrays', () => {
+      omniboxController.suggestions = [];
+      expect(omniboxController.hasSuggestions()).toBe(false);
+    });
+
+    it('should return true for non-empty Arrays', () => {
+      omniboxController.suggestions = ['test', 'me'];
       expect(omniboxController.hasSuggestions()).toBe(true);
     });
   });
 
   describe('when navigating via the keyboard', () => {
     it('should highlight the next suggestion', () => {
+      ['test', 'me'].forEach((item) => omniboxController.registerItem(item));
+
       expect(omniboxController.highlightedIndex).toBe(-1);
 
       omniboxController.highlightNext();
@@ -62,6 +61,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should highlight the previous suggestion', () => {
+      ['test', 'me', 'too'].forEach((item) => omniboxController.registerItem(item));
+
       omniboxController.highlightedIndex = 1;
 
       omniboxController.highlightPrevious();
@@ -69,6 +70,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should wrap around the selection', () => {
+      ['test', 'me', 'again', 'please'].forEach((item) => omniboxController.registerItem(item));
       omniboxController.highlightedIndex = 0;
 
       omniboxController.highlightPrevious();

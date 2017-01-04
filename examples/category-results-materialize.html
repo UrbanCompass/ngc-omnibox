@@ -21,11 +21,15 @@
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-suggestions class="collection with-header">
-          <dl ng-repeat="(country, makes) in omnibox.suggestions">
-            <dt class="collection-header"><h5>{{country}}</h5></dt>
-            <dd class="collection-item" ngc-omnibox-suggestion-item ng-repeat="suggestion in makes"
-                ng-class="{'active': omnibox.highlightedIndex == suggestionItem.getIndex()}">
-              {{suggestion.make_display}}
+          <dl ngc-omnibox-suggestion-category>
+            <dt class="collection-header">
+              <h5>{{suggestion.make_country}}</h5>
+            </dt>
+            <dd>
+              <ngc-omnibox-suggestion-item class="collection-item"
+                  ng-class="{'active': omnibox.isHighlighted(suggestion)}">
+                {{suggestion.make_display}}
+              </ngc-omnibox-suggestion-item>
             </dd>
           </dl>
         </ngc-omnibox-suggestions>
@@ -34,7 +38,6 @@
 
     <script src="../dist/ngc-omnibox.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
     <script type="text/javascript">
       angular
         .module('demoApp', ['ngc.omnibox'])
@@ -59,8 +62,25 @@
 
           this.sourceFn = function (query) {
             if (fuse && query) {
-              var byCountry = _.groupBy(fuse.search(query), 'make_country');
-              return $q.resolve(byCountry);
+              const grouped = {};
+              const results = fuse.search(query);
+
+              // Populate groups with results
+              results.forEach((result) => {
+                const groupName = result.make_country;
+                if (!grouped[groupName]) {
+                  grouped[groupName] = {
+                    make_country: result.make_country,
+                    children: []
+                  };
+                }
+
+                grouped[groupName].children.push(result);
+              });
+
+              const data = Object.keys(grouped).map((groupName) => grouped[groupName]);
+
+              return $q.resolve(data);
             } else {
               return $q.resolve(); // Hides the suggestions
             }

@@ -28,9 +28,8 @@
 
         <ngc-omnibox-suggestions class="collection">
           <ngc-omnibox-suggestion-item class="collection-item"
-              ng-repeat="suggestion in omnibox.suggestions"
-              ng-class="{'active': omnibox.highlightedIndex == getIndex()}">
-            <img ng-attr-src="{{suggestion.url}}" >
+              ng-class="{'active': omnibox.isHighlighted(suggestion)}">
+             <img ng-attr-src="{{suggestion.url}}" >
           </ngc-omnibox-suggestion-item>
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
