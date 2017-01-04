@@ -26,7 +26,8 @@
               <h5>{{suggestion.make_country}}</h5>
             </dt>
             <dd>
-              <ngc-omnibox-suggestion-item class="collection-item">
+              <ngc-omnibox-suggestion-item class="collection-item"
+                  ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 {{suggestion.make_display}}
               </ngc-omnibox-suggestion-item>
             </dd>

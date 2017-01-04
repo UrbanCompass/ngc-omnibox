@@ -69,11 +69,13 @@ export default function ngcOmniboxSuggestionsDirective($document, $templateCache
       categoryContainer.appendChild(categoryEl);
       categoryContainer.appendChild(itemEl);
       itemEl.setAttribute('ng-if', '!suggestion.children');
+      itemEl.setAttribute('suggestion', 'suggestion');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
       return categoryContainer.outerHTML;
     } else if (itemEl) {
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
+      itemEl.setAttribute('suggestion', 'suggestion');
       return itemEl.outerHTML;
     } else {
       throw new Error('ngcOmniboxSuggestions requires an ngcOmniboxSuggestionItem');

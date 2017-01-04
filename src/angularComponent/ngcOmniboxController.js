@@ -1,7 +1,5 @@
 import {KEY, isVerticalMovementKey} from '../coreComponent/keyboard.js';
 
-export const INSTANCE_ID = `ngc-omnibox-${new Date().getTime() * Math.random()}`;
-export const SUGGESTION_ITEM_NAME = `${INSTANCE_ID}-suggestion-item`;
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
@@ -15,16 +13,31 @@ export default class NgcOmniboxController {
     this.$element = $element;
     this.$timeout = $timeout;
 
+    this._suggestionItems = [];
+
     this.highlightedIndex = -1; // -1 means nothing is highlighted
   }
 
   $postLink() {
-    this._suggestionElements = this.$document[0].getElementsByName(
-      SUGGESTION_ITEM_NAME
-    ); // Live HTMLCollection so it's always automatically up to date
 
-    // Cached copy as an array we can do transformations on
-    this._cachedNodeList = Array.prototype.slice.apply(this._suggestionElements);
+  }
+
+  /**
+   * Register an item so that it can receive keyboard focus events.
+   *
+   * @param {Object} item
+   */
+  registerItem(item) {
+    this._suggestionItems.push(item);
+  }
+
+  /**
+   * De-register an item so no longer receives keyboard focus events.
+   *
+   * @param {Object} item
+   */
+  deregisterItem(item) {
+    this._suggestionItems.indexOf(item);
   }
 
   onInputChange() {
@@ -83,7 +96,7 @@ export default class NgcOmniboxController {
     if (this.highlightedIndex > 0) {
       this.highlightedIndex--;
     } else {
-      this.highlightedIndex = this._suggestionElements.length - 1;
+      this.highlightedIndex = this._suggestionItems.length - 1;
     }
 
     return this.highlightedIndex;
@@ -96,7 +109,7 @@ export default class NgcOmniboxController {
    * @returns {Number} -- Index of the newly highlighted item
    */
   highlightNext() {
-    if (this.highlightedIndex < this._suggestionElements.length - 1) {
+    if (this.highlightedIndex < this._suggestionItems.length - 1) {
       this.highlightedIndex++;
     } else {
       this.highlightedIndex = 0;
@@ -105,15 +118,8 @@ export default class NgcOmniboxController {
     return this.highlightedIndex;
   }
 
-  /**
-   * Returns the overall index of suggestion HTML element in our list of suggestions.
-   *
-   * @param {HTMLElement} elem
-   * @returns {Number|Null}
-   */
-  getSuggestionItemIndex(elem) {
-    const index = this._cachedNodeList.indexOf(elem);
-    return index >= 0 ? index : null; // -1 is our index for nothing highlighted
+  isHighlighted(item) {
+    return this._suggestionItems.indexOf(item) === this.highlightedIndex;
   }
 
   _handleKeyDown(keyCode) {
@@ -124,31 +130,14 @@ export default class NgcOmniboxController {
     } else if (keyCode === KEY.ESC) {
       this.highlightedIndex = -1;
     }
-
-    this._updateHighlightedItem();
-  }
-
-  _updateHighlightedItem() {
-    const selectedEls = this.$element[0].querySelectorAll('[aria-selected]');
-    selectedEls && selectedEls.forEach((el) => {
-      el.removeAttribute('aria-selected');
-    });
-
-    const newSelection = this._suggestionElements[this.highlightedIndex];
-    newSelection && newSelection.setAttribute('aria-selected', true);
   }
 
   _updateSuggestions() {
-    this._cachedNodeList.length = 0;
+    this._suggestionItems.length = 0;
     this.highlightedIndex = -1;
 
     this.source({query: this.ngModel}).then((suggestions) => {
       this.suggestions = suggestions;
-
-      // Wait for DOM to update, then keep a cached copy of the HTMLCollection for indexOf lookup
-      this.$timeout(() => {
-        this._cachedNodeList = Array.prototype.slice.apply(this._suggestionElements);
-      }, 0);
     });
   }
 }
