@@ -3,7 +3,6 @@
  * the data structure of the Omnibox. The template will be different depending on whether it finds
  * an ngc-omnibox-suggestion-category or not.
  *
- * @private
  * @param {HTMLElement} element -- HTMLElement that contains the template to modify
  * @param {String} templateCacheName -- Unique string to use as the template cache name for
  *     recursively rendering the template
