@@ -22,7 +22,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.hasSuggestions()).toBe(false);
     });
 
-    it('should return false for suggestions that aren\'t Arrays or Objects', () => {
+    it('should return false for suggestions that aren\'t an Array', () => {
       omniboxController.suggestions = 'false';
       expect(omniboxController.hasSuggestions()).toBe(false);
 
@@ -31,21 +31,18 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.suggestions = 100;
       expect(omniboxController.hasSuggestions()).toBe(false);
-    });
-
-    it('should return false for empty Arrays and Objects', () => {
-      omniboxController.suggestions = [];
-      expect(omniboxController.hasSuggestions()).toBe(false);
-
-      omniboxController.suggestions = {};
-      expect(omniboxController.hasSuggestions()).toBe(false);
-    });
-
-    it('should return true for non-empty Arrays and Objects', () => {
-      omniboxController.suggestions = ['test', 'me'];
-      expect(omniboxController.hasSuggestions()).toBe(true);
 
       omniboxController.suggestions = {test: 'me'};
+      expect(omniboxController.hasSuggestions()).toBe(false);
+    });
+
+    it('should return false for empty Arrays', () => {
+      omniboxController.suggestions = [];
+      expect(omniboxController.hasSuggestions()).toBe(false);
+    });
+
+    it('should return true for non-empty Arrays', () => {
+      omniboxController.suggestions = ['test', 'me'];
       expect(omniboxController.hasSuggestions()).toBe(true);
     });
   });
