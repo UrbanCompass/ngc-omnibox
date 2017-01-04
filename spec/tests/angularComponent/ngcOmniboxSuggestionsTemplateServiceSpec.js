@@ -1,6 +1,6 @@
 import jsdom from 'jsdom';
 
-import {getModifiedTemplate} from '~/angularComponent/ngcOmniboxSuggestionsDirective.js';
+import NgcOmniboxSuggestionsTemplateService from '~/angularComponent/ngcOmniboxSuggestionsTemplateService.js';
 
 /* eslint-disable indent */
 
@@ -42,6 +42,7 @@ const categorizedTemplateOutput = [
 
 describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
   const templateCache = {put: () => {}};
+  let ngcOmniboxSuggestionsTemplate;
 
   it('should modify an un-categorized element', () => {
     const elementTemplate =
@@ -49,7 +50,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    expect(getModifiedTemplate(element, [document], templateCache))
+    ngcOmniboxSuggestionsTemplate = new NgcOmniboxSuggestionsTemplateService([document],
+        templateCache);
+
+    expect(ngcOmniboxSuggestionsTemplate.getModifiedTemplate(element))
         .toBe(unCategorizedTemplateOutput);
   });
 
@@ -59,7 +63,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxSuggestionsDirective', () => {
     const document = jsdom.jsdom(elementTemplate).defaultView.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
-    expect(getModifiedTemplate(element, [document], templateCache, 'category-tmpl'))
+    ngcOmniboxSuggestionsTemplate = new NgcOmniboxSuggestionsTemplateService([document],
+        templateCache);
+
+    expect(ngcOmniboxSuggestionsTemplate.getModifiedTemplate(element, 'category-tmpl'))
         .toBe(categorizedTemplateOutput);
   });
 });
