@@ -8,6 +8,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     omniboxController = new NgcOmniboxController();
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
+    omniboxController.isSelectable = () => true;
   });
 
   describe('when determining if there are suggestions', () => {
@@ -49,7 +50,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   describe('when navigating via the keyboard', () => {
     it('should highlight the next suggestion', () => {
-      ['test', 'me'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me'];
+      omniboxController._buildSuggestionsUiList();
 
       expect(omniboxController.highlightedIndex).toBe(-1);
 
@@ -61,7 +63,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should highlight the previous suggestion', () => {
-      ['test', 'me', 'too'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me', 'too'];
+      omniboxController._buildSuggestionsUiList();
 
       omniboxController.highlightedIndex = 1;
 
@@ -70,7 +73,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should wrap around the selection', () => {
-      ['test', 'me', 'again', 'please'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
+      omniboxController._buildSuggestionsUiList();
       omniboxController.highlightedIndex = 0;
 
       omniboxController.highlightPrevious();
