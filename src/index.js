@@ -9,5 +9,6 @@ export default angular.module('ngc.omnibox', [])
   .component('ngcOmnibox', ngcOmniboxComponent)
   .factory('ngcModifySuggestionsTemplate', ngcModifySuggestionsTemplateFactory)
   .directive('ngcOmniboxSuggestions', ngcOmniboxSuggestionsDirective)
+  .directive('ngcOmniboxSuggestionHeader', ngcOmniboxSuggestionItemDirective)
   .directive('ngcOmniboxSuggestionItem', ngcOmniboxSuggestionItemDirective)
   .name;

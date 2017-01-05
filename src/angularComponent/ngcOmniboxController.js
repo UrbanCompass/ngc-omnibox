@@ -13,32 +13,14 @@ export default class NgcOmniboxController {
     this.$element = $element;
     this.$timeout = $timeout;
 
-    this._suggestionItems = [];
+    // Flatttened list of elements in the order they appear in the UI
+    this._suggestionsUiList = [];
 
     this.highlightedIndex = -1; // -1 means nothing is highlighted
   }
 
   $postLink() {
 
-  }
-
-  /**
-   * Register an item so that it can receive keyboard focus events.
-   *
-   * @param {Object} item
-   */
-  registerItem(item) {
-    this._suggestionItems.push(item);
-  }
-
-  /**
-   * De-register an item so no longer receives keyboard focus events.
-   *
-   * @param {Object} item
-   */
-  deregisterItem(item) {
-    const index = this._suggestionItems.indexOf(item);
-    this._suggestionItems.splice(index, 1);
   }
 
   onInputChange() {
@@ -90,13 +72,33 @@ export default class NgcOmniboxController {
    * @returns {Number} -- Index of the newly highlighted item
    */
   highlightPrevious() {
-    if (this.highlightedIndex > 0) {
-      this.highlightedIndex--;
+    let newIndex = this.highlightedIndex;
+
+    if (newIndex > 0) {
+      newIndex--;
     } else {
-      this.highlightedIndex = this._suggestionItems.length - 1;
+      newIndex = this._suggestionsUiList.length - 1;
     }
 
-    return this.highlightedIndex;
+    // Protect against an infinite loop in cases where all items are disabled
+    if (this.startHighlightIndex === newIndex) {
+      return this.highlightedIndex;
+    } else {
+      this.highlightedIndex = newIndex;
+    }
+
+    const suggestion = this._suggestionsUiList[newIndex];
+    if (!this.isSelectable({suggestion: suggestion.data})) {
+      if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
+        this.startHighlightIndex = newIndex;
+      }
+
+      this.highlightPrevious();
+    } else {
+      this.startHighlightIndex = null;
+    }
+
+    return newIndex;
   }
 
   /**
@@ -106,18 +108,43 @@ export default class NgcOmniboxController {
    * @returns {Number} -- Index of the newly highlighted item
    */
   highlightNext() {
-    if (this.highlightedIndex < this._suggestionItems.length - 1) {
-      this.highlightedIndex++;
+    let newIndex = this.highlightedIndex;
+
+    if (newIndex < this._suggestionsUiList.length - 1) {
+      newIndex++;
     } else {
-      this.highlightedIndex = 0;
+      newIndex = 0;
     }
 
-    return this.highlightedIndex;
+    // Protect against an infinite loop in cases where all items are disabled
+    if (this.startHighlightIndex === newIndex) {
+      return this.highlightedIndex;
+    } else {
+      this.highlightedIndex = newIndex;
+    }
+
+    const suggestion = this._suggestionsUiList[newIndex];
+    if (!this.isSelectable({suggestion: suggestion.data})) {
+      if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
+        this.startHighlightIndex = newIndex;
+      }
+
+      this.highlightNext();
+    } else {
+      this.startHighlightIndex = null;
+    }
+
+    return newIndex;
   }
 
   isHighlighted(item) {
-    const index = this._suggestionItems.indexOf(item);
-    return index >= 0 && index === this.highlightedIndex;
+    const match = this._suggestionsUiList.find((listItem) => listItem.data === item);
+
+    if (match) {
+      return match.index >= 0 && match.index === this.highlightedIndex;
+    } else {
+      return false;
+    }
   }
 
   _handleKeyDown(keyCode) {
@@ -131,12 +158,46 @@ export default class NgcOmniboxController {
   }
 
   _updateSuggestions() {
-    this._suggestionItems.length = 0;
+    this._suggestionsUiList.length = 0;
     this.highlightedIndex = -1;
 
     this.source({query: this.query}).then((suggestions) => {
-      this.suggestions = suggestions;
+      if (suggestions) {
+        this.suggestions = Array.prototype.slice.apply(suggestions);
+        this._buildSuggestionsUiList();
+      } else {
+        this.suggestions = suggestions;
+      }
     });
+  }
+
+  /**
+   * Builds a flat list of items out of the suggestions for easier keyboard navigation.
+   *
+   * @private
+   */
+  _buildSuggestionsUiList() {
+    let index = 0;
+
+    function flatten(items) {
+      let list = [];
+      items.forEach((item) => {
+        list.push({
+          index,
+          data: item
+        });
+
+        index++;
+
+        if (Array.isArray(item.children) && item.children.length) {
+          list = list.concat(flatten(item.children));
+        }
+      });
+
+      return list;
+    }
+
+    this._suggestionsUiList = flatten(this.suggestions);
   }
 
   _selectItem(item) {

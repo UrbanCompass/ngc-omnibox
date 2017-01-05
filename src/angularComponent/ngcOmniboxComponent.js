@@ -14,6 +14,7 @@ export default {
     placeholder: '@',
     autofocus: '@',
     ngDisabled: '&',
+    isSelectable: '&',
     source: '&'
   }
 };

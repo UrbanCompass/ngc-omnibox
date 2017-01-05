@@ -18,18 +18,22 @@
           ng-model="demo.model"
           placeholder="Enter a car make (e.g. Ford)"
           autofocus="true"
+          is-selectable="demo.isSelectable(suggestion)"
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-suggestions class="collection with-header">
           <dl ngc-omnibox-suggestion-category>
             <dt class="collection-header">
-              <h5>{{suggestion.make_country}}</h5>
+              <h5 ngc-omnibox-suggestion-header class="collection-item"
+                  ng-class="{'active': omnibox.isHighlighted(suggestion)}">
+                {{suggestion.make_country}}
+              </h5>
             </dt>
             <dd>
-              <ngc-omnibox-suggestion-item class="collection-item"
+              <div ngc-omnibox-suggestion-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 {{suggestion.make_display}}
-              </ngc-omnibox-suggestion-item>
+              </div>
             </dd>
           </dl>
         </ngc-omnibox-suggestions>
@@ -59,6 +63,11 @@
           });
 
           this.model = '';
+
+          // Only allow items, and not category headers, to be selectable
+          this.isSelectable = function (item) {
+            return !item.children;
+          };
 
           this.sourceFn = function (query) {
             if (fuse && query) {

@@ -32,24 +32,35 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       const itemChildrenEl = doc.createElement('div');
       itemChildrenEl.setAttribute('ng-repeat', 'suggestion in suggestion.children');
       itemChildrenEl.setAttribute('ng-include', `'${templateCacheName}'`);
-      if (itemEl.hasAttributes()) {
-        for (let i = 0; i < itemEl.attributes.length; i++) {
-          const attr = itemEl.attributes[i];
-          itemChildrenEl.setAttribute(attr.name, attr.value);
-        }
-      }
+
       itemEl.parentNode.appendChild(itemChildrenEl);
+
+      const itemHeader = element.querySelector(
+        'ngc-omnibox-suggestion-header, [ngc-omnibox-suggestion-header]'
+      );
+      if (itemHeader) {
+        itemHeader.setAttribute('suggestion', 'suggestion');
+        itemHeader.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+        itemHeader.setAttribute('ng-attr-aria-readonly',
+            '{{!suggestionItem.isSelectable() || undefined}}');
+      }
 
       categoryContainer.appendChild(categoryEl);
       categoryContainer.appendChild(itemEl);
       itemEl.setAttribute('ng-if', '!suggestion.children');
       itemEl.setAttribute('suggestion', 'suggestion');
+      itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+      itemEl.setAttribute('ng-attr-aria-readonly',
+          '{{!suggestionItem.isSelectable() || undefined}}');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
       return categoryContainer.outerHTML;
     } else if (itemEl) {
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
       itemEl.setAttribute('suggestion', 'suggestion');
+      itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+      itemEl.setAttribute('ng-attr-aria-readonly',
+          '{{!suggestionItem.isSelectable() || undefined}}');
       return itemEl.outerHTML;
     } else {
       throw new Error('An ngcOmniboxSuggestionItem is required.');
