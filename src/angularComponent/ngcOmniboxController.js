@@ -16,7 +16,7 @@ export default class NgcOmniboxController {
     // Flatttened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
-    this.highlightedIndex = -1; // -1 means nothing is highlighted
+    this.highlightNone();
   }
 
   $postLink() {
@@ -87,6 +87,7 @@ export default class NgcOmniboxController {
 
     // Protect against an infinite loop in cases where all items are disabled
     if (this.startHighlightIndex === newIndex) {
+      this.highlightNone();
       return this.highlightedIndex;
     } else {
       this.highlightedIndex = newIndex;
@@ -123,6 +124,7 @@ export default class NgcOmniboxController {
 
     // Protect against an infinite loop in cases where all items are disabled
     if (this.startHighlightIndex === newIndex) {
+      this.highlightNone();
       return this.highlightedIndex;
     } else {
       this.highlightedIndex = newIndex;
@@ -142,6 +144,13 @@ export default class NgcOmniboxController {
     return newIndex;
   }
 
+  /**
+   * Un-highlights all suggestions.
+   */
+  highlightNone() {
+    this.highlightedIndex = -1; // -1 means nothing is highlighted
+  }
+
   isHighlighted(item) {
     const match = this._suggestionsUiList.find((listItem) => listItem.data === item);
 
@@ -158,13 +167,13 @@ export default class NgcOmniboxController {
     } else if (keyCode === KEY.DOWN) {
       this.highlightNext();
     } else if (keyCode === KEY.ESC) {
-      this.highlightedIndex = -1;
+      this.highlightNone();
     }
   }
 
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
-    this.highlightedIndex = -1;
+    this.highlightNone();
 
     this.source({query: this.query}).then((suggestions) => {
       if (suggestions) {
