@@ -232,7 +232,7 @@ export default class NgcOmniboxController {
   }
 
   _selectItem(item) {
-    if (!item) {
+    if (!item || (Array.isArray(this.ngModel) && this.ngModel.includes(item))) {
       return null;
     }
 

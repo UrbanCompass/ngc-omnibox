@@ -3,7 +3,8 @@
   <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <style>
-      ngc-omnibox-suggestions {
+      ngc-omnibox-suggestions,
+      ngc-omnibox-selections {
         display: block;
       }
     </style>
@@ -21,6 +22,10 @@
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
           source="demo.sourceFn(query)">
+
+        <ngc-omnibox-selections class="chips">
+          <div class="chip">{{selection.make_display}}</div>
+        </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">
           <dl ngc-omnibox-suggestion-category>
