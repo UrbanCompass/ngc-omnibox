@@ -24,6 +24,7 @@
         </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">
+
           <dl ngc-omnibox-suggestion-category>
             <dt>
               <h5>{{suggestion.make_country}}</h5>
@@ -32,6 +33,12 @@
               <ngc-omnibox-suggestion-item>{{suggestion.make_display}}</ngc-omnibox-suggestion-item>
             </dd>
           </dl>
+
+          <ngc-omnibox-suggestion-loading>
+            Loading...
+          </ngc-omnibox-suggestion-loading>
+
+
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
     </main>

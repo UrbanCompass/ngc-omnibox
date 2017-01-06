@@ -19,6 +19,8 @@ export default class NgcOmniboxController {
     // Flatttened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
+    this.isLoading = false;
+
     this.highlightNone();
   }
 
@@ -206,13 +208,14 @@ export default class NgcOmniboxController {
 
   _showLoading() {
     this._loadingTimeout = this.$timeout(() => {
-
+      this.isLoading = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
   _hideLoading() {
     this.$timeout.cancel(this._loadingTimeout);
     this._loadingTimeout = null;
+    this.isLoading = false;
   }
 
   /**

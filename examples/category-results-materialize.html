@@ -28,6 +28,7 @@
         </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">
+
           <dl ngc-omnibox-suggestion-category>
             <dt class="collection-header">
               <h5 ngc-omnibox-suggestion-header class="collection-item"
@@ -42,6 +43,11 @@
               </div>
             </dd>
           </dl>
+
+          <div ngc-omnibox-suggestion-loading class="progress">
+            <div class="indeterminate"></div>
+          </div>
+
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
     </main>
