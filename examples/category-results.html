@@ -24,6 +24,7 @@
         </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">
+
           <dl ngc-omnibox-suggestion-category>
             <dt>
               <h5>{{suggestion.make_country}}</h5>
@@ -32,6 +33,15 @@
               <ngc-omnibox-suggestion-item>{{suggestion.make_display}}</ngc-omnibox-suggestion-item>
             </dd>
           </dl>
+
+          <ngc-omnibox-suggestion-loading>
+            Loading...
+          </ngc-omnibox-suggestion-loading>
+
+          <ngc-omnibox-suggestion-empty>
+            No results...
+          </ngc-omnibox-suggestion-empty>
+
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
     </main>
@@ -52,12 +62,42 @@
           var demo = this;
           var fuse;
 
-          $http.jsonp('http://www.carqueryapi.com/api/0.3/?cmd=getMakes', {
-            jsonpCallbackParam: 'callback'
-          })
-          .then(function (response) {
-            fuse = new Fuse(response.data.Makes, {keys: ['make_display'], threshold: 0.3});
-          });
+          // Loads the remote data and populates the search engine
+          function populateSearch() {
+            return $q(function (resolve) {
+              if (fuse) {
+                resolve(fuse);
+              } else {
+                $http.jsonp('http://www.carqueryapi.com/api/0.3/?cmd=getMakes', {
+                  jsonpCallbackParam: 'callback'
+                })
+                .then(function (response) {
+                  fuse = new Fuse(response.data.Makes, {keys: ['make_display'], threshold: 0.3});
+                  resolve(fuse);
+                });
+              }
+            });
+          };
+
+          // Takes results from JSON API and categorizes the results by make_country
+          function formatResults(results) {
+            const grouped = {};
+
+            // Populate groups with results
+            results.forEach((result) => {
+              const groupName = result.make_country;
+              if (!grouped[groupName]) {
+                grouped[groupName] = {
+                  make_country: result.make_country,
+                  children: []
+                };
+              }
+
+              grouped[groupName].children.push(result);
+            });
+
+            return Object.keys(grouped).map((groupName) => grouped[groupName]);
+          };
 
           this.model = '';
 
@@ -67,26 +107,11 @@
           };
 
           this.sourceFn = function (query) {
-            if (fuse && query) {
-              const grouped = {};
-              const results = fuse.search(query);
-
-              // Populate groups with results
-              results.forEach((result) => {
-                const groupName = result.make_country;
-                if (!grouped[groupName]) {
-                  grouped[groupName] = {
-                    make_country: result.make_country,
-                    children: []
-                  };
-                }
-
-                grouped[groupName].children.push(result);
+            if (query) {
+              return populateSearch().then(function (fuse) {
+                const searchResults = fuse.search(query);
+                return $q.resolve(formatResults(searchResults));
               });
-
-              const data = Object.keys(grouped).map((groupName) => grouped[groupName]);
-
-              return $q.resolve(data);
             } else {
               return $q.resolve(); // Hides the suggestions
             }

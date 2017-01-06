@@ -15,9 +15,19 @@
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-suggestions>
+
           <ngc-omnibox-suggestion-item>
             <img ng-attr-src="{{suggestion.url}}" >
           </ngc-omnibox-suggestion-item>
+
+          <ngc-omnibox-suggestion-loading>
+            Loading...
+          </ngc-omnibox-suggestion-loading>
+
+          <ngc-omnibox-suggestion-empty>
+            No results...
+          </ngc-omnibox-suggestion-empty>
+
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
     </main>
@@ -30,26 +40,38 @@
         .controller('OmniboxExampleController', function ($http, $q) {
           var fuse;
 
-          $http.get('https://api.github.com/emojis').then(function (response) {
-            var emoji = Object.keys(response.data).map(function (id) {
-              return {
-                id,
-                url: response.data[id]
+          // Loads the remote data and populates the search engine
+          function populateSearch() {
+            return $q(function (resolve) {
+              if (fuse) {
+                resolve(fuse);
+              } else {
+                $http.get('https://api.github.com/emojis').then(function (response) {
+                  var emoji = Object.keys(response.data).map(function (id) {
+                    return {
+                      id,
+                      url: response.data[id]
+                    }
+                  });
+
+                  fuse = new Fuse(emoji, {keys: ['id'], threshold: 0.3});
+                  resolve(fuse);
+                });
               }
             });
-
-            fuse = new Fuse(emoji, {keys: ['id'], threshold: 0.3});
-          });
+          };
 
           this.model = '';
 
           this.sourceFn = function (query) {
-            if (fuse && query) {
-              var results = fuse.search(query);
-              return $q.resolve(results);
-            } else {
-              return $q.resolve(); // Hides the suggestions
-            }
+            return populateSearch().then(function (fuse) {
+              if (query) {
+                var results = fuse.search(query);
+                return $q.resolve(results);
+              } else {
+                return $q.resolve(); // Hides the suggestions
+              }
+            });
           };
         });
     </script>

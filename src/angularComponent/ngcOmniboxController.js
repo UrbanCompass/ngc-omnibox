@@ -3,24 +3,24 @@ import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
+// Amount of time to wait results to load before showing the loading screen
+const LOADING_SCREEN_THRESHOLD = 150;
+
 export default class NgcOmniboxController {
   static get $inject() {
-    return ['$document', '$element', '$timeout'];
+    return ['$timeout'];
   }
 
-  constructor($document, $element, $timeout) {
-    this.$document = $document;
-    this.$element = $element;
+  constructor($timeout) {
     this.$timeout = $timeout;
 
     // Flatttened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
+    this.isLoading = false; // Loading suggestions is in progress
+    this.showLoadingElement = false; // Been loading for long enough we should show loading UI
+
     this.highlightNone();
-  }
-
-  $postLink() {
-
   }
 
   onInputChange() {
@@ -53,11 +53,10 @@ export default class NgcOmniboxController {
   /**
    * Determines if there are suggestions to display
    *
+   * @param {Array} [suggestions=this.suggestions]
    * @returns {Boolean}
    */
-  hasSuggestions() {
-    const suggestions = this.suggestions;
-
+  hasSuggestions(suggestions = this.suggestions) {
     if (!suggestions || !Array.isArray(suggestions) || !suggestions.length) {
       return false;
     }
@@ -180,10 +179,22 @@ export default class NgcOmniboxController {
 
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
-    this.highlightNone();
 
-    this.source({query: this.query, suggestions: this.suggestions}).then((suggestions) => {
-      if (suggestions) {
+    this.highlightNone();
+    this._showLoading();
+
+    const promise = this.source({query: this.query, suggestions: this.suggestions});
+    this._sourceFunctionPromise = promise;
+
+    promise.then((suggestions) => {
+      // Bail out if the promise has changed
+      if (promise !== this._sourceFunctionPromise) {
+        return;
+      }
+
+      this._hideLoading();
+
+      if (this.hasSuggestions(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
@@ -200,6 +211,21 @@ export default class NgcOmniboxController {
 
   get suggestions() {
     return this._suggestions;
+  }
+
+  _showLoading() {
+    this.isLoading = true;
+
+    this._loadingTimeout = this.$timeout(() => {
+      this.showLoadingElement = true;
+    }, LOADING_SCREEN_THRESHOLD);
+  }
+
+  _hideLoading() {
+    this.$timeout.cancel(this._loadingTimeout);
+    this._loadingTimeout = null;
+    this.isLoading = false;
+    this.showLoadingElement = false;
   }
 
   /**
