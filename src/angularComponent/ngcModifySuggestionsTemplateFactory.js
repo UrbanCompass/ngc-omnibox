@@ -60,6 +60,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
         itemHeader.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
         itemHeader.setAttribute('ng-attr-aria-readonly',
             '{{suggestionItem.isSelectable() === false || undefined}}');
+        itemHeader.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
+        itemHeader.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
+        itemHeader.setAttribute('ng-click', 'omnibox.selectItem(suggestion)');
       }
 
       categoryContainer.appendChild(categoryEl);
