@@ -32,7 +32,7 @@ export default class NgcOmniboxController {
 
     if (this.hasSuggestions()) {
 
-      if (isVerticalMovementKey(keyCode)) {
+      if (isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) {
         $event.preventDefault();
         $event.stopPropagation();
       }
@@ -45,14 +45,9 @@ export default class NgcOmniboxController {
     }
   }
 
-  onKeyUp($event) {
+  onKeyUp() {
     this.$timeout.cancel(this._keyDownTimeout);
     this._keyDownTimeout = null;
-
-    if (this.hasSuggestions() && isSelectKey($event.which)) {
-      const selection = this._suggestionsUiList[this.highlightedIndex];
-      selection && this._selectItem(selection.data);
-    }
   }
 
   /**
@@ -168,6 +163,9 @@ export default class NgcOmniboxController {
       this.highlightNext();
     } else if (keyCode === KEY.ESC) {
       this.highlightNone();
+    } else if (isSelectKey(keyCode)) {
+      const selection = this._suggestionsUiList[this.highlightedIndex];
+      selection && this._selectItem(selection.data);
     }
   }
 
