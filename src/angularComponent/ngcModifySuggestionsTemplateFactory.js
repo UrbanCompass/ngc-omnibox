@@ -31,11 +31,11 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
     if (loadingEl) {
       loadingEl.setAttribute('role', 'progressbar');
-      loadingEl.setAttribute('ng-show', 'omnibox.showLoadingElement');
+      loadingEl.setAttribute('ng-if', 'omnibox.showLoadingElement');
     }
 
     if (noResultsEl) {
-      noResultsEl.setAttribute('ng-show', '!omnibox.hasSuggestions() && !omnibox.isLoading');
+      noResultsEl.setAttribute('ng-if', '!omnibox.hasSuggestions() && !omnibox.isLoading');
     }
 
     if (categoryEl) {
