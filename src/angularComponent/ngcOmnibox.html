@@ -1,6 +1,6 @@
 <input type="text" role="combobox" aria-autocomplete="list"
     ng-attr-aria-expanded="{{omnibox.hasSuggestions()}}"
-    ng-model="omnibox.ngModel"
+    ng-model="omnibox.query"
     ng-change="omnibox.onInputChange()"
     ng-keydown="omnibox.onKeyDown($event)"
     ng-keyup="omnibox.onKeyUp($event)"

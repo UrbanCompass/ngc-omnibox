@@ -1,9 +1,20 @@
 export default class NgcOmniboxSuggestionItemController {
-  $onInit() {
-    this.omnibox.registerItem(this.suggestion);
 
+  /**
+   * Whether or not the item is currently highlighted.
+   *
+   * @returns {Boolean}
+   */
+  isHighlighted() {
+    return this.omnibox.isHighlighted(this.suggestion);
   }
-  $onDestroy() {
-    this.omnibox.deregisterItem(this.index);
+
+  /**
+   * Whether or not the item is currently selectable by the keyboard or mouse.
+   *
+   * @returns {Boolean}
+   */
+  isSelectable() {
+    return this.omnibox.isSelectable({suggestion: this.suggestion});
   }
 }

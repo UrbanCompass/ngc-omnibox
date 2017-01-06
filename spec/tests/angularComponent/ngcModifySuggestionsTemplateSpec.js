@@ -12,14 +12,15 @@ const unCategorizedTemplate = [
 
 const unCategorizedTemplateOutput = [
   '<ngc-omnibox-suggestion-item ng-repeat="suggestion in omnibox.suggestions" ',
-      'suggestion="suggestion">',
+      'suggestion="suggestion" ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+      'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestion-item>'
 ].join('');
 
 const categorizedTemplate = [
   '<div ngc-omnibox-suggestion-category>',
-    '<h5>{{suggestion.sample_category_title}}</h5>',
+    '<h5 ngc-omnibox-suggestion-header>{{suggestion.sample_category_title}}</h5>',
     '<ngc-omnibox-suggestion-item>',
       '{{suggestion.sample_item_text}}',
     '</ngc-omnibox-suggestion-item>',
@@ -29,10 +30,16 @@ const categorizedTemplate = [
 const categorizedTemplateOutput = [
   '<div ng-repeat="suggestion in suggestion.children || omnibox.suggestions">',
     '<div ngc-omnibox-suggestion-category="" ng-if="suggestion.children">',
-      '<h5>{{suggestion.sample_category_title}}</h5>',
+      '<h5 ngc-omnibox-suggestion-header="" suggestion="suggestion" ',
+          'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+          'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}">',
+        '{{suggestion.sample_category_title}}',
+      '</h5>',
       '<div ng-repeat="suggestion in suggestion.children" ng-include="\'category-tmpl\'"></div>',
     '</div>',
-    '<ngc-omnibox-suggestion-item ng-if="!suggestion.children" suggestion="suggestion">',
+    '<ngc-omnibox-suggestion-item ng-if="!suggestion.children" suggestion="suggestion" ',
+        'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+        'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}">',
       '{{suggestion.sample_item_text}}',
     '</ngc-omnibox-suggestion-item>',
   '</div>'

@@ -8,6 +8,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     omniboxController = new NgcOmniboxController();
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
+    omniboxController.isSelectable = () => {};
   });
 
   describe('when determining if there are suggestions', () => {
@@ -47,9 +48,43 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
+  describe('building a flattened list representation of the suggestions', () => {
+    it('should produce a list of UI objects with strings for data', () => {
+      omniboxController.suggestions = ['test', 'me', 'now'];
+      expect(JSON.stringify(omniboxController._suggestionsUiList)).toBe(JSON.stringify([
+        {index: 0, data: 'test'},
+        {index: 1, data: 'me'},
+        {index: 2, data: 'now'}
+      ]));
+    });
+
+    it('should product a flat list of UI objects from a nested list of suggestions', () => {
+      omniboxController.suggestions = [
+        {title: 'test', children: ['one', 'two', 'three']},
+        {title: 'me', children: ['four', 'five', 'six']},
+        {title: 'now', children: ['seven', 'eight', 'nine']}
+      ];
+
+      expect(JSON.stringify(omniboxController._suggestionsUiList)).toBe(JSON.stringify([
+        {index: 0, data: {title: 'test', children: ['one', 'two', 'three']}},
+        {index: 1, data: 'one'},
+        {index: 2, data: 'two'},
+        {index: 3, data: 'three'},
+        {index: 4, data: {title: 'me', children: ['four', 'five', 'six']}},
+        {index: 5, data: 'four'},
+        {index: 6, data: 'five'},
+        {index: 7, data: 'six'},
+        {index: 8, data: {title: 'now', children: ['seven', 'eight', 'nine']}},
+        {index: 9, data: 'seven'},
+        {index: 10, data: 'eight'},
+        {index: 11, data: 'nine'}
+      ]));
+    });
+  });
+
   describe('when navigating via the keyboard', () => {
     it('should highlight the next suggestion', () => {
-      ['test', 'me'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me'];
 
       expect(omniboxController.highlightedIndex).toBe(-1);
 
@@ -61,7 +96,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should highlight the previous suggestion', () => {
-      ['test', 'me', 'too'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me', 'too'];
 
       omniboxController.highlightedIndex = 1;
 
@@ -70,7 +105,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should wrap around the selection', () => {
-      ['test', 'me', 'again', 'please'].forEach((item) => omniboxController.registerItem(item));
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
       omniboxController.highlightedIndex = 0;
 
       omniboxController.highlightPrevious();

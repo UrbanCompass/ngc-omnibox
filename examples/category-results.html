@@ -10,6 +10,7 @@
           ng-model="demo.model"
           placeholder="Enter a car make (e.g. Ford)"
           autofocus="true"
+          is-selectable="demo.isSelectable(suggestion)"
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-suggestions class="collection with-header">
@@ -49,6 +50,11 @@
           });
 
           this.model = '';
+
+          // Only allow items, and not category headers, to be selectable
+          this.isSelectable = function (item) {
+            return !item.children;
+          };
 
           this.sourceFn = function (query) {
             if (fuse && query) {
