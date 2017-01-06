@@ -89,7 +89,7 @@ export default class NgcOmniboxController {
     }
 
     const suggestion = this._suggestionsUiList[newIndex];
-    if (!this.isSelectable({suggestion: suggestion.data})) {
+    if (this.isSelectable({suggestion: suggestion.data}) === false) {
       if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
         this.startHighlightIndex = newIndex;
       }
@@ -126,7 +126,7 @@ export default class NgcOmniboxController {
     }
 
     const suggestion = this._suggestionsUiList[newIndex];
-    if (!this.isSelectable({suggestion: suggestion.data})) {
+    if (this.isSelectable({suggestion: suggestion.data}) === false) {
       if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
         this.startHighlightIndex = newIndex;
       }

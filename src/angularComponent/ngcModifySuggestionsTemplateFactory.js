@@ -42,7 +42,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
         itemHeader.setAttribute('suggestion', 'suggestion');
         itemHeader.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
         itemHeader.setAttribute('ng-attr-aria-readonly',
-            '{{!suggestionItem.isSelectable() || undefined}}');
+            '{{suggestionItem.isSelectable() === false || undefined}}');
       }
 
       categoryContainer.appendChild(categoryEl);
@@ -51,7 +51,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
-          '{{!suggestionItem.isSelectable() || undefined}}');
+          '{{suggestionItem.isSelectable() === false || undefined}}');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
       return categoryContainer.outerHTML;
@@ -60,7 +60,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
-          '{{!suggestionItem.isSelectable() || undefined}}');
+          '{{suggestionItem.isSelectable() === false || undefined}}');
       return itemEl.outerHTML;
     } else {
       throw new Error('An ngcOmniboxSuggestionItem is required.');

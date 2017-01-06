@@ -8,7 +8,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     omniboxController = new NgcOmniboxController();
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
-    omniboxController.isSelectable = () => true;
+    omniboxController.isSelectable = () => {};
   });
 
   describe('when determining if there are suggestions', () => {
