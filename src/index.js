@@ -4,6 +4,7 @@ import ngcOmniboxComponent from './angularComponent/ngcOmniboxComponent.js';
 import ngcModifySuggestionsTemplateFactory from './angularComponent/ngcModifySuggestionsTemplateFactory.js';
 import ngcOmniboxSuggestionsDirective from './angularComponent/ngcOmniboxSuggestionsDirective.js';
 import ngcOmniboxSuggestionItemDirective from './angularComponent/ngcOmniboxSuggestionItemDirective.js';
+import ngcOmniboxSelectionsDirective from './angularComponent/ngcOmniboxSelectionsDirective.js';
 
 export default angular.module('ngc.omnibox', [])
   .component('ngcOmnibox', ngcOmniboxComponent)
@@ -11,4 +12,5 @@ export default angular.module('ngc.omnibox', [])
   .directive('ngcOmniboxSuggestions', ngcOmniboxSuggestionsDirective)
   .directive('ngcOmniboxSuggestionHeader', ngcOmniboxSuggestionItemDirective)
   .directive('ngcOmniboxSuggestionItem', ngcOmniboxSuggestionItemDirective)
+  .directive('ngcOmniboxSelections', ngcOmniboxSelectionsDirective)
   .name;

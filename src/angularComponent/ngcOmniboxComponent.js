@@ -7,7 +7,8 @@ export default {
   controller: NgcOmniboxController,
   controllerAs: 'omnibox',
   transclude: {
-    omniboxSuggestions: 'ngcOmniboxSuggestions'
+    omniboxSuggestions: 'ngcOmniboxSuggestions',
+    omniboxSelections: '?ngcOmniboxSelections'
   },
   bindings: {
     ngModel: '=',

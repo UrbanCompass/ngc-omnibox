@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
   <body>
+    <style media="screen">
+      [aria-selected="true"] {
+        font-weight: bold;
+      }
+    </style>
     <main ng-controller="OmniboxExampleController as demo">
       <h1>Categorized Results Omnibox Example</h1>
       <h2>Search For a Car Make by Country</h2>
@@ -11,7 +16,12 @@
           placeholder="Enter a car make (e.g. Ford)"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
+          multiple="true"
           source="demo.sourceFn(query)">
+
+        <ngc-omnibox-selections>
+          <span>{{selection.make_display}}</span>
+        </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">
           <dl ngc-omnibox-suggestion-category>
