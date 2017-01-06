@@ -104,7 +104,7 @@ export default class NgcOmniboxController {
 
   /**
    * Tries to update the index of the currently highlighted item to be the previous item in the
-   * list. If we've reached the starrt, it'll loop back and highlight the last item.
+   * list. If we've reached the start, it'll loop back and highlight the last item.
    *
    * @param {Number} startHighlightIndex -- If running this function recursively, this is the index
    *     that was used at the start. This is to prevent it running infinitely.
@@ -182,7 +182,7 @@ export default class NgcOmniboxController {
     this._suggestionsUiList.length = 0;
     this.highlightNone();
 
-    this.source({query: this.query}).then((suggestions) => {
+    this.source({query: this.query, suggestions: this.suggestions}).then((suggestions) => {
       if (suggestions) {
         this.suggestions = suggestions;
       } else {
