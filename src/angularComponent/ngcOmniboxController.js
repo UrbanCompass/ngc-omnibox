@@ -178,9 +178,21 @@ export default class NgcOmniboxController {
         this.suggestions = Array.prototype.slice.apply(suggestions);
         this._buildSuggestionsUiList();
       } else {
-        this.suggestions = suggestions;
+        throw new Error('Suggestions must be an Array');
       }
     });
+  }
+
+  set suggestions(suggestions) {
+    this._suggestions = suggestions;
+
+    if (Array.isArray(suggestions)) {
+      this._buildSuggestionsUiList();
+    }
+  }
+
+  get suggestions() {
+    return this._suggestions;
   }
 
   /**
