@@ -184,7 +184,7 @@ export default class NgcOmniboxController {
 
     this.source({query: this.query}).then((suggestions) => {
       if (suggestions) {
-        this.suggestions = Array.prototype.slice.apply(suggestions);
+        this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
       }
@@ -192,9 +192,8 @@ export default class NgcOmniboxController {
   }
 
   set suggestions(suggestions) {
-    this._suggestions = suggestions;
-
     if (Array.isArray(suggestions)) {
+      this._suggestions = Array.prototype.slice.apply(suggestions);
       this._buildSuggestionsUiList();
     }
   }
