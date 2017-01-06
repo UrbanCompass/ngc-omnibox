@@ -151,10 +151,10 @@ export default class NgcOmniboxController {
   * @param {Object} item
   */
   highlightItem(item) {
-    const match = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
+    const uiItemMatch = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
 
-    if (match) {
-      this.highlightedIndex = match.index;
+    if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
+      this.highlightedIndex = uiItemMatch.index;
     }
   }
 
@@ -189,7 +189,8 @@ export default class NgcOmniboxController {
    * @param {Object} item
    */
   selectItem(item) {
-    if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0)) {
+    if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
+        this.isSelectable({suggestion: item}) !== false) {
       if (this.multiple) {
         this.ngModel = this.ngModel || [];
         this.ngModel.push(item);
