@@ -19,7 +19,8 @@ export default class NgcOmniboxController {
     // Flatttened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
-    this.isLoading = false;
+    this.isLoading = false; // Loading suggestions is in progress
+    this.showLoadingElement = false; // Been loading for long enough we should show loading UI
 
     this.highlightNone();
   }
@@ -54,11 +55,10 @@ export default class NgcOmniboxController {
   /**
    * Determines if there are suggestions to display
    *
+   * @param {Array} [suggestions=this.suggestions]
    * @returns {Boolean}
    */
-  hasSuggestions() {
-    const suggestions = this.suggestions;
-
+  hasSuggestions(suggestions = this.suggestions) {
     if (!suggestions || !Array.isArray(suggestions) || !suggestions.length) {
       return false;
     }
@@ -181,13 +181,14 @@ export default class NgcOmniboxController {
 
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
+
     this.highlightNone();
     this._showLoading();
 
     this.source({query: this.query, suggestions: this.suggestions}).then((suggestions) => {
       this._hideLoading();
 
-      if (suggestions) {
+      if (this.hasSuggestions(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
@@ -207,8 +208,10 @@ export default class NgcOmniboxController {
   }
 
   _showLoading() {
+    this.isLoading = true;
+
     this._loadingTimeout = this.$timeout(() => {
-      this.isLoading = true;
+      this.showLoadingElement = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
@@ -216,6 +219,7 @@ export default class NgcOmniboxController {
     this.$timeout.cancel(this._loadingTimeout);
     this._loadingTimeout = null;
     this.isLoading = false;
+    this.showLoadingElement = false;
   }
 
   /**

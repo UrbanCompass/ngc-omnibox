@@ -23,12 +23,19 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
     const loadingEl = element.querySelector(
       'ngc-omnibox-suggestion-loading, [ngc-omnibox-suggestion-loading]'
     );
+    const noResultsEl = element.querySelector(
+      'ngc-omnibox-suggestion-empty, [ngc-omnibox-suggestion-empty]'
+    );
 
     element.setAttribute('role', 'listbox');
 
     if (loadingEl) {
       loadingEl.setAttribute('role', 'progressbar');
-      loadingEl.setAttribute('ng-if', 'omnibox.isLoading');
+      loadingEl.setAttribute('ng-show', 'omnibox.showLoadingElement');
+    }
+
+    if (noResultsEl) {
+      noResultsEl.setAttribute('ng-show', '!omnibox.hasSuggestions() && !omnibox.isLoading');
     }
 
     if (categoryEl) {
