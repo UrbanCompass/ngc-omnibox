@@ -146,14 +146,23 @@ export default class NgcOmniboxController {
     this.highlightedIndex = -1; // -1 means nothing is highlighted
   }
 
-  isHighlighted(item) {
-    const match = this._suggestionsUiList.find((listItem) => listItem.data === item);
+  set highlightedIndex(index) {
+    this._highlightedIndex = index;
 
-    if (match) {
-      return match.index >= 0 && match.index === this.highlightedIndex;
+    const highlightedUiItem = this._suggestionsUiList[index];
+    if (highlightedUiItem) {
+      this._highlightedItem = highlightedUiItem.data;
     } else {
-      return false;
+      this._highlightedItem = null;
     }
+  }
+
+  get highlightedIndex() {
+    return this._highlightedIndex;
+  }
+
+  isHighlighted(item) {
+    return item === this._highlightedItem;
   }
 
   _handleKeyDown(keyCode) {
