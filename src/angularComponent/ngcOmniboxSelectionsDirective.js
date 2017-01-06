@@ -9,7 +9,11 @@ export default function ngcOmniboxSuggestionItemDirective() {
       const element = tElement[0];
       const tokens = element.firstElementChild;
 
-      tokens && tokens.setAttribute('ng-repeat', 'selection in omnibox.ngModel');
+      if (tokens) {
+        tokens.setAttribute('ng-repeat', 'selection in omnibox.ngModel');
+      } else {
+        throw new Error('ngc-omnibox-selections requires a root HTML element');
+      }
 
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
