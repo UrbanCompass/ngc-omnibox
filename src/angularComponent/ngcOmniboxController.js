@@ -8,12 +8,10 @@ const LOADING_SCREEN_THRESHOLD = 150;
 
 export default class NgcOmniboxController {
   static get $inject() {
-    return ['$document', '$element', '$timeout'];
+    return ['$timeout'];
   }
 
-  constructor($document, $element, $timeout) {
-    this.$document = $document;
-    this.$element = $element;
+  constructor($timeout) {
     this.$timeout = $timeout;
 
     // Flatttened list of elements in the order they appear in the UI
