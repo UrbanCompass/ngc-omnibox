@@ -185,7 +185,6 @@ export default class NgcOmniboxController {
     this.source({query: this.query}).then((suggestions) => {
       if (suggestions) {
         this.suggestions = Array.prototype.slice.apply(suggestions);
-        this._buildSuggestionsUiList();
       } else {
         throw new Error('Suggestions must be an Array');
       }

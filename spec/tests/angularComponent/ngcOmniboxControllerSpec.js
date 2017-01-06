@@ -51,7 +51,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   describe('when navigating via the keyboard', () => {
     it('should highlight the next suggestion', () => {
       omniboxController.suggestions = ['test', 'me'];
-      omniboxController._buildSuggestionsUiList();
 
       expect(omniboxController.highlightedIndex).toBe(-1);
 
@@ -64,7 +63,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     it('should highlight the previous suggestion', () => {
       omniboxController.suggestions = ['test', 'me', 'too'];
-      omniboxController._buildSuggestionsUiList();
 
       omniboxController.highlightedIndex = 1;
 
@@ -74,7 +72,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     it('should wrap around the selection', () => {
       omniboxController.suggestions = ['test', 'me', 'again', 'please'];
-      omniboxController._buildSuggestionsUiList();
       omniboxController.highlightedIndex = 0;
 
       omniboxController.highlightPrevious();
