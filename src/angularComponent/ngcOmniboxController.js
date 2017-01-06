@@ -183,7 +183,15 @@ export default class NgcOmniboxController {
     this.highlightNone();
     this._showLoading();
 
-    this.source({query: this.query, suggestions: this.suggestions}).then((suggestions) => {
+    const promise = this.source({query: this.query, suggestions: this.suggestions});
+    this._sourceFunctionPromise = promise;
+
+    promise.then((suggestions) => {
+      // Bail out if the promise has changed
+      if (promise !== this._sourceFunctionPromise) {
+        return;
+      }
+
       this._hideLoading();
 
       if (this.hasSuggestions(suggestions)) {
