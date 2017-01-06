@@ -69,6 +69,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
+      itemEl.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
+      itemEl.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
+      itemEl.setAttribute('ng-click', 'omnibox.selectItem(suggestion)');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
 
@@ -79,6 +82,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
+      itemEl.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
+      itemEl.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
+      itemEl.setAttribute('ng-click', 'omnibox.selectItem(suggestion)');
 
       return element.innerHTML;
     } else {

@@ -145,6 +145,19 @@ export default class NgcOmniboxController {
     this.highlightedIndex = -1; // -1 means nothing is highlighted
   }
 
+  /**
+  * Highlights a particular suggestion item.
+  *
+  * @param {Object} item
+  */
+  highlightItem(item) {
+    const match = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
+
+    if (match) {
+      this.highlightedIndex = match.index;
+    }
+  }
+
   set highlightedIndex(index) {
     this._highlightedIndex = index;
 
@@ -160,8 +173,30 @@ export default class NgcOmniboxController {
     return this._highlightedIndex;
   }
 
+  /**
+   * Whether a particular suggestion item is highlighted.
+   *
+   * @param {Object} item
+   * @returns {Boolean}
+   */
   isHighlighted(item) {
     return item === this._highlightedItem;
+  }
+
+  /**
+   * Select a particular suggestion item.
+   *
+   * @param {Object} item
+   */
+  selectItem(item) {
+    if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0)) {
+      if (this.multiple) {
+        this.ngModel = this.ngModel || [];
+        this.ngModel.push(item);
+      } else {
+        this.ngModel = item;
+      }
+    }
   }
 
   _handleKeyDown(keyCode) {
@@ -173,7 +208,7 @@ export default class NgcOmniboxController {
       this.highlightNone();
     } else if (isSelectKey(keyCode)) {
       const selection = this._suggestionsUiList[this.highlightedIndex];
-      selection && this._selectItem(selection.data);
+      selection && this.selectItem(selection.data);
     }
   }
 
@@ -255,18 +290,5 @@ export default class NgcOmniboxController {
     }
 
     this._suggestionsUiList = flatten(this.suggestions);
-  }
-
-  _selectItem(item) {
-    if (!item || (Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0)) {
-      return null;
-    }
-
-    if (this.multiple) {
-      this.ngModel = this.ngModel || [];
-      this.ngModel.push(item);
-    } else {
-      this.ngModel = item;
-    }
   }
 }
