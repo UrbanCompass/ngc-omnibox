@@ -1,4 +1,4 @@
-export default function ngcOmniboxSuggestionItemDirective() {
+export default function ngcOmniboxSelectionsDirective() {
   return {
     restrict: 'E',
     require: {
