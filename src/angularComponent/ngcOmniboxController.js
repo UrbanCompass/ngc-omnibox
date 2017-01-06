@@ -184,11 +184,11 @@ export default class NgcOmniboxController {
   }
 
   /**
-   * Select a particular suggestion item.
+   * Adds a particular suggestion item to the list of selected items.
    *
    * @param {Object} item
    */
-  selectItem(item) {
+  addToSelections(item) {
     if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
         this.isSelectable({suggestion: item}) !== false) {
       if (this.multiple) {
@@ -197,6 +197,19 @@ export default class NgcOmniboxController {
       } else {
         this.ngModel = item;
       }
+    }
+  }
+
+  /**
+   * Removes a particular suggestion item frmo the list of selected items.
+   *
+   * @param {Object} item
+   */
+  removeFromSelections(item) {
+    if (item && Array.isArray(this.ngModel)) {
+      this.ngModel.splice(this.ngModel.indexOf(item), 1);
+    } else if (!this.multiple) {
+      this.ngModel = null;
     }
   }
 
@@ -209,7 +222,7 @@ export default class NgcOmniboxController {
       this.highlightNone();
     } else if (isSelectKey(keyCode)) {
       const selection = this._suggestionsUiList[this.highlightedIndex];
-      selection && this.selectItem(selection.data);
+      selection && this.addToSelections(selection.data);
     }
   }
 

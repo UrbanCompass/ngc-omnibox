@@ -24,7 +24,12 @@
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-selections class="chips">
-          <div class="chip">{{selection.make_display}}</div>
+          <div class="chip">
+            {{selection.make_display}}
+            <i class="close material-icons" ng-click="omnibox.removeFromSelections(selection)">
+              &times;
+            </i>
+          </div>
         </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">

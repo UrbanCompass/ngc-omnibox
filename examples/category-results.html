@@ -20,7 +20,10 @@
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-selections>
-          <span>{{selection.make_display}}</span>
+          <span>
+            {{selection.make_display}}
+            <button ng-click="omnibox.removeFromSelections(selection)">&times;</button>
+          </span>
         </ngc-omnibox-selections>
 
         <ngc-omnibox-suggestions class="collection with-header">

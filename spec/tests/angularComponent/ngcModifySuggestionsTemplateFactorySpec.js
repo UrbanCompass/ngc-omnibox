@@ -15,7 +15,7 @@ const unCategorizedTemplateOutput = [
       'suggestion="suggestion" ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="omnibox.highlightItem(suggestion)" ng-mouseleave="omnibox.highlightNone()" ',
-      'ng-click="omnibox.selectItem(suggestion)">',
+      'ng-click="omnibox.addToSelections(suggestion)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestion-item>'
 ].join('');
@@ -36,7 +36,7 @@ const categorizedTemplateOutput = [
           'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
           'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
           'ng-mouseenter="omnibox.highlightItem(suggestion)" ',
-          'ng-mouseleave="omnibox.highlightNone()" ng-click="omnibox.selectItem(suggestion)">',
+          'ng-mouseleave="omnibox.highlightNone()" ng-click="omnibox.addToSelections(suggestion)">',
         '{{suggestion.sample_category_title}}',
       '</h5>',
       '<div ng-repeat="suggestion in suggestion.children" ng-include="\'category-tmpl\'"></div>',
@@ -45,7 +45,7 @@ const categorizedTemplateOutput = [
         'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
         'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
         'ng-mouseenter="omnibox.highlightItem(suggestion)" ',
-        'ng-mouseleave="omnibox.highlightNone()" ng-click="omnibox.selectItem(suggestion)">',
+        'ng-mouseleave="omnibox.highlightNone()" ng-click="omnibox.addToSelections(suggestion)">',
       '{{suggestion.sample_item_text}}',
     '</ngc-omnibox-suggestion-item>',
   '</div>'

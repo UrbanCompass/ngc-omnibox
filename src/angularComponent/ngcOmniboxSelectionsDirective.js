@@ -5,12 +5,17 @@ export default function ngcOmniboxSelectionsDirective() {
       omnibox: '^^ngcOmnibox'
     },
     scope: true,
+    bindToController: {
+      selection: '<'
+    },
+    controller: () => {},
     compile(tElement) {
       const element = tElement[0];
       const tokens = element.firstElementChild;
 
       if (tokens) {
         tokens.setAttribute('ng-repeat', 'selection in omnibox.ngModel');
+        tokens.setAttribute('selection', 'selection');
       } else {
         throw new Error('ngc-omnibox-selections requires a root HTML element');
       }
