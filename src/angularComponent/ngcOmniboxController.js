@@ -3,6 +3,9 @@ import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
+// Amount of time to wait results to load before showing the loading screen
+const LOADING_SCREEN_THRESHOLD = 150;
+
 export default class NgcOmniboxController {
   static get $inject() {
     return ['$document', '$element', '$timeout'];
@@ -17,10 +20,6 @@ export default class NgcOmniboxController {
     this._suggestionsUiList = [];
 
     this.highlightNone();
-  }
-
-  $postLink() {
-
   }
 
   onInputChange() {
@@ -181,8 +180,11 @@ export default class NgcOmniboxController {
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
     this.highlightNone();
+    this._showLoading();
 
     this.source({query: this.query, suggestions: this.suggestions}).then((suggestions) => {
+      this._hideLoading();
+
       if (suggestions) {
         this.suggestions = suggestions;
       } else {
@@ -200,6 +202,17 @@ export default class NgcOmniboxController {
 
   get suggestions() {
     return this._suggestions;
+  }
+
+  _showLoading() {
+    this._loadingTimeout = this.$timeout(() => {
+
+    }, LOADING_SCREEN_THRESHOLD);
+  }
+
+  _hideLoading() {
+    this.$timeout.cancel(this._loadingTimeout);
+    this._loadingTimeout = null;
   }
 
   /**
