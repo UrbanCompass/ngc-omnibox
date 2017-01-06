@@ -69,9 +69,11 @@ export default class NgcOmniboxController {
    * Tries to update the index of the currently highlighted item to be the next item in the list. If
    * we've reached the end, it'll loop back around and highlight the first item.
    *
+   * @param {Number} startHighlightIndex -- If running this function recursively, this is the index
+   *     that was used at the start. This is to prevent it running infinitely.
    * @returns {Number} -- Index of the newly highlighted item
    */
-  highlightPrevious() {
+  highlightPrevious(startHighlightIndex) {
     let newIndex = this.highlightedIndex;
 
     if (newIndex > 0) {
@@ -81,7 +83,7 @@ export default class NgcOmniboxController {
     }
 
     // Protect against an infinite loop in cases where all items are disabled
-    if (this.startHighlightIndex === newIndex) {
+    if (startHighlightIndex === newIndex) {
       this.highlightNone();
       return this.highlightedIndex;
     } else {
@@ -90,13 +92,11 @@ export default class NgcOmniboxController {
 
     const suggestion = this._suggestionsUiList[newIndex];
     if (this.isSelectable({suggestion: suggestion.data}) === false) {
-      if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
-        this.startHighlightIndex = newIndex;
+      if (startHighlightIndex === null || typeof startHighlightIndex === 'undefined') {
+        startHighlightIndex = newIndex;
       }
 
-      this.highlightPrevious();
-    } else {
-      this.startHighlightIndex = null;
+      this.highlightPrevious(startHighlightIndex);
     }
 
     return newIndex;
@@ -106,9 +106,11 @@ export default class NgcOmniboxController {
    * Tries to update the index of the currently highlighted item to be the previous item in the
    * list. If we've reached the starrt, it'll loop back and highlight the last item.
    *
+   * @param {Number} startHighlightIndex -- If running this function recursively, this is the index
+   *     that was used at the start. This is to prevent it running infinitely.
    * @returns {Number} -- Index of the newly highlighted item
    */
-  highlightNext() {
+  highlightNext(startHighlightIndex) {
     let newIndex = this.highlightedIndex;
 
     if (newIndex < this._suggestionsUiList.length - 1) {
@@ -118,7 +120,7 @@ export default class NgcOmniboxController {
     }
 
     // Protect against an infinite loop in cases where all items are disabled
-    if (this.startHighlightIndex === newIndex) {
+    if (startHighlightIndex === newIndex) {
       this.highlightNone();
       return this.highlightedIndex;
     } else {
@@ -127,13 +129,11 @@ export default class NgcOmniboxController {
 
     const suggestion = this._suggestionsUiList[newIndex];
     if (this.isSelectable({suggestion: suggestion.data}) === false) {
-      if (this.startHighlightIndex === null || typeof this.startHighlightIndex === 'undefined') {
-        this.startHighlightIndex = newIndex;
+      if (startHighlightIndex === null || typeof startHighlightIndex === 'undefined') {
+        startHighlightIndex = newIndex;
       }
 
-      this.highlightNext();
-    } else {
-      this.startHighlightIndex = null;
+      this.highlightNext(startHighlightIndex);
     }
 
     return newIndex;
