@@ -176,7 +176,13 @@ export function isFunctionKey(keyCode) {
  * @returns {Boolean}
  */
 export function isVerticalMovementKey(keyCode) {
-  return [KEY.UP, KEY.DOWN].includes(keyCode);
+  switch (keyCode) {
+    case KEY.UP:
+    case KEY.DOWN:
+      return true;
+  }
+
+  return false;
 }
 
 /**
@@ -186,7 +192,15 @@ export function isVerticalMovementKey(keyCode) {
  * @returns {Boolean}
  */
 export function isHorizontalMovementKey(keyCode) {
-  return [KEY.LEFT, KEY.RIGHT, KEY.BACKSPACE, KEY.DELETE].includes(keyCode);
+  switch (keyCode) {
+    case KEY.LEFT:
+    case KEY.RIGHT:
+    case KEY.BACKSPACE:
+    case KEY.DELETE:
+      return true;
+  }
+
+  return false;
 }
 
 /**
@@ -196,5 +210,11 @@ export function isHorizontalMovementKey(keyCode) {
  * @returns {Boolean}
  */
 export function isSelectKey(keyCode) {
-  return [KEY.ENTER, KEY.TAB].includes(keyCode);
+  switch (keyCode) {
+    case KEY.ENTER:
+    case KEY.TAB:
+      return true;
+  }
+
+  return false;
 }
