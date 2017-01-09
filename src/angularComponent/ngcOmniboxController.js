@@ -201,7 +201,7 @@ export default class NgcOmniboxController {
   }
 
   /**
-   * Removes a particular suggestion item frmo the list of selected items.
+   * Removes a particular suggestion item from the list of selected items.
    *
    * @param {Object} item
    */
