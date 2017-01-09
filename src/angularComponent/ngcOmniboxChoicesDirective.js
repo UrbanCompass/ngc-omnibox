@@ -1,10 +1,11 @@
-export default function ngcOmniboxSelectionsDirective() {
+export default function ngcOmniboxChoicesDirective() {
   return {
     restrict: 'E',
     require: {
       omnibox: '^^ngcOmnibox'
     },
     scope: true,
+    controller: () => {},
     compile(tElement) {
       const element = tElement[0];
       const tokens = element.firstElementChild;
@@ -12,7 +13,7 @@ export default function ngcOmniboxSelectionsDirective() {
       if (tokens) {
         tokens.setAttribute('ng-repeat', 'selection in omnibox.ngModel');
       } else {
-        throw new Error('ngc-omnibox-selections requires a root HTML element');
+        throw new Error('ngc-omnibox-choices requires a root HTML element');
       }
 
       return {
