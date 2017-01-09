@@ -184,11 +184,12 @@ export default class NgcOmniboxController {
   }
 
   /**
-   * Adds a particular suggestion item to the list of selected items.
+   * Chooses a suggestion item and adds it to the list of choices. If `multiple` is off, then only
+   * one choice can be chosen at a time, and the choice becomes the `ngModel`.
    *
    * @param {Object} item
    */
-  addToSelections(item) {
+  choose(item) {
     if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
         this.isSelectable({suggestion: item}) !== false) {
       if (this.multiple) {
@@ -201,11 +202,12 @@ export default class NgcOmniboxController {
   }
 
   /**
-   * Removes a particular suggestion item from the list of selected items.
+   * Removes a suggestion item from the list of choices. If `multiple` is off, then the `ngModel`
+   * is cleared.
    *
    * @param {Object} item
    */
-  removeFromSelections(item) {
+  unchoose(item) {
     if (item && Array.isArray(this.ngModel)) {
       this.ngModel.splice(this.ngModel.indexOf(item), 1);
     } else if (!this.multiple) {
@@ -222,7 +224,7 @@ export default class NgcOmniboxController {
       this.highlightNone();
     } else if (isSelectKey(keyCode)) {
       const selection = this._suggestionsUiList[this.highlightedIndex];
-      selection && this.addToSelections(selection.data);
+      selection && this.choose(selection.data);
     }
   }
 
