@@ -21,6 +21,7 @@
           placeholder="Enter a car make (e.g. Ford)"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
+          can-show="demo.shouldShowSuggestions(query)"
           multiple="true"
           source="demo.sourceFn(query)">
 
@@ -119,6 +120,11 @@
           // Only allow items, and not category headers, to be selectable
           this.isSelectable = function (item) {
             return !item.children;
+          };
+
+          // Only show suggestions when at least 2 characters have been entered
+          this.shouldShowSuggestions = function (query) {
+            return query.length >= 2;
           };
 
           this.sourceFn = function (query) {

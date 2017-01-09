@@ -16,6 +16,7 @@ export default {
     autofocus: '@',
     ngDisabled: '&',
     isSelectable: '&',
+    canShow: '&',
     multiple: '<',
     source: '&'
   }

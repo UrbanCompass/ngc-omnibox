@@ -1,5 +1,6 @@
 <input type="text" role="combobox" aria-autocomplete="list"
     ng-attr-aria-expanded="{{omnibox.hasSuggestions()}}"
+    ng-attr-aria-multiselectable="{{omnibox.multiple || undefined}}"
     ng-model="omnibox.query"
     ng-change="omnibox.onInputChange()"
     ng-keydown="omnibox.onKeyDown($event)"
@@ -10,4 +11,4 @@
 
 <div ng-transclude="omniboxSelections"
     ng-if="omnibox.multiple && omnibox.ngModel && omnibox.ngModel.length"></div>
-<div ng-transclude="omniboxSuggestions" ng-if="omnibox.isLoading || omnibox.query"></div>
+<div ng-transclude="omniboxSuggestions" ng-if="omnibox.shouldShowSuggestions()"></div>
