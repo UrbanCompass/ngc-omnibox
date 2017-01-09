@@ -2,6 +2,7 @@
 <html ng-app="demoApp">
   <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
       ngc-omnibox-suggestions,
       ngc-omnibox-selections {
@@ -27,7 +28,7 @@
           <div class="chip">
             {{selection.make_display}}
             <i class="close material-icons" ng-click="omnibox.removeFromSelections(selection)">
-              &times;
+              close
             </i>
           </div>
         </ngc-omnibox-selections>
