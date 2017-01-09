@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
       ngc-omnibox-suggestions,
-      ngc-omnibox-selections {
+      ngc-omnibox-choices {
         display: block;
       }
     </style>
@@ -24,14 +24,14 @@
           multiple="true"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-selections class="chips">
+        <ngc-omnibox-choices class="chips">
           <div class="chip">
             {{selection.make_display}}
             <i class="close material-icons" ng-click="omnibox.unchoose(selection)">
               close
             </i>
           </div>
-        </ngc-omnibox-selections>
+        </ngc-omnibox-choices>
 
         <ngc-omnibox-suggestions class="collection with-header">
 
