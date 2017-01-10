@@ -150,6 +150,13 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.canShow = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
+
+    it('should be visible when done loading if query and canShow pass', () => {
+      omniboxController.isLoading = false;
+      omniboxController.query = 'a real query';
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(true);
+    });
   });
 
   describe('changing the ngModel', () => {
