@@ -6,10 +6,10 @@ export default function ngcOmniboxFieldDirective($document) {
       omnibox: '^^ngcOmnibox'
     },
     bindToController: {
-      type: '<'
+      type: '@'
     },
     scope: true,
-    controller: () => {},
+    controller() {},
     controllerAs: 'omniboxField',
     compile(tElement) {
       const doc = $document[0];
@@ -30,7 +30,7 @@ export default function ngcOmniboxFieldDirective($document) {
           '{{::omnibox.autofocus === \'true\' || undefined}}');
       input.setAttribute('ng-disabled', 'omnibox.ngDisabled()');
 
-      tElement.html(input.outerHTML);
+      tElement[0].appendChild(input);
 
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
