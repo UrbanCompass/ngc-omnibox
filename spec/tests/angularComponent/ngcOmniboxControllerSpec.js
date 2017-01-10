@@ -115,4 +115,62 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.highlightedIndex).toBe(0);
     });
   });
+
+  describe('changing the ngModel', () => {
+    beforeEach(() => {
+      spyOn(omniboxController, '_ngModelUpdated');
+    });
+
+    it('should be detected when setting ngModel to a string', () => {
+      omniboxController.ngModel = 'My model value';
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('should be detected when setting ngModel to an array', () => {
+      omniboxController.ngModel = ['my', 'model'];
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('should be detected when replacing the ngModel array', () => {
+      omniboxController.ngModel = ['my', 'new', 'model'];
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+  });
+
+  describe('modifying the ngModel should be detected when', () => {
+    beforeEach(() => {
+      spyOn(omniboxController, '_ngModelUpdated');
+      omniboxController.ngModel = ['one', 'two', 'three'];
+    });
+
+    it('pushing to the ngModel array', () => {
+      omniboxController.ngModel.push('four');
+      expect(omniboxController.ngModel.toString()).toBe('one,two,three,four');
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('popping from the ngModel array', () => {
+      omniboxController.ngModel.pop();
+      expect(omniboxController.ngModel.toString()).toBe('one,two');
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('shifting the ngModel array', () => {
+      omniboxController.ngModel.shift();
+      expect(omniboxController.ngModel.toString()).toBe('two,three');
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('unshifting the ngModel array', () => {
+      omniboxController.ngModel.unshift('zero');
+      expect(omniboxController.ngModel.toString()).toBe('zero,one,two,three');
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+
+    it('splicing the ngModel array', () => {
+      omniboxController.ngModel.splice(1, 1);
+      expect(omniboxController.ngModel.toString()).toBe('one,three');
+      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+    });
+  });
 });
