@@ -349,6 +349,7 @@ export default class NgcOmniboxController {
    * array and its contents are modified using the array modification functions.
    */
   _ngModelUpdated() {
-    this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
+    this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) &&
+        !!this._ngModel.length;
   }
 }

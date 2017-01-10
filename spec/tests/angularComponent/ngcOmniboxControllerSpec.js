@@ -228,7 +228,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.multiple = false;
 
-      // Multiple will never get updated out of band like this, so just forcing the update here for the test
+      // Multiple will never get updated out of band like this, so just forcing the update here for
+      // the test
       omniboxController._ngModelUpdated();
 
       expect(omniboxController.shouldShowChoices).toBe(false);
