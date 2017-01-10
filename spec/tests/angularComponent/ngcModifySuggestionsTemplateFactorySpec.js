@@ -12,7 +12,6 @@ const unCategorizedTemplate = [
 
 const unCategorizedTemplateOutput = [
   '<ngc-omnibox-suggestion-item ng-repeat="suggestion in omnibox.suggestions" ',
-      'ng-if="omnibox.shouldShowSuggestions()" ',
       'suggestion="suggestion" ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="omnibox.highlightItem(suggestion)" ng-mouseleave="omnibox.highlightNone()" ',
@@ -31,8 +30,7 @@ const categorizedTemplate = [
 ].join('');
 
 const categorizedTemplateOutput = [
-  '<div ng-repeat="suggestion in suggestion.children || omnibox.suggestions" ',
-      'ng-if="omnibox.shouldShowSuggestions()">',
+  '<div ng-repeat="suggestion in suggestion.children || omnibox.suggestions">',
     '<div ngc-omnibox-suggestion-category="" ng-if="suggestion.children">',
       '<h5 ngc-omnibox-suggestion-header="" suggestion="suggestion" ',
           'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',

@@ -31,20 +31,17 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
     if (loadingEl) {
       loadingEl.setAttribute('role', 'progressbar');
-      loadingEl.setAttribute('ng-if',
-          'omnibox.shouldShowSuggestions() && omnibox.showLoadingElement');
+      loadingEl.setAttribute('ng-if', 'omnibox.showLoadingElement');
     }
 
     if (noResultsEl) {
-      noResultsEl.setAttribute('ng-if',
-          'omnibox.shouldShowSuggestions() && !omnibox.hasSuggestions && !omnibox.isLoading');
+      noResultsEl.setAttribute('ng-if', '!omnibox.hasSuggestions && !omnibox.isLoading');
     }
 
     if (categoryEl) {
       const categoryContainer = doc.createElement('div');
       categoryContainer.setAttribute('ng-repeat',
           'suggestion in suggestion.children || omnibox.suggestions');
-      categoryContainer.setAttribute('ng-if', 'omnibox.shouldShowSuggestions()');
       categoryEl.parentNode.insertBefore(categoryContainer, categoryEl);
 
       categoryEl.setAttribute('ng-if', 'suggestion.children');
@@ -84,7 +81,6 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       return element.innerHTML;
     } else if (itemEl) {
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
-      itemEl.setAttribute('ng-if', 'omnibox.shouldShowSuggestions()');
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',

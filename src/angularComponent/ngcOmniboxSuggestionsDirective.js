@@ -15,6 +15,14 @@ export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTempl
       return {
         pre(scope, iElement, iAttrs, omnibox) {
           scope.omnibox = omnibox;
+
+          scope.$watch(() => omnibox.shouldShowSuggestions(), () => {
+            if (omnibox.shouldShowSuggestions()) {
+              iElement.css('display', '');
+            } else {
+              iElement.css('display', 'none');
+            }
+          });
         }
       };
     }
