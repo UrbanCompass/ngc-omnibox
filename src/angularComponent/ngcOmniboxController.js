@@ -21,6 +21,7 @@ export default class NgcOmniboxController {
 
     this.isLoading = false; // Loading suggestions is in progress
     this.showLoadingElement = false; // Been loading for long enough we should show loading UI
+    this.shouldShowChoices = false; // Whether to show the choices elements
 
     this.highlightNone();
 
@@ -348,6 +349,6 @@ export default class NgcOmniboxController {
    * array and its contents are modified using the array modification functions.
    */
   _ngModelUpdated() {
-    this.shouldShowChoices = this.multiple && Array.isArray(this._ngModel) && this._ngModel.length;
+    this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
   }
 }

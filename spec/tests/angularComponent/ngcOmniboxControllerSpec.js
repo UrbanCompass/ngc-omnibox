@@ -209,4 +209,29 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
     });
   });
+
+  describe('choices visibility', () => {
+    beforeEach(() => {
+      omniboxController.multiple = true;
+      omniboxController.ngModel = ['choice'];
+    });
+
+    it('should require an ngModel with at least one choice', () => {
+      expect(omniboxController.shouldShowChoices).toBe(true);
+
+      omniboxController.ngModel = [];
+      expect(omniboxController.shouldShowChoices).toBe(false);
+    });
+
+    it('should require the component to be set to multiple', () => {
+      expect(omniboxController.shouldShowChoices).toBe(true);
+
+      omniboxController.multiple = false;
+
+      // Multiple will never get updated out of band like this, so just forcing the update here for the test
+      omniboxController._ngModelUpdated();
+
+      expect(omniboxController.shouldShowChoices).toBe(false);
+    });
+  });
 });
