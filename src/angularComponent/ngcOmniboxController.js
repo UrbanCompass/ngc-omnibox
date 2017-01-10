@@ -110,10 +110,6 @@ export default class NgcOmniboxController {
     return (this.isLoading || this.query) && this.canShow({query: this.query}) !== false;
   }
 
-  shouldShowChoices() {
-    return this.multple && Array.isArray(this.ngModel) && this.ngModel.length;
-  }
-
   /**
    * Tries to update the index of the currently highlighted item to be the next item in the list. If
    * we've reached the end, it'll loop back around and highlight the first item.
