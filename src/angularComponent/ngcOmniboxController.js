@@ -1,7 +1,5 @@
 import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard.js';
 
-/* global setTimeout, clearTimeout */
-
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
