@@ -230,6 +230,8 @@ export default class NgcOmniboxController {
       } else {
         this.ngModel = item;
       }
+
+      this._updateSuggestions();
     }
   }
 
@@ -240,10 +242,14 @@ export default class NgcOmniboxController {
    * @param {Object} item
    */
   unchoose(item) {
-    if (item && Array.isArray(this.ngModel)) {
-      this.ngModel.splice(this.ngModel.indexOf(item), 1);
-    } else if (!this.multiple) {
-      this.ngModel = null;
+    if (item) {
+      if (Array.isArray(this.ngModel)) {
+        this.ngModel.splice(this.ngModel.indexOf(item), 1);
+      } else if (!this.multiple) {
+        this.ngModel = null;
+      }
+
+      this._updateSuggestions();
     }
   }
 
