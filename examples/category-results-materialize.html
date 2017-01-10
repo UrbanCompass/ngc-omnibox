@@ -132,7 +132,9 @@
           this.sourceFn = function (query) {
             if (query) {
               return populateSearch().then(function (fuse) {
-                const searchResults = fuse.search(query);
+                const searchResults = fuse.search(query).filter(function (result) {
+                  return !demo.model.includes(result);
+                });
                 return $q.resolve(formatResults(searchResults));
               });
             } else {
