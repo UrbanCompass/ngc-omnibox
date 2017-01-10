@@ -37,7 +37,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
     if (noResultsEl) {
       noResultsEl.setAttribute('ng-if',
-          'omnibox.shouldShowSuggestions() && !omnibox.hasSuggestions() && !omnibox.isLoading');
+          'omnibox.shouldShowSuggestions() && !omnibox.hasSuggestions && !omnibox.isLoading');
     }
 
     if (categoryEl) {

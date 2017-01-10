@@ -16,6 +16,8 @@ export default class NgcOmniboxController {
   constructor($timeout) {
     this.$timeout = $timeout;
 
+    this.hasSuggestions = false; // Whether we have any suggestions loaded
+
     // Flattened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
@@ -41,6 +43,8 @@ export default class NgcOmniboxController {
       this._suggestions = Array.prototype.slice.apply(suggestions);
       this._buildSuggestionsUiList();
     }
+
+    this.hasSuggestions = Array.isArray(suggestions) && !!suggestions.length;
   }
 
   get suggestions() {
@@ -68,7 +72,7 @@ export default class NgcOmniboxController {
   onKeyDown($event) {
     const keyCode = $event.which;
 
-    if (this.hasSuggestions()) {
+    if (this.hasSuggestions) {
 
       if (isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) {
         $event.preventDefault();
@@ -86,20 +90,6 @@ export default class NgcOmniboxController {
   onKeyUp() {
     this.$timeout.cancel(this._keyDownTimeout);
     this._keyDownTimeout = null;
-  }
-
-  /**
-   * Determines if there are suggestions to display
-   *
-   * @param {Array} [suggestions=this.suggestions]
-   * @returns {Boolean}
-   */
-  hasSuggestions(suggestions = this.suggestions) {
-    if (!suggestions || !Array.isArray(suggestions) || !suggestions.length) {
-      return false;
-    }
-
-    return true;
   }
 
   /**

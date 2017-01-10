@@ -19,7 +19,7 @@ export default function ngcOmniboxFieldDirective($document) {
       input.setAttribute('ng-attr-type', '{{::omniboxField.type || \'text\'}}');
       input.setAttribute('role', 'combobox');
       input.setAttribute('aria-autocomplete', 'list');
-      input.setAttribute('ng-attr-aria-expanded', '{{omnibox.hasSuggestions()}}');
+      input.setAttribute('ng-attr-aria-expanded', '{{omnibox.hasSuggestions}}');
       input.setAttribute('ng-attr-aria-multiselectable', '{{omnibox.multiple || undefined}}');
       input.setAttribute('ng-model', 'omnibox.query');
       input.setAttribute('ng-change', 'omnibox.onInputChange($event)');
