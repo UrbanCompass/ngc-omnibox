@@ -1,5 +1,7 @@
 import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard.js';
 
+/* global setTimeout, clearTimeout */
+
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
 
@@ -9,13 +11,8 @@ const LOADING_SCREEN_THRESHOLD = 150;
 const customArrayPrototype = Object.create(Array.prototype);
 
 export default class NgcOmniboxController {
-  static get $inject() {
-    return ['$timeout'];
-  }
 
-  constructor($timeout) {
-    this.$timeout = $timeout;
-
+  constructor() {
     this.hasSuggestions = false; // Whether we have any suggestions loaded
 
     // Flattened list of elements in the order they appear in the UI
@@ -83,12 +80,12 @@ export default class NgcOmniboxController {
         this._handleKeyDown(keyCode);
       }
 
-      this._keyDownTimeout = this.$timeout(() => this._handleKeyDown(keyCode), KEY_REPEAT_DELAY);
+      this._keyDownTimeout = setTimeout(() => this._handleKeyDown(keyCode), KEY_REPEAT_DELAY);
     }
   }
 
   onKeyUp() {
-    this.$timeout.cancel(this._keyDownTimeout);
+    clearTimeout(this._keyDownTimeout);
     this._keyDownTimeout = null;
   }
 
@@ -293,13 +290,13 @@ export default class NgcOmniboxController {
   _showLoading() {
     this.isLoading = true;
 
-    this._loadingTimeout = this.$timeout(() => {
+    this._loadingTimeout = setTimeout(() => {
       this.showLoadingElement = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
   _hideLoading() {
-    this.$timeout.cancel(this._loadingTimeout);
+    clearTimeout(this._loadingTimeout);
     this._loadingTimeout = null;
     this.isLoading = false;
     this.showLoadingElement = false;
