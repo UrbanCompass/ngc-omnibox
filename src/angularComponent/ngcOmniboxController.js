@@ -6,6 +6,8 @@ const KEY_REPEAT_DELAY = 150;
 // Amount of time to wait results to load before showing the loading screen
 const LOADING_SCREEN_THRESHOLD = 150;
 
+const customArrayPrototype = Object.create(Array.prototype);
+
 export default class NgcOmniboxController {
   static get $inject() {
     return ['$timeout'];
@@ -14,13 +16,48 @@ export default class NgcOmniboxController {
   constructor($timeout) {
     this.$timeout = $timeout;
 
-    // Flatttened list of elements in the order they appear in the UI
+    // Flattened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
     this.isLoading = false; // Loading suggestions is in progress
     this.showLoadingElement = false; // Been loading for long enough we should show loading UI
 
     this.highlightNone();
+
+    // Listen for updates to the model when it's an array
+    const omnibox = this;
+    ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((property) => {
+      customArrayPrototype[property] = function (...args) {
+        const ret = Array.prototype[property].apply(this, args);
+        omnibox._ngModelUpdated();
+        return ret;
+      };
+    });
+  }
+
+  set suggestions(suggestions) {
+    if (Array.isArray(suggestions)) {
+      this._suggestions = Array.prototype.slice.apply(suggestions);
+      this._buildSuggestionsUiList();
+    }
+  }
+
+  get suggestions() {
+    return this._suggestions;
+  }
+
+  set ngModel(newModel) {
+    this._ngModel = newModel;
+
+    if (Array.isArray(this._ngModel)) {
+      Object.setPrototypeOf(this._ngModel, customArrayPrototype);
+    }
+
+    this._ngModelUpdated();
+  }
+
+  get ngModel() {
+    return this._ngModel;
   }
 
   onInputChange() {
@@ -71,6 +108,10 @@ export default class NgcOmniboxController {
    */
   shouldShowSuggestions() {
     return (this.isLoading || this.query) && this.canShow({query: this.query}) !== false;
+  }
+
+  shouldShowChoices() {
+    return this.multple && Array.isArray(this.ngModel) && this.ngModel.length;
   }
 
   /**
@@ -262,17 +303,6 @@ export default class NgcOmniboxController {
     });
   }
 
-  set suggestions(suggestions) {
-    if (Array.isArray(suggestions)) {
-      this._suggestions = Array.prototype.slice.apply(suggestions);
-      this._buildSuggestionsUiList();
-    }
-  }
-
-  get suggestions() {
-    return this._suggestions;
-  }
-
   _showLoading() {
     this.isLoading = true;
 
@@ -315,5 +345,13 @@ export default class NgcOmniboxController {
     }
 
     this._suggestionsUiList = flatten(this.suggestions);
+  }
+
+  /**
+   * Called when the model has been modified, either by being replaced entirely or when it's an
+   * array and its contents are modified using the array modification functions.
+   */
+  _ngModelUpdated() {
+    this.shouldShowChoices = this.multiple && Array.isArray(this._ngModel) && this._ngModel.length;
   }
 }
