@@ -116,6 +116,42 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
+  describe('suggestion visibility', () => {
+    beforeEach(() => {
+      omniboxController.isLoading = false;
+      omniboxController.query = '';
+      omniboxController.canShow = () => false;
+    });
+
+    it('should not be determined just by if the suggestions are loading', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.isLoading = true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should not be determined by just the presence of a query', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.query = 'my query';
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should not be controllable by just the canShow binding function', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should be determined by loading state, query, and canShow binding', () => {
+      omniboxController.isLoading = true;
+      omniboxController.query = 'my query';
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(true);
+    });
+  });
+
   describe('changing the ngModel', () => {
     beforeEach(() => {
       spyOn(omniboxController, '_ngModelUpdated');
