@@ -25,6 +25,8 @@
           multiple="true"
           source="demo.sourceFn(query)">
 
+        <ngc-omnibox-field type="text"></ngc-omnibox-field>
+
         <ngc-omnibox-choices class="chips">
           <div class="chip">
             {{selection.make_display}}
@@ -115,7 +117,7 @@
             return Object.keys(grouped).map((groupName) => grouped[groupName]);
           };
 
-          this.model = '';
+          this.model = [];
 
           // Only allow items, and not category headers, to be selectable
           this.isSelectable = function (item) {
