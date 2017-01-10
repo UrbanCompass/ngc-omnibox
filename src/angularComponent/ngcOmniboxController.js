@@ -27,7 +27,7 @@ export default class NgcOmniboxController {
     ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((property) => {
       customArrayPrototype[property] = function (...args) {
         const ret = Array.prototype[property].apply(this, args);
-        omnibox._ngModelUpdated();
+        omnibox._onNgModelChange();
         return ret;
       };
     });
@@ -53,7 +53,7 @@ export default class NgcOmniboxController {
       Object.setPrototypeOf(this._ngModel, customArrayPrototype);
     }
 
-    this._ngModelUpdated();
+    this._onNgModelChange();
   }
 
   get ngModel() {
@@ -333,7 +333,7 @@ export default class NgcOmniboxController {
    * Called when the model has been modified, either by being replaced entirely or when it's an
    * array and its contents are modified using the array modification functions.
    */
-  _ngModelUpdated() {
+  _onNgModelChange() {
     this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) &&
         !!this._ngModel.length;
   }

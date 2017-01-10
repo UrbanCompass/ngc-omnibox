@@ -161,59 +161,59 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   describe('changing the ngModel', () => {
     beforeEach(() => {
-      spyOn(omniboxController, '_ngModelUpdated');
+      spyOn(omniboxController, '_onNgModelChange');
     });
 
     it('should be detected when setting ngModel to a string', () => {
       omniboxController.ngModel = 'My model value';
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('should be detected when setting ngModel to an array', () => {
       omniboxController.ngModel = ['my', 'model'];
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('should be detected when replacing the ngModel array', () => {
       omniboxController.ngModel = ['my', 'new', 'model'];
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
   });
 
   describe('modifying the ngModel should be detected when', () => {
     beforeEach(() => {
-      spyOn(omniboxController, '_ngModelUpdated');
+      spyOn(omniboxController, '_onNgModelChange');
       omniboxController.ngModel = ['one', 'two', 'three'];
     });
 
     it('pushing to the ngModel array', () => {
       omniboxController.ngModel.push('four');
       expect(omniboxController.ngModel.toString()).toBe('one,two,three,four');
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('popping from the ngModel array', () => {
       omniboxController.ngModel.pop();
       expect(omniboxController.ngModel.toString()).toBe('one,two');
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('shifting the ngModel array', () => {
       omniboxController.ngModel.shift();
       expect(omniboxController.ngModel.toString()).toBe('two,three');
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('unshifting the ngModel array', () => {
       omniboxController.ngModel.unshift('zero');
       expect(omniboxController.ngModel.toString()).toBe('zero,one,two,three');
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
 
     it('splicing the ngModel array', () => {
       omniboxController.ngModel.splice(1, 1);
       expect(omniboxController.ngModel.toString()).toBe('one,three');
-      expect(omniboxController._ngModelUpdated).toHaveBeenCalled();
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
   });
 
@@ -237,7 +237,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       // Multiple will never get updated out of band like this, so just forcing the update here for
       // the test
-      omniboxController._ngModelUpdated();
+      omniboxController._onNgModelChange();
 
       expect(omniboxController.shouldShowChoices).toBe(false);
     });
