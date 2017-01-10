@@ -21,8 +21,11 @@
           placeholder="Enter a car make (e.g. Ford)"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
+          can-show="demo.shouldShowSuggestions(query)"
           multiple="true"
           source="demo.sourceFn(query)">
+
+        <ngc-omnibox-field type="text"></ngc-omnibox-field>
 
         <ngc-omnibox-choices class="chips">
           <div class="chip">
@@ -114,11 +117,16 @@
             return Object.keys(grouped).map((groupName) => grouped[groupName]);
           };
 
-          this.model = '';
+          this.model = [];
 
           // Only allow items, and not category headers, to be selectable
           this.isSelectable = function (item) {
             return !item.children;
+          };
+
+          // Only show suggestions when at least 2 characters have been entered
+          this.shouldShowSuggestions = function (query) {
+            return query.length >= 2;
           };
 
           this.sourceFn = function (query) {

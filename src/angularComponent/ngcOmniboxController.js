@@ -6,21 +6,58 @@ const KEY_REPEAT_DELAY = 150;
 // Amount of time to wait results to load before showing the loading screen
 const LOADING_SCREEN_THRESHOLD = 150;
 
+const customArrayPrototype = Object.create(Array.prototype);
+
 export default class NgcOmniboxController {
-  static get $inject() {
-    return ['$timeout'];
-  }
 
-  constructor($timeout) {
-    this.$timeout = $timeout;
+  constructor() {
+    this.hasSuggestions = false; // Whether we have any suggestions loaded
 
-    // Flatttened list of elements in the order they appear in the UI
+    // Flattened list of elements in the order they appear in the UI
     this._suggestionsUiList = [];
 
     this.isLoading = false; // Loading suggestions is in progress
     this.showLoadingElement = false; // Been loading for long enough we should show loading UI
+    this.shouldShowChoices = false; // Whether to show the choices elements
 
     this.highlightNone();
+
+    // Listen for updates to the model when it's an array
+    const omnibox = this;
+    ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((property) => {
+      customArrayPrototype[property] = function (...args) {
+        const ret = Array.prototype[property].apply(this, args);
+        omnibox._onNgModelChange();
+        return ret;
+      };
+    });
+  }
+
+  set suggestions(suggestions) {
+    if (Array.isArray(suggestions)) {
+      this._suggestions = Array.prototype.slice.apply(suggestions);
+      this._buildSuggestionsUiList();
+    }
+
+    this.hasSuggestions = Array.isArray(suggestions) && !!suggestions.length;
+  }
+
+  get suggestions() {
+    return this._suggestions;
+  }
+
+  set ngModel(newModel) {
+    this._ngModel = newModel;
+
+    if (Array.isArray(this._ngModel)) {
+      Object.setPrototypeOf(this._ngModel, customArrayPrototype);
+    }
+
+    this._onNgModelChange();
+  }
+
+  get ngModel() {
+    return this._ngModel;
   }
 
   onInputChange() {
@@ -30,7 +67,7 @@ export default class NgcOmniboxController {
   onKeyDown($event) {
     const keyCode = $event.which;
 
-    if (this.hasSuggestions()) {
+    if (this.hasSuggestions) {
 
       if (isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) {
         $event.preventDefault();
@@ -41,27 +78,22 @@ export default class NgcOmniboxController {
         this._handleKeyDown(keyCode);
       }
 
-      this._keyDownTimeout = this.$timeout(() => this._handleKeyDown(keyCode), KEY_REPEAT_DELAY);
+      this._keyDownTimeout = setTimeout(() => this._handleKeyDown(keyCode), KEY_REPEAT_DELAY);
     }
   }
 
   onKeyUp() {
-    this.$timeout.cancel(this._keyDownTimeout);
+    clearTimeout(this._keyDownTimeout);
     this._keyDownTimeout = null;
   }
 
   /**
-   * Determines if there are suggestions to display
+   * Whether or not we should show the suggestions menu.
    *
-   * @param {Array} [suggestions=this.suggestions]
    * @returns {Boolean}
    */
-  hasSuggestions(suggestions = this.suggestions) {
-    if (!suggestions || !Array.isArray(suggestions) || !suggestions.length) {
-      return false;
-    }
-
-    return true;
+  shouldShowSuggestions() {
+    return (this.isLoading || !!this.query) && this.canShow({query: this.query}) !== false;
   }
 
   /**
@@ -245,7 +277,7 @@ export default class NgcOmniboxController {
 
       this._hideLoading();
 
-      if (Array.isArray(suggestions)) {
+      if (suggestions && Array.isArray(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
@@ -253,27 +285,16 @@ export default class NgcOmniboxController {
     });
   }
 
-  set suggestions(suggestions) {
-    if (Array.isArray(suggestions)) {
-      this._suggestions = Array.prototype.slice.apply(suggestions);
-      this._buildSuggestionsUiList();
-    }
-  }
-
-  get suggestions() {
-    return this._suggestions;
-  }
-
   _showLoading() {
     this.isLoading = true;
 
-    this._loadingTimeout = this.$timeout(() => {
+    this._loadingTimeout = setTimeout(() => {
       this.showLoadingElement = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
   _hideLoading() {
-    this.$timeout.cancel(this._loadingTimeout);
+    clearTimeout(this._loadingTimeout);
     this._loadingTimeout = null;
     this.isLoading = false;
     this.showLoadingElement = false;
@@ -306,5 +327,14 @@ export default class NgcOmniboxController {
     }
 
     this._suggestionsUiList = flatten(this.suggestions);
+  }
+
+  /**
+   * Called when the model has been modified, either by being replaced entirely or when it's an
+   * array and its contents are modified using the array modification functions.
+   */
+  _onNgModelChange() {
+    this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) &&
+        !!this._ngModel.length;
   }
 }

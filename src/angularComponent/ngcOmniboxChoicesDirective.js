@@ -19,6 +19,14 @@ export default function ngcOmniboxChoicesDirective() {
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
+
+          scope.$watch('omnibox.shouldShowChoices', () => {
+            if (omnibox.multiple && omnibox.ngModel && omnibox.ngModel.length) {
+              iElement.css('display', '');
+            } else {
+              iElement.css('display', 'none');
+            }
+          });
         }
       };
     }

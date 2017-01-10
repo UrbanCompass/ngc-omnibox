@@ -14,37 +14,37 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   describe('when determining if there are suggestions', () => {
     it('should return false for falsy values', () => {
       omniboxController.suggestions = false;
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
 
       omniboxController.suggestions = null;
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
 
       omniboxController.suggestions = '';
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
     });
 
     it('should return false for suggestions that aren\'t an Array', () => {
       omniboxController.suggestions = 'false';
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
 
       omniboxController.suggestions = true;
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
 
       omniboxController.suggestions = 100;
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
 
       omniboxController.suggestions = {test: 'me'};
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
     });
 
     it('should return false for empty Arrays', () => {
       omniboxController.suggestions = [];
-      expect(omniboxController.hasSuggestions()).toBe(false);
+      expect(omniboxController.hasSuggestions).toBe(false);
     });
 
     it('should return true for non-empty Arrays', () => {
       omniboxController.suggestions = ['test', 'me'];
-      expect(omniboxController.hasSuggestions()).toBe(true);
+      expect(omniboxController.hasSuggestions).toBe(true);
     });
   });
 
@@ -113,6 +113,133 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.highlightNext();
       expect(omniboxController.highlightedIndex).toBe(0);
+    });
+  });
+
+  describe('suggestion visibility', () => {
+    beforeEach(() => {
+      omniboxController.isLoading = false;
+      omniboxController.query = '';
+      omniboxController.canShow = () => false;
+    });
+
+    it('should not be determined just by if the suggestions are loading', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.isLoading = true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should not be determined by just the presence of a query', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.query = 'my query';
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should not be controllable by just the canShow binding function', () => {
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(false);
+    });
+
+    it('should be determined by loading state, query, and canShow binding', () => {
+      omniboxController.isLoading = true;
+      omniboxController.query = 'my query';
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(true);
+    });
+
+    it('should be visible when done loading if query and canShow pass', () => {
+      omniboxController.isLoading = false;
+      omniboxController.query = 'a real query';
+      omniboxController.canShow = () => true;
+      expect(omniboxController.shouldShowSuggestions()).toBe(true);
+    });
+  });
+
+  describe('changing the ngModel', () => {
+    beforeEach(() => {
+      spyOn(omniboxController, '_onNgModelChange');
+    });
+
+    it('should be detected when setting ngModel to a string', () => {
+      omniboxController.ngModel = 'My model value';
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('should be detected when setting ngModel to an array', () => {
+      omniboxController.ngModel = ['my', 'model'];
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('should be detected when replacing the ngModel array', () => {
+      omniboxController.ngModel = ['my', 'new', 'model'];
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+  });
+
+  describe('modifying the ngModel should be detected when', () => {
+    beforeEach(() => {
+      spyOn(omniboxController, '_onNgModelChange');
+      omniboxController.ngModel = ['one', 'two', 'three'];
+    });
+
+    it('pushing to the ngModel array', () => {
+      omniboxController.ngModel.push('four');
+      expect(omniboxController.ngModel.toString()).toBe('one,two,three,four');
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('popping from the ngModel array', () => {
+      omniboxController.ngModel.pop();
+      expect(omniboxController.ngModel.toString()).toBe('one,two');
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('shifting the ngModel array', () => {
+      omniboxController.ngModel.shift();
+      expect(omniboxController.ngModel.toString()).toBe('two,three');
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('unshifting the ngModel array', () => {
+      omniboxController.ngModel.unshift('zero');
+      expect(omniboxController.ngModel.toString()).toBe('zero,one,two,three');
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+
+    it('splicing the ngModel array', () => {
+      omniboxController.ngModel.splice(1, 1);
+      expect(omniboxController.ngModel.toString()).toBe('one,three');
+      expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+  });
+
+  describe('choices visibility', () => {
+    beforeEach(() => {
+      omniboxController.multiple = true;
+      omniboxController.ngModel = ['choice'];
+    });
+
+    it('should require an ngModel with at least one choice', () => {
+      expect(omniboxController.shouldShowChoices).toBe(true);
+
+      omniboxController.ngModel = [];
+      expect(omniboxController.shouldShowChoices).toBe(false);
+    });
+
+    it('should require the component to be set to multiple', () => {
+      expect(omniboxController.shouldShowChoices).toBe(true);
+
+      omniboxController.multiple = false;
+
+      // Multiple will never get updated out of band like this, so just forcing the update here for
+      // the test
+      omniboxController._onNgModelChange();
+
+      expect(omniboxController.shouldShowChoices).toBe(false);
     });
   });
 });
