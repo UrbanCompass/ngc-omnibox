@@ -30,6 +30,7 @@ export default function ngcOmniboxFieldDirective($document) {
           '{{::omnibox.autofocus === \'true\' || undefined}}');
       input.setAttribute('ng-disabled', 'omnibox.ngDisabled()');
 
+      tElement.html('');
       tElement[0].appendChild(input);
 
       return {
