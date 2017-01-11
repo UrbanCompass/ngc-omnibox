@@ -5,7 +5,7 @@ export default function ngcOmniboxChoicesDirective() {
       omnibox: '^^ngcOmnibox'
     },
     scope: true,
-    controller: () => {},
+    controller() {},
     compile(tElement) {
       const element = tElement[0];
       const tokens = element.firstElementChild;

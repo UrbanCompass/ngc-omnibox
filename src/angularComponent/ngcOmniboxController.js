@@ -205,6 +205,22 @@ export default class NgcOmniboxController {
     return this._highlightedIndex;
   }
 
+  set fieldElement(el) {
+    this._fieldElement = el;
+  }
+
+  get fieldElement() {
+    return this._fieldElement;
+  }
+
+  focus() {
+    this._fieldElement && this._fieldElement.focus();
+  }
+
+  blur() {
+    this._fieldElement && this._fieldElement.blur();
+  }
+
   /**
    * Whether a particular suggestion item is highlighted.
    *
@@ -232,6 +248,7 @@ export default class NgcOmniboxController {
       }
 
       this.query = '';
+      this.focus();
       this._updateSuggestions();
     }
   }
@@ -250,6 +267,7 @@ export default class NgcOmniboxController {
         this.ngModel = null;
       }
 
+      this.focus();
       this._updateSuggestions();
     }
   }

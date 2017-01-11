@@ -47,6 +47,8 @@ export default function ngcOmniboxFieldDirective($document) {
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
+
+          omnibox.fieldElement = input;
         }
       };
     }
