@@ -4,9 +4,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-      ngc-omnibox-suggestions,
-      ngc-omnibox-choices {
+      ngc-omnibox-suggestions {
         display: block;
+      }
+
+      /* Small work around Materialize so input field takes up the remainder of the space from chips */
+      .chips {
+        display: flex;
+        align-items: center;
+      }
+      .chips .input {
+        width: 100% !important;
+      }
+      ngc-omnibox-field {
+        flex-grow: 1;
       }
     </style>
   </head>
@@ -25,16 +36,18 @@
           multiple="true"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-field type="text"></ngc-omnibox-field>
+        <div class="chips" ng-class="{'focus': omnibox.fieldHasFocus}">
+          <ngc-omnibox-choices>
+            <div class="chip" tabindex="1" ng-focus="hasFocus = true" ng-blur="hasFocus = false" ng-class="{'selected': hasFocus}">
+              {{selection.make_display}}
+              <i class="close material-icons" ng-click="omnibox.unchoose(selection)">
+                close
+              </i>
+            </div>
+          </ngc-omnibox-choices>
 
-        <ngc-omnibox-choices class="chips">
-          <div class="chip">
-            {{selection.make_display}}
-            <i class="close material-icons" ng-click="omnibox.unchoose(selection)">
-              close
-            </i>
-          </div>
-        </ngc-omnibox-choices>
+          <ngc-omnibox-field class="input" type="text" tabindex="0" ng-focus="omnibox.fieldHasFocus = true" ng-blur="omnibox.fieldHasFocus = false"></ngc-omnibox-field>
+        </div>
 
         <ngc-omnibox-suggestions class="collection with-header">
 
