@@ -231,6 +231,7 @@ export default class NgcOmniboxController {
         this.ngModel = item;
       }
 
+      this.query = '';
       this._updateSuggestions();
     }
   }
