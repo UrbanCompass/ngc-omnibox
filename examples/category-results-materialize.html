@@ -37,15 +37,18 @@
 
         <div class="chips" ng-class="{'focus': omnibox.fieldHasFocus}">
           <ngc-omnibox-choices>
-            <div class="chip" tabindex="1" ng-focus="hasFocus = true" ng-blur="hasFocus = false" ng-class="{'selected': hasFocus}">
-              {{selection.make_display}}
-              <i class="close material-icons" ng-click="omnibox.unchoose(selection)">
+            <div class="chip" tabindex="1" ng-class="{'selected': hasFocus}"
+                ng-focus="hasFocus = true" ng-blur="hasFocus = false">
+              {{choice.make_display}}
+              <i class="close material-icons" ng-click="omnibox.unchoose(choice)">
                 close
               </i>
             </div>
           </ngc-omnibox-choices>
 
-          <ngc-omnibox-field class="input" type="text" tabindex="0" ng-focus="omnibox.fieldHasFocus = true" ng-blur="omnibox.fieldHasFocus = false"></ngc-omnibox-field>
+          <ngc-omnibox-field class="input" type="text" tabindex="0"
+              ng-focus="omnibox.fieldHasFocus = true" ng-blur="omnibox.fieldHasFocus = false">
+          </ngc-omnibox-field>
         </div>
 
         <ngc-omnibox-suggestions class="collection with-header">
