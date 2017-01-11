@@ -69,7 +69,7 @@ export default class NgcOmniboxController {
 
     if (this.hasSuggestions) {
 
-      if (isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) {
+      if (isVerticalMovementKey(keyCode) || (isSelectKey(keyCode) && this.highlightedIndex >= 0)) {
         $event.preventDefault();
         $event.stopPropagation();
       }
