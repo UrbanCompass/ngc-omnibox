@@ -283,7 +283,9 @@ export default class NgcOmniboxController {
 
       this._hideLoading();
 
-      if (!suggestions || Array.isArray(suggestions)) {
+      if (!suggestions) {
+        this.suggestions = null;
+      } else if (Array.isArray(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
