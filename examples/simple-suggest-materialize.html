@@ -24,6 +24,7 @@
           placeholder="Search here..."
           autofocus="true"
           ng-disabled="demo.isDisabled"
+          can-show="demo.shouldShowSuggestions(query)"
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-field type="text"></ngc-omnibox-field>
