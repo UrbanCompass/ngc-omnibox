@@ -31,7 +31,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
     if (loadingEl) {
       loadingEl.setAttribute('role', 'progressbar');
-      loadingEl.setAttribute('ng-if', 'omnibox.showLoadingElement');
+      loadingEl.setAttribute('ng-if', 'omnibox.shouldShowLoadingElement');
     }
 
     if (noResultsEl) {
@@ -60,9 +60,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
         itemHeader.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
         itemHeader.setAttribute('ng-attr-aria-readonly',
             '{{suggestionItem.isSelectable() === false || undefined}}');
-        itemHeader.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
-        itemHeader.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
-        itemHeader.setAttribute('ng-click', 'omnibox.choose(suggestion)');
+        itemHeader.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
+        itemHeader.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
+        itemHeader.setAttribute('ng-click', 'suggestionItem.handleClick()');
       }
 
       categoryContainer.appendChild(categoryEl);
@@ -72,9 +72,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
-      itemEl.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
-      itemEl.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
-      itemEl.setAttribute('ng-click', 'omnibox.choose(suggestion)');
+      itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
+      itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
+      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
 
@@ -85,9 +85,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
-      itemEl.setAttribute('ng-mouseenter', 'omnibox.highlightItem(suggestion)');
-      itemEl.setAttribute('ng-mouseleave', 'omnibox.highlightNone()');
-      itemEl.setAttribute('ng-click', 'omnibox.choose(suggestion)');
+      itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
+      itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
+      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
 
       return element.innerHTML;
     } else {

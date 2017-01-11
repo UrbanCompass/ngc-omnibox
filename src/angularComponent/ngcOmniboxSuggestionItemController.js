@@ -1,5 +1,17 @@
 export default class NgcOmniboxSuggestionItemController {
 
+  handleMouseEnter() {
+    this.omnibox.highlightItem(this.suggestion);
+  }
+
+  handleMouseLeave() {
+    this.omnibox.highlightNone();
+  }
+
+  handleClick() {
+    this.omnibox.choose(this.suggestion);
+  }
+
   /**
    * Whether or not the item is currently highlighted.
    *
