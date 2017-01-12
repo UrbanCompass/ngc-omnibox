@@ -232,7 +232,7 @@ export default class NgcOmniboxController {
     return item === this._highlightedItem;
   }
 
-  highlightNextSuggestionChoice() {
+  highlightNextChoice() {
     const index = this.ngModel.indexOf(this.highlightedChoice);
 
     if (index < this.ngModel.length - 1) {
@@ -242,7 +242,7 @@ export default class NgcOmniboxController {
     }
   }
 
-  highlightPreviousSuggestionChoice() {
+  highlightPreviousChoice() {
     const index = this.ngModel.indexOf(this.highlightedChoice);
 
     if (index > 0) {
@@ -281,8 +281,9 @@ export default class NgcOmniboxController {
    * one choice can be chosen at a time, and the choice becomes the `ngModel`.
    *
    * @param {Object} item
+   * @param {Boolean} shouldFocusField -- Whether to focus the input field after choosing
    */
-  choose(item) {
+  choose(item, shouldFocusField = true) {
     if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
         this.isSelectable({suggestion: item}) !== false) {
       if (this.multiple) {
@@ -293,7 +294,7 @@ export default class NgcOmniboxController {
       }
 
       this.query = '';
-      this.focus();
+      shouldFocusField && this.focus();
       this._updateSuggestions();
     }
   }
@@ -303,8 +304,9 @@ export default class NgcOmniboxController {
    * is cleared.
    *
    * @param {Object} item
+   * @param {Boolean} shouldFocusField -- Whether to focus the input field after unchoosing
    */
-  unchoose(item) {
+  unchoose(item, shouldFocusField = true) {
     if (item) {
       if (Array.isArray(this.ngModel)) {
         this.ngModel.splice(this.ngModel.indexOf(item), 1);
@@ -312,7 +314,7 @@ export default class NgcOmniboxController {
         this.ngModel = null;
       }
 
-      this.focus();
+      shouldFocusField && this.focus();
       this._updateSuggestions();
     }
   }
@@ -380,12 +382,13 @@ export default class NgcOmniboxController {
       if (this.doc.activeElement === this._fieldElement) {
         this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
 
-        // We should now consider navigating out of the input field. We only want to trigger this when
-        // we are already at the beginning or end of the field and hit Left or Right *again*.
+        // We should now consider navigating out of the input field. We only want to trigger this
+        // when we are already at the beginning or end of the field and hit Left or Right *again*.
         if (this.selectionStartKeyDown === this.selectionStartKeyUp) {
           const inputLength = this._fieldElement.value.length;
 
-          if ((keyCode === KEY.LEFT || keyCode === KEY.BACKSPACE) && this.selectionStartKeyUp === 0) {
+          if ((keyCode === KEY.LEFT || keyCode === KEY.BACKSPACE) &&
+              this.selectionStartKeyUp === 0) {
             this.highlightLastChoice();
           } else if (keyCode === KEY.RIGHT && this.selectionStartKeyUp === inputLength) {
             this.highlightFirstChoice();
@@ -393,12 +396,17 @@ export default class NgcOmniboxController {
         }
       } else if (this.highlightedChoice) {
         if (keyCode === KEY.LEFT) {
-          this.highlightPreviousSuggestionChoice();
+          this.highlightPreviousChoice();
         } else if (keyCode === KEY.RIGHT) {
-          this.highlightNextSuggestionChoice();
-        } else if (keyCode === KEY.BACKSPACE || keyCode === KEY.DELETE) {
-          this.unchoose(this.highlightedChoice);
-          this.highlightNextSuggestionChoice();
+          this.highlightNextChoice();
+        } else if (keyCode === KEY.BACKSPACE) {
+          const choice = this.highlightedChoice;
+          this.highlightPreviousChoice();
+          this.unchoose(choice, false);
+        } else if (keyCode === KEY.DELETE) {
+          const choice = this.highlightedChoice;
+          this.highlightNextChoice();
+          this.unchoose(choice, false);
         }
       }
     }

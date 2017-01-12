@@ -4,9 +4,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   let omniboxController;
 
   beforeEach(() => {
-    const fakeEl = {removeAttribute: () => {}, setAttribute: () => {}};
+    const fakeEl = {
+      addEventListener() {},
+      remvoeEventListener() {},
+      removeAttribute() {},
+      setAttribute() {}
+    };
 
-    omniboxController = new NgcOmniboxController();
+    omniboxController = new NgcOmniboxController([fakeEl], [fakeEl], {$apply() {}});
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
     omniboxController.isSelectable = () => {};
   });
