@@ -24,7 +24,7 @@ export default class NgcOmniboxController {
     this.highlightedChoice = null; // Keeps track of the currently highlighted choice
 
     this.isLoading = false; // Loading suggestions is in progress
-    this.showLoadingElement = false; // Been loading for long enough we should show loading UI
+    this.shouldShowLoadingElement = false; // Been loading for long enough we should show loading UI
 
     this.highlightNone();
 
@@ -443,7 +443,7 @@ export default class NgcOmniboxController {
     this.isLoading = true;
 
     this._loadingTimeout = setTimeout(() => {
-      this.showLoadingElement = true;
+      this.shouldShowLoadingElement = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
@@ -451,7 +451,7 @@ export default class NgcOmniboxController {
     clearTimeout(this._loadingTimeout);
     this._loadingTimeout = null;
     this.isLoading = false;
-    this.showLoadingElement = false;
+    this.shouldShowLoadingElement = false;
   }
 
   /**

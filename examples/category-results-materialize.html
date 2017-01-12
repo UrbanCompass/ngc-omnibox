@@ -23,13 +23,13 @@
   </head>
   <body>
     <main class="container" ng-controller="OmniboxExampleController as demo">
-      <h1>Categorized Results Omnibox Example</h1>
+      <h1>Categorized Results Example - Materialize CSS Framework</h1>
       <h2>Search For a Car Make by Country</h2>
       <p>Model value: {{demo.model}}</p>
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Enter a car make (e.g. Ford)"
+          placeholder="Enter a car make (e.g. Ford)..."
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"

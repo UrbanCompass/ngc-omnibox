@@ -14,14 +14,14 @@
 </head>
   <body>
     <main class="container" ng-controller="OmniboxExampleController as demo">
-      <h1>Simple Omnibox Example</h1>
+      <h1>Simple Example - Materialize CSS Framework</h1>
       <h2>Search through Github's emoji</h2>
       <p>Model value: {{demo.model}}</p>
 
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Search here..."
+          placeholder="Type in the name of an emoji (2 characters minimum)..."
           autofocus="true"
           ng-disabled="demo.isDisabled"
           can-show="demo.shouldShowSuggestions(query)"
