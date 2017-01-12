@@ -1,5 +1,3 @@
-import NgcOmniboxChoicesController from './NgcOmniboxChoicesController.js';
-
 export default function ngcOmniboxChoicesDirective() {
   return {
     restrict: 'E',
@@ -7,15 +5,17 @@ export default function ngcOmniboxChoicesDirective() {
       omnibox: '^^ngcOmnibox'
     },
     scope: true,
-    controller: NgcOmniboxChoicesController,
+    controller() {},
     controllerAs: 'choices',
     compile(tElement) {
       const element = tElement[0];
-      const tokens = element.firstElementChild;
+      const token = element.firstElementChild;
 
-      if (tokens) {
-        tokens.setAttribute('ng-repeat', 'choice in omnibox.ngModel');
-        tokens.setAttribute('ng-keyup', 'choices.handleKeyUp($event, choice)');
+      if (token) {
+        token.setAttribute('tabindex', -1);
+        token.setAttribute('ng-repeat', 'choice in omnibox.ngModel');
+        token.setAttribute('ng-focus', 'omnibox.highlightedChoice = choice');
+        token.setAttribute('ng-blur', 'omnibox.highlightedChoice = null');
       } else {
         throw new Error('ngc-omnibox-choices requires a root HTML element');
       }
@@ -24,7 +24,7 @@ export default function ngcOmniboxChoicesDirective() {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
 
-          scope.$watch('omnibox.shouldShowChoices', () => {
+          scope.$watch('omnibox.hasChoices', () => {
             if (omnibox.multiple && omnibox.ngModel && omnibox.ngModel.length) {
               iElement.css('display', '');
             } else {

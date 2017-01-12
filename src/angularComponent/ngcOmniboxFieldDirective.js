@@ -33,8 +33,6 @@ export default function ngcOmniboxFieldDirective($document) {
       input.setAttribute('ng-change', 'omnibox.onInputChange($event)');
       input.setAttribute('ng-disabled', 'omnibox.ngDisabled()');
 
-      input.setAttribute('ng-keydown', 'omnibox.onKeyDown($event)');
-      input.setAttribute('ng-keyup', 'omnibox.onKeyUp($event)');
       input.setAttribute('ng-focus', 'omniboxField.ngFocus()');
       input.setAttribute('ng-blur', 'omniboxField.ngBlur()');
 
@@ -47,7 +45,6 @@ export default function ngcOmniboxFieldDirective($document) {
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
-
           omnibox.fieldElement = input;
         }
       };

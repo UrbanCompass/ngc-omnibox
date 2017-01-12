@@ -88,10 +88,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       expect(omniboxController.highlightedIndex).toBe(-1);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(1);
     });
 
@@ -100,7 +100,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.highlightedIndex = 1;
 
-      omniboxController.highlightPrevious();
+      omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
     });
 
@@ -108,10 +108,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.suggestions = ['test', 'me', 'again', 'please'];
       omniboxController.highlightedIndex = 0;
 
-      omniboxController.highlightPrevious();
+      omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(3);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
     });
   });
@@ -224,14 +224,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should require an ngModel with at least one choice', () => {
-      expect(omniboxController.shouldShowChoices).toBe(true);
+      expect(omniboxController.hasChoices).toBe(true);
 
       omniboxController.ngModel = [];
-      expect(omniboxController.shouldShowChoices).toBe(false);
+      expect(omniboxController.hasChoices).toBe(false);
     });
 
     it('should require the component to be set to multiple', () => {
-      expect(omniboxController.shouldShowChoices).toBe(true);
+      expect(omniboxController.hasChoices).toBe(true);
 
       omniboxController.multiple = false;
 
@@ -239,7 +239,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       // the test
       omniboxController._onNgModelChange();
 
-      expect(omniboxController.shouldShowChoices).toBe(false);
+      expect(omniboxController.hasChoices).toBe(false);
     });
   });
 });
