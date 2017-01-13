@@ -301,7 +301,7 @@ export default class NgcOmniboxController {
 
       this.query = '';
       shouldFocusField && this.focus();
-      this._updateSuggestions();
+      this.hideSuggestions = true;
     }
   }
 
@@ -321,7 +321,6 @@ export default class NgcOmniboxController {
       }
 
       shouldFocusField && this.focus();
-      this._updateSuggestions();
     }
   }
 
@@ -336,7 +335,11 @@ export default class NgcOmniboxController {
   }
 
   onInputChange() {
-    this._updateSuggestions();
+    if (!this.query) {
+      this.hideSuggestions = true;
+    } else {
+      this._updateSuggestions();
+    }
   }
 
   onKeyDown($event) {

@@ -124,7 +124,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   describe('suggestion visibility', () => {
     beforeEach(() => {
       omniboxController.isLoading = false;
-      omniboxController.query = '';
+      omniboxController.hasSuggestions = false;
       omniboxController.canShow = () => false;
     });
 
@@ -135,10 +135,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should not be determined by just the presence of a query', () => {
+    it('should not be determined by just the presence of suggestions', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
 
-      omniboxController.query = 'my query';
+      omniboxController.hasSuggestions = true;
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
@@ -149,16 +149,16 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should be determined by loading state, query, and canShow binding', () => {
+    it('should be determined by loading state, having suggestions, and canShow binding', () => {
       omniboxController.isLoading = true;
-      omniboxController.query = 'my query';
+      omniboxController.hasSuggestions = true;
       omniboxController.canShow = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
 
-    it('should be visible when done loading if query and canShow pass', () => {
+    it('should be visible when done loading if has suggestions and canShow passes', () => {
       omniboxController.isLoading = false;
-      omniboxController.query = 'a real query';
+      omniboxController.hasSuggestions = true;
       omniboxController.canShow = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
