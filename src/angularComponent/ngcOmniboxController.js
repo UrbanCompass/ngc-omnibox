@@ -345,7 +345,7 @@ export default class NgcOmniboxController {
   onKeyDown($event) {
     const keyCode = {$event};
 
-    if ((isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) && this.hasSuggestions) {
+    if ((isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) && this.shouldShowSuggestions()) {
       $event.preventDefault();
       $event.stopPropagation();
     }
