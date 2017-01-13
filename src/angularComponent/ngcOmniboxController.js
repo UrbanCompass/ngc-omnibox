@@ -50,11 +50,6 @@ export default class NgcOmniboxController {
       this.onKeyUp(evt);
       $scope.$apply();
     });
-    this.element.addEventListener('keydown', ({keyCode}) => {
-      if (keyCode === KEY.ESC) {
-        this.hideSuggestions = true;
-      }
-    }, true);
 
     // Remove the focus ring when the overall component is focused
     const styleSheets = this.doc.styleSheets;
@@ -375,7 +370,11 @@ export default class NgcOmniboxController {
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
       } else if (keyCode === KEY.ESC) {
-        this.highlightNone();
+        if (this._highlightedItem) {
+          this.highlightNone();
+        } else {
+          this.hideSuggestions = true;
+        }
       } else if (isSelectKey(keyCode)) {
         const selection = this._suggestionsUiList[this.highlightedIndex];
         selection && this.choose(selection.data);
