@@ -38,7 +38,7 @@
           multiple="true"
           source="demo.sourceFn(query)">
 
-        <div class="chips" ng-class="{'focus': omnibox.fieldHasFocus}">
+        <div class="chips" ng-class="{'focus': demoCtrl.fieldHasFocus}">
           <ngc-omnibox-choices>
             <div class="chip"
                 ng-class="{
@@ -54,7 +54,7 @@
           </ngc-omnibox-choices>
 
           <ngc-omnibox-field class="input" type="text" tabindex="0"
-              ng-focus="omnibox.fieldHasFocus = true" ng-blur="omnibox.fieldHasFocus = false">
+              ng-focus="demoCtrl.fieldHasFocus = true" ng-blur="demoCtrl.fieldHasFocus = false">
           </ngc-omnibox-field>
         </div>
 
