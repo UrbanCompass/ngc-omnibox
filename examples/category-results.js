@@ -50,6 +50,10 @@
         return Object.keys(grouped).sort().map((groupName) => grouped[groupName]);
       }
 
+      function filterOutChosen(result) {
+        return !demo.model.includes(result);
+      }
+
       this.model = [];
 
       // Only allow items, and not category headers, to be selectable
@@ -59,12 +63,10 @@
 
       this.sourceFn = function (query) {
         return populateSearch().then(function (fuse) {
-          var results = fuse.list; // Default to showing all results
+          var results = fuse.list.filter(filterOutChosen); // Default to showing all results
 
           if (query) {
-            results = fuse.search(query).filter(function (result) {
-              return !demo.model.includes(result);
-            });
+            results = fuse.search(query).filter(filterOutChosen);
           }
 
           return $q.resolve(formatResults(results));

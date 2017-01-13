@@ -6,6 +6,9 @@ const KEY_REPEAT_DELAY = 150;
 // Amount of time to wait results to load before showing the loading screen
 const LOADING_SCREEN_THRESHOLD = 150;
 
+// Time in miliseconds to wait before closing the suggestions after focus is lost
+const SUGGESTIONS_BLUR_THRESHOLD = 10;
+
 const customArrayPrototype = Object.create(Array.prototype);
 
 export default class NgcOmniboxController {
@@ -50,10 +53,16 @@ export default class NgcOmniboxController {
       this.onKeyUp(evt);
       $scope.$apply();
     });
-    this.element.addEventListener('keydown', ({keyCode}) => {
-      if (keyCode === KEY.ESC) {
+
+    let blurTimeout;
+    this.element.addEventListener('focus', () => {
+      clearTimeout(blurTimeout);
+    }, true);
+    this.element.addEventListener('blur', () => {
+      blurTimeout = setTimeout(() => {
         this.hideSuggestions = true;
-      }
+        $scope.$apply();
+      }, SUGGESTIONS_BLUR_THRESHOLD);
     }, true);
 
     // Remove the focus ring when the overall component is focused
@@ -330,7 +339,7 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.isLoading || this.hasSuggestions) &&
+    return !this.hideSuggestions && (this.shouldShowLoadingElement || this.hasSuggestions) &&
         this.canShow({query: this.query}) !== false;
   }
 
@@ -375,7 +384,11 @@ export default class NgcOmniboxController {
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
       } else if (keyCode === KEY.ESC) {
-        this.highlightNone();
+        if (this._highlightedItem) {
+          this.highlightNone();
+        } else {
+          this.hideSuggestions = true;
+        }
       } else if (isSelectKey(keyCode)) {
         const selection = this._suggestionsUiList[this.highlightedIndex];
         selection && this.choose(selection.data);
