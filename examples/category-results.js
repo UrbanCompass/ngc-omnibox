@@ -32,11 +32,11 @@
 
       // Takes results from JSON API and categorizes the results by `state`
       function formatResults(results) {
-        const grouped = {};
+        var grouped = {};
 
         // Populate groups with results
         results.forEach((result) => {
-          const groupName = result.state;
+          var groupName = result.state;
           if (!grouped[groupName]) {
             grouped[groupName] = {
               state: states[result.state],
@@ -58,16 +58,17 @@
       };
 
       this.sourceFn = function (query) {
-        if (query) {
-          return populateSearch().then(function (fuse) {
-            const searchResults = fuse.search(query).filter(function (result) {
+        return populateSearch().then(function (fuse) {
+          var results = fuse.list; // Default to showing all results
+
+          if (query) {
+            results = fuse.search(query).filter(function (result) {
               return !demo.model.includes(result);
             });
-            return $q.resolve(formatResults(searchResults));
-          });
-        } else {
-          return $q.resolve(); // Hides the suggestions
-        }
+          }
+
+          return $q.resolve(formatResults(results));
+        });
       };
     });
 })(window.angular, window.Fuse);

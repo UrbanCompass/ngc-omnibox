@@ -331,7 +331,7 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.isLoading || !!this.query) &&
+    return !this.hideSuggestions && (this.isLoading || this.hasSuggestions) &&
         this.canShow({query: this.query}) !== false;
   }
 
@@ -377,6 +377,8 @@ export default class NgcOmniboxController {
         const selection = this._suggestionsUiList[this.highlightedIndex];
         selection && this.choose(selection.data);
       }
+    } else if (keyCode === KEY.DOWN) {
+      this._updateSuggestions();
     }
   }
 
