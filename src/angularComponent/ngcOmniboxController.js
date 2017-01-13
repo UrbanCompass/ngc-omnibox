@@ -17,6 +17,7 @@ export default class NgcOmniboxController {
     this.doc = $document[0];
     this.element = $element[0];
 
+    this.hideSuggestions = false; // Whether to forcibly hide the list of suggestions
     this.hasSuggestions = false; // Whether we have any suggestions loaded
     this.hasChoices = false; // Whether we have any suggestions chosen
 
@@ -49,6 +50,11 @@ export default class NgcOmniboxController {
       this.onKeyUp(evt);
       $scope.$apply();
     });
+    this.element.addEventListener('keydown', ({keyCode}) => {
+      if (keyCode === KEY.ESC) {
+        this.hideSuggestions = true;
+      }
+    }, true);
 
     // Remove the focus ring when the overall component is focused
     const styleSheets = this.doc.styleSheets;
@@ -325,7 +331,8 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return (this.isLoading || !!this.query) && this.canShow({query: this.query}) !== false;
+    return !this.hideSuggestions && (this.isLoading || !!this.query) &&
+        this.canShow({query: this.query}) !== false;
   }
 
   onInputChange() {
@@ -417,6 +424,7 @@ export default class NgcOmniboxController {
 
     this.highlightNone();
     this._showLoading();
+    this.hideSuggestions = false;
 
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
