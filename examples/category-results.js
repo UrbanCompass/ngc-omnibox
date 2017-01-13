@@ -3,7 +3,7 @@
     .module('demoApp', ['ngc.omnibox'])
     .controller('OmniboxExampleController', function ($http, $q) {
       var demo = this;
-      var fuse;
+      var fuse, states;
 
       // Loads the remote data and populates the search engine
       function populateSearch() {
@@ -11,14 +11,21 @@
           if (fuse) {
             resolve(fuse);
           } else {
-            $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
+            /* eslint-disable max-len, lines-around-comment */
+            $http.get('https://rawgit.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json')
+            /* eslint-enable max-len, lines-around-comment */
               .then(function (response) {
-                fuse = new Fuse(response.data.objects, {
-                  keys: ['party', 'person.name'],
-                  threshold: 0.3
-                });
+                states = response.data;
 
-                resolve(fuse);
+                $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
+                  .then(function (response) {
+                    fuse = new Fuse(response.data.objects, {
+                      keys: ['party', 'person.name'],
+                      threshold: 0.3
+                    });
+
+                    resolve(fuse);
+                  });
               });
           }
         });
@@ -33,7 +40,7 @@
           const groupName = result.state;
           if (!grouped[groupName]) {
             grouped[groupName] = {
-              state: result.state,
+              state: states[result.state],
               children: []
             };
           }
