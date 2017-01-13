@@ -6,7 +6,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   beforeEach(() => {
     const fakeEl = {
       addEventListener() {},
-      remvoeEventListener() {},
+      removeEventListener() {},
       removeAttribute() {},
       setAttribute() {}
     };
