@@ -59,7 +59,7 @@ export default class NgcOmniboxController {
     // Remove the focus ring when the overall component is focused
     const styleSheets = this.doc.styleSheets;
     if (styleSheets && styleSheets.length) {
-      styleSheets[0].insertRule('ngc-omnibox:focus {outline: none}');
+      styleSheets[styleSheets.length - 1].insertRule('ngc-omnibox:focus {outline: none}');
     }
   }
 
