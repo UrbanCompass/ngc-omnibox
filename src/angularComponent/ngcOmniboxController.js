@@ -339,7 +339,7 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.isLoading || this.hasSuggestions) &&
+    return !this.hideSuggestions && (this.shouldShowLoadingElement || this.hasSuggestions) &&
         this.canShow({query: this.query}) !== false;
   }
 
