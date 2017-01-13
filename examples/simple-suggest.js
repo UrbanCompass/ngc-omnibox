@@ -27,6 +27,11 @@
 
       this.model = '';
 
+      // Only show suggestions when at least 2 characters have been entered
+      this.shouldShowSuggestions = function (query) {
+        return query.length >= 2;
+      };
+
       this.sourceFn = function (query) {
         return populateSearch().then(function (fuse) {
           if (query) {

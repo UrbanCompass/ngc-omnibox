@@ -4,9 +4,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   let omniboxController;
 
   beforeEach(() => {
-    const fakeEl = {removeAttribute: () => {}, setAttribute: () => {}};
+    const fakeEl = {
+      addEventListener() {},
+      removeEventListener() {},
+      removeAttribute() {},
+      setAttribute() {}
+    };
 
-    omniboxController = new NgcOmniboxController();
+    omniboxController = new NgcOmniboxController([fakeEl], [fakeEl], {$apply() {}});
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
     omniboxController.isSelectable = () => {};
   });
@@ -88,10 +93,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       expect(omniboxController.highlightedIndex).toBe(-1);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(1);
     });
 
@@ -100,7 +105,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.highlightedIndex = 1;
 
-      omniboxController.highlightPrevious();
+      omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
     });
 
@@ -108,10 +113,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.suggestions = ['test', 'me', 'again', 'please'];
       omniboxController.highlightedIndex = 0;
 
-      omniboxController.highlightPrevious();
+      omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(3);
 
-      omniboxController.highlightNext();
+      omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
     });
   });
@@ -119,7 +124,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   describe('suggestion visibility', () => {
     beforeEach(() => {
       omniboxController.isLoading = false;
-      omniboxController.query = '';
+      omniboxController.hasSuggestions = false;
       omniboxController.canShow = () => false;
     });
 
@@ -130,10 +135,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should not be determined by just the presence of a query', () => {
+    it('should not be determined by just the presence of suggestions', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
 
-      omniboxController.query = 'my query';
+      omniboxController.hasSuggestions = true;
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
@@ -144,16 +149,16 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should be determined by loading state, query, and canShow binding', () => {
+    it('should be determined by loading state, having suggestions, and canShow binding', () => {
       omniboxController.isLoading = true;
-      omniboxController.query = 'my query';
+      omniboxController.hasSuggestions = true;
       omniboxController.canShow = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
 
-    it('should be visible when done loading if query and canShow pass', () => {
+    it('should be visible when done loading if has suggestions and canShow passes', () => {
       omniboxController.isLoading = false;
-      omniboxController.query = 'a real query';
+      omniboxController.hasSuggestions = true;
       omniboxController.canShow = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
@@ -224,14 +229,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should require an ngModel with at least one choice', () => {
-      expect(omniboxController.shouldShowChoices).toBe(true);
+      expect(omniboxController.hasChoices).toBe(true);
 
       omniboxController.ngModel = [];
-      expect(omniboxController.shouldShowChoices).toBe(false);
+      expect(omniboxController.hasChoices).toBe(false);
     });
 
     it('should require the component to be set to multiple', () => {
-      expect(omniboxController.shouldShowChoices).toBe(true);
+      expect(omniboxController.hasChoices).toBe(true);
 
       omniboxController.multiple = false;
 
@@ -239,7 +244,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       // the test
       omniboxController._onNgModelChange();
 
-      expect(omniboxController.shouldShowChoices).toBe(false);
+      expect(omniboxController.hasChoices).toBe(false);
     });
   });
 });

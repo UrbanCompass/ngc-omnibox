@@ -1,5 +1,3 @@
-import NgcOmniboxSuggestionsController from './ngcOmniboxSuggestionsController.js';
-
 ngcOmniboxSuggestionsDirective.$inject = ['ngcModifySuggestionsTemplate'];
 export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTemplate) {
 
@@ -7,7 +5,7 @@ export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTempl
     restrict: 'E',
     require: '^^ngcOmnibox',
     scope: true,
-    controller: NgcOmniboxSuggestionsController,
+    controller() {},
     controllerAs: 'suggestions',
     compile(tElement) {
       tElement.html(ngcModifySuggestionsTemplate(tElement[0]));

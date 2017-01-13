@@ -9,16 +9,23 @@ const LOADING_SCREEN_THRESHOLD = 150;
 const customArrayPrototype = Object.create(Array.prototype);
 
 export default class NgcOmniboxController {
+  static get $inject() {
+    return ['$document', '$element', '$scope'];
+  }
 
-  constructor() {
+  constructor($document, $element, $scope) {
+    this.doc = $document[0];
+    this.element = $element[0];
+
+    this.hideSuggestions = false; // Whether to forcibly hide the list of suggestions
     this.hasSuggestions = false; // Whether we have any suggestions loaded
+    this.hasChoices = false; // Whether we have any suggestions chosen
 
-    // Flattened list of elements in the order they appear in the UI
-    this._suggestionsUiList = [];
+    this._suggestionsUiList = []; // Flattened list of elements in the order they appear in the UI
+    this.highlightedChoice = null; // Keeps track of the currently highlighted choice
 
     this.isLoading = false; // Loading suggestions is in progress
-    this.showLoadingElement = false; // Been loading for long enough we should show loading UI
-    this.shouldShowChoices = false; // Whether to show the choices elements
+    this.shouldShowLoadingElement = false; // Been loading for long enough we should show loading UI
 
     this.highlightNone();
 
@@ -31,6 +38,42 @@ export default class NgcOmniboxController {
         return ret;
       };
     });
+
+    // Need our overall component to be focusable so that it can continue listening to keyboard
+    // events when we stop focusing on the input field and focus on the choices
+    this.element.setAttribute('tabindex', -1);
+    this.element.addEventListener('keydown', (evt) => {
+      this.onKeyDown(evt);
+      $scope.$apply();
+    });
+    this.element.addEventListener('keyup', (evt) => {
+      this.onKeyUp(evt);
+      $scope.$apply();
+    });
+    this.element.addEventListener('keydown', ({keyCode}) => {
+      if (keyCode === KEY.ESC) {
+        this.hideSuggestions = true;
+      }
+    }, true);
+
+    // Remove the focus ring when the overall component is focused
+    const styleSheets = this.doc.styleSheets;
+    if (styleSheets && styleSheets.length) {
+      styleSheets[styleSheets.length - 1].insertRule('ngc-omnibox:focus {outline: none}');
+    }
+  }
+
+  set fieldElement(el) {
+    if (this._fieldElement) {
+      this._fieldElement.removeEventListener('focus', this.highlightNoChoice.bind(this));
+    }
+
+    this._fieldElement = el;
+    this._fieldElement.addEventListener('focus', this.highlightNoChoice.bind(this));
+  }
+
+  get fieldElement() {
+    return this._fieldElement;
   }
 
   set suggestions(suggestions) {
@@ -60,40 +103,48 @@ export default class NgcOmniboxController {
     return this._ngModel;
   }
 
-  onInputChange() {
-    this._updateSuggestions();
-  }
+  set highlightedChoice(choice) {
+    this._highlightedChoice = choice;
 
-  onKeyDown($event) {
-    const keyCode = $event.which;
-
-    if (this.hasSuggestions) {
-
-      if (isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) {
-        $event.preventDefault();
-        $event.stopPropagation();
+    if (this._fieldElement) {
+      if (choice) {
+        this.element.focus();
+      } else {
+        this._fieldElement.focus();
       }
-
-      if (!this._keyDownTimeout) {
-        this._handleKeyDown(keyCode);
-      }
-
-      this._keyDownTimeout = setTimeout(() => this._handleKeyDown(keyCode), KEY_REPEAT_DELAY);
     }
   }
 
-  onKeyUp() {
-    clearTimeout(this._keyDownTimeout);
-    this._keyDownTimeout = null;
+  get highlightedChoice() {
+    return this._highlightedChoice;
+  }
+
+  set highlightedIndex(index) {
+    this._highlightedIndex = index;
+
+    const highlightedUiItem = this._suggestionsUiList[index];
+    if (highlightedUiItem) {
+      this._highlightedItem = highlightedUiItem.data;
+    } else {
+      this._highlightedItem = null;
+    }
+  }
+
+  get highlightedIndex() {
+    return this._highlightedIndex;
   }
 
   /**
-   * Whether or not we should show the suggestions menu.
-   *
-   * @returns {Boolean}
-   */
-  shouldShowSuggestions() {
-    return (this.isLoading || !!this.query) && this.canShow({query: this.query}) !== false;
+  * Highlights a particular suggestion item.
+  *
+  * @param {Object} item
+  */
+  highlightSuggestion(item) {
+    const uiItemMatch = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
+
+    if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
+      this.highlightedIndex = uiItemMatch.index;
+    }
   }
 
   /**
@@ -104,7 +155,7 @@ export default class NgcOmniboxController {
    *     that was used at the start. This is to prevent it running infinitely.
    * @returns {Number} -- Index of the newly highlighted item
    */
-  highlightPrevious(startHighlightIndex) {
+  highlightPreviousSuggestion(startHighlightIndex) {
     let newIndex = this.highlightedIndex;
 
     if (newIndex > 0) {
@@ -127,7 +178,7 @@ export default class NgcOmniboxController {
         startHighlightIndex = newIndex;
       }
 
-      this.highlightPrevious(startHighlightIndex);
+      this.highlightPreviousSuggestion(startHighlightIndex);
     }
 
     return newIndex;
@@ -141,7 +192,7 @@ export default class NgcOmniboxController {
    *     that was used at the start. This is to prevent it running infinitely.
    * @returns {Number} -- Index of the newly highlighted item
    */
-  highlightNext(startHighlightIndex) {
+  highlightNextSuggestion(startHighlightIndex) {
     let newIndex = this.highlightedIndex;
 
     if (newIndex < this._suggestionsUiList.length - 1) {
@@ -164,7 +215,7 @@ export default class NgcOmniboxController {
         startHighlightIndex = newIndex;
       }
 
-      this.highlightNext(startHighlightIndex);
+      this.highlightNextSuggestion(startHighlightIndex);
     }
 
     return newIndex;
@@ -178,34 +229,6 @@ export default class NgcOmniboxController {
   }
 
   /**
-  * Highlights a particular suggestion item.
-  *
-  * @param {Object} item
-  */
-  highlightItem(item) {
-    const uiItemMatch = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
-
-    if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
-      this.highlightedIndex = uiItemMatch.index;
-    }
-  }
-
-  set highlightedIndex(index) {
-    this._highlightedIndex = index;
-
-    const highlightedUiItem = this._suggestionsUiList[index];
-    if (highlightedUiItem) {
-      this._highlightedItem = highlightedUiItem.data;
-    } else {
-      this._highlightedItem = null;
-    }
-  }
-
-  get highlightedIndex() {
-    return this._highlightedIndex;
-  }
-
-  /**
    * Whether a particular suggestion item is highlighted.
    *
    * @param {Object} item
@@ -215,13 +238,58 @@ export default class NgcOmniboxController {
     return item === this._highlightedItem;
   }
 
+  highlightNextChoice() {
+    const index = this.ngModel.indexOf(this.highlightedChoice);
+
+    if (index < this.ngModel.length - 1) {
+      this.highlightedChoice = this.ngModel[index + 1];
+    } else {
+      this.highlightNoChoice();
+    }
+  }
+
+  highlightPreviousChoice() {
+    const index = this.ngModel.indexOf(this.highlightedChoice);
+
+    if (index > 0) {
+      this.highlightedChoice = this.ngModel[index - 1];
+    } else {
+      this.highlightNoChoice();
+    }
+  }
+
+  highlightFirstChoice() {
+    this.highlightedChoice = this.ngModel[0];
+  }
+
+  highlightLastChoice() {
+    this.highlightedChoice = this.ngModel[this.ngModel.length - 1];
+  }
+
+  highlightNoChoice() {
+    this.highlightedChoice = null;
+  }
+
+  isChoiceHighlighted(choice) {
+    return this.highlightedChoice === choice;
+  }
+
+  focus() {
+    this._fieldElement && this._fieldElement.focus();
+  }
+
+  blur() {
+    this._fieldElement && this._fieldElement.blur();
+  }
+
   /**
    * Chooses a suggestion item and adds it to the list of choices. If `multiple` is off, then only
    * one choice can be chosen at a time, and the choice becomes the `ngModel`.
    *
    * @param {Object} item
+   * @param {Boolean} shouldFocusField -- Whether to focus the input field after choosing
    */
-  choose(item) {
+  choose(item, shouldFocusField = true) {
     if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
         this.isSelectable({suggestion: item}) !== false) {
       if (this.multiple) {
@@ -231,7 +299,9 @@ export default class NgcOmniboxController {
         this.ngModel = item;
       }
 
-      this._updateSuggestions();
+      this.query = '';
+      shouldFocusField && this.focus();
+      this.hideSuggestions = true;
     }
   }
 
@@ -240,8 +310,9 @@ export default class NgcOmniboxController {
    * is cleared.
    *
    * @param {Object} item
+   * @param {Boolean} shouldFocusField -- Whether to focus the input field after unchoosing
    */
-  unchoose(item) {
+  unchoose(item, shouldFocusField = true) {
     if (item) {
       if (Array.isArray(this.ngModel)) {
         this.ngModel.splice(this.ngModel.indexOf(item), 1);
@@ -249,20 +320,103 @@ export default class NgcOmniboxController {
         this.ngModel = null;
       }
 
+      shouldFocusField && this.focus();
+    }
+  }
+
+  /**
+   * Whether or not we should show the suggestions menu.
+   *
+   * @returns {Boolean}
+   */
+  shouldShowSuggestions() {
+    return !this.hideSuggestions && (this.isLoading || this.hasSuggestions) &&
+        this.canShow({query: this.query}) !== false;
+  }
+
+  onInputChange() {
+    if (!this.query) {
+      this.hideSuggestions = true;
+    } else {
       this._updateSuggestions();
     }
   }
 
-  _handleKeyDown(keyCode) {
-    if (keyCode === KEY.UP) {
-      this.highlightPrevious();
+  onKeyDown($event) {
+    const keyCode = {$event};
+
+    if ((isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) && this.hasSuggestions) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+
+    if (!this._keyDownTimeout) {
+      this._handleKeyDown($event);
+    } else {
+      this._keyDownTimeout = setTimeout(() => this._handleKeyDown($event), KEY_REPEAT_DELAY);
+    }
+  }
+
+  onKeyUp($event) {
+    clearTimeout(this._keyDownTimeout);
+    this._keyDownTimeout = null;
+
+    this._handleKeyUp($event);
+  }
+
+  _handleKeyDown({keyCode}) {
+    if (this.doc.activeElement === this._fieldElement) {
+      this.selectionStartKeyDown = this.doc.activeElement.selectionStart;
+    }
+
+    if (this.hasSuggestions) {
+      if (keyCode === KEY.UP) {
+        this.highlightPreviousSuggestion();
+      } else if (keyCode === KEY.DOWN) {
+        this.highlightNextSuggestion();
+      } else if (keyCode === KEY.ESC) {
+        this.highlightNone();
+      } else if (isSelectKey(keyCode)) {
+        const selection = this._suggestionsUiList[this.highlightedIndex];
+        selection && this.choose(selection.data);
+      }
     } else if (keyCode === KEY.DOWN) {
-      this.highlightNext();
-    } else if (keyCode === KEY.ESC) {
-      this.highlightNone();
-    } else if (isSelectKey(keyCode)) {
-      const selection = this._suggestionsUiList[this.highlightedIndex];
-      selection && this.choose(selection.data);
+      this._updateSuggestions();
+    }
+  }
+
+  _handleKeyUp({keyCode}) {
+    if (this.hasChoices) {
+      if (this.doc.activeElement === this._fieldElement) {
+        this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
+
+        // We should now consider navigating out of the input field. We only want to trigger this
+        // when we are already at the beginning or end of the field and hit Left or Right *again*.
+        if (this.selectionStartKeyDown === this.selectionStartKeyUp) {
+          const inputLength = this._fieldElement.value.length;
+
+          if ((keyCode === KEY.LEFT || keyCode === KEY.BACKSPACE) &&
+              this.selectionStartKeyUp === 0) {
+            this.highlightLastChoice();
+          } else if (keyCode === KEY.RIGHT && this.selectionStartKeyUp === inputLength) {
+            this.highlightFirstChoice();
+          }
+        }
+      } else if (this.highlightedChoice) {
+        if (keyCode === KEY.LEFT) {
+          this.highlightPreviousChoice();
+        } else if (keyCode === KEY.RIGHT) {
+          this.highlightNextChoice();
+        } else if (keyCode === KEY.BACKSPACE) {
+          const choice = this.highlightedChoice;
+          this.highlightPreviousChoice();
+          this.unchoose(choice, false);
+        } else if (keyCode === KEY.DELETE) {
+          const choice = this.highlightedChoice;
+          this.highlightNextChoice();
+          this.unchoose(choice, false);
+        }
+      }
     }
   }
 
@@ -271,6 +425,7 @@ export default class NgcOmniboxController {
 
     this.highlightNone();
     this._showLoading();
+    this.hideSuggestions = false;
 
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
@@ -297,7 +452,7 @@ export default class NgcOmniboxController {
     this.isLoading = true;
 
     this._loadingTimeout = setTimeout(() => {
-      this.showLoadingElement = true;
+      this.shouldShowLoadingElement = true;
     }, LOADING_SCREEN_THRESHOLD);
   }
 
@@ -305,7 +460,7 @@ export default class NgcOmniboxController {
     clearTimeout(this._loadingTimeout);
     this._loadingTimeout = null;
     this.isLoading = false;
-    this.showLoadingElement = false;
+    this.shouldShowLoadingElement = false;
   }
 
   /**
@@ -342,7 +497,6 @@ export default class NgcOmniboxController {
    * array and its contents are modified using the array modification functions.
    */
   _onNgModelChange() {
-    this.shouldShowChoices = !!this.multiple && Array.isArray(this._ngModel) &&
-        !!this._ngModel.length;
+    this.hasChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
   }
 }

@@ -9,11 +9,10 @@
     <main ng-controller="OmniboxExampleController as demo">
       <h1>Categorized Results Omnibox Example</h1>
       <h2>Search For a Car Make by Country</h2>
-      <p>Model value: {{demo.model}}</p>
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Enter a car make (e.g. Ford)"
+          placeholder="Search for a US Senator by Name or Party"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
@@ -23,8 +22,8 @@
 
         <ngc-omnibox-choices>
           <span>
-            {{selection.make_display}}
-            <button ng-click="omnibox.unchoose(selection)">&times;</button>
+            {{choice.person.name}}
+            <button ng-click="omnibox.unchoose(choice)">&times;</button>
           </span>
         </ngc-omnibox-choices>
 
@@ -32,10 +31,13 @@
 
           <dl ngc-omnibox-suggestion-category>
             <dt>
-              <h5>{{suggestion.make_country}}</h5>
+              <h5>{{suggestion.state}}</h5>
             </dt>
             <dd>
-              <ngc-omnibox-suggestion-item>{{suggestion.make_display}}</ngc-omnibox-suggestion-item>
+              <ngc-omnibox-suggestion-item>
+                <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
+                <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
+              </ngc-omnibox-suggestion-item>
             </dd>
           </dl>
 
@@ -49,6 +51,11 @@
 
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>

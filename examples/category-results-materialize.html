@@ -1,40 +1,62 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
   <head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-      ngc-omnibox-suggestions,
-      ngc-omnibox-choices {
+      ngc-omnibox-suggestions {
         display: block;
+      }
+
+      /* Small work around Materialize so input field takes up the remainder of the space from chips */
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .chips .input {
+        width: 100% !important;
+        font-size: 16px; /* stops iOS Safari from zooming in */
+      }
+      ngc-omnibox-field {
+        flex-grow: 1;
+        flex-basis: 200px;
       }
     </style>
   </head>
   <body>
     <main class="container" ng-controller="OmniboxExampleController as demo">
-      <h1>Categorized Results Omnibox Example</h1>
-      <h2>Search For a Car Make by Country</h2>
-      <p>Model value: {{demo.model}}</p>
+      <h3>Categorized Results Example - Materialize CSS Framework</h3>
+      <h4>Search For a Senator by State</h4>
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Enter a car make (e.g. Ford)"
+          placeholder="Search for a US Senator by Name or Party"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
-          can-show="demo.shouldShowSuggestions(query)"
           multiple="true"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-field type="text"></ngc-omnibox-field>
+        <div class="chips" ng-class="{'focus': demoCtrl.fieldHasFocus}">
+          <ngc-omnibox-choices>
+            <div class="chip"
+                ng-class="{
+                  'selected': omnibox.isChoiceHighlighted(choice),
+                  'red lighten-3': choice.party === 'Republican',
+                  'blue lighten-3': choice.party === 'Democrat'
+                  }">
+              {{choice.person.name}}
+              <i class="close material-icons" ng-click="omnibox.unchoose(choice)">
+                close
+              </i>
+            </div>
+          </ngc-omnibox-choices>
 
-        <ngc-omnibox-choices class="chips">
-          <div class="chip">
-            {{selection.make_display}}
-            <i class="close material-icons" ng-click="omnibox.unchoose(selection)">
-              close
-            </i>
-          </div>
-        </ngc-omnibox-choices>
+          <ngc-omnibox-field class="input" type="text" tabindex="0"
+              ng-focus="demoCtrl.fieldHasFocus = true" ng-blur="demoCtrl.fieldHasFocus = false">
+          </ngc-omnibox-field>
+        </div>
 
         <ngc-omnibox-suggestions class="collection with-header">
 
@@ -42,13 +64,16 @@
             <dt class="collection-header">
               <h5 ngc-omnibox-suggestion-header class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
-                {{suggestion.make_country}}
+                {{suggestion.state}}
               </h5>
             </dt>
             <dd>
               <div ngc-omnibox-suggestion-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
-                {{suggestion.make_display}}
+                <h6>
+                  <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
+                </h6>
+                <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
               </div>
             </dd>
           </dl>
@@ -63,6 +88,11 @@
 
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
