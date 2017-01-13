@@ -11,22 +11,21 @@
           if (fuse) {
             resolve(fuse);
           } else {
-            /* eslint-disable max-len, lines-around-comment */
-            $http.get('https://rawgit.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json')
-            /* eslint-enable max-len, lines-around-comment */
-              .then(function (response) {
-                states = response.data;
-
-                $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
-                  .then(function (response) {
-                    fuse = new Fuse(response.data.objects, {
-                      keys: ['party', 'person.name'],
-                      threshold: 0.3
-                    });
-
-                    resolve(fuse);
-                  });
+            $q.all([
+              /* eslint-disable max-len, lines-around-comment */
+              $http.get('https://rawgit.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json'),
+              /* eslint-enable max-len, lines-around-comment */
+              $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
+            ])
+            .then(function (responses) {
+              states = responses[0].data;
+              fuse = new Fuse(responses[1].data.objects, {
+                keys: ['party', 'person.name'],
+                threshold: 0.3
               });
+
+              resolve(fuse);
+            });
           }
         });
       }
