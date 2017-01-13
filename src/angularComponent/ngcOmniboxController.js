@@ -6,6 +6,9 @@ const KEY_REPEAT_DELAY = 150;
 // Amount of time to wait results to load before showing the loading screen
 const LOADING_SCREEN_THRESHOLD = 150;
 
+// Time in miliseconds to wait before closing the suggestions after focus is lost
+const SUGGESTIONS_BLUR_THRESHOLD = 10;
+
 const customArrayPrototype = Object.create(Array.prototype);
 
 export default class NgcOmniboxController {
@@ -50,6 +53,17 @@ export default class NgcOmniboxController {
       this.onKeyUp(evt);
       $scope.$apply();
     });
+
+    let blurTimeout;
+    this.element.addEventListener('focus', () => {
+      clearTimeout(blurTimeout);
+    }, true);
+    this.element.addEventListener('blur', () => {
+      blurTimeout = setTimeout(() => {
+        this.hideSuggestions = true;
+        $scope.$apply();
+      }, SUGGESTIONS_BLUR_THRESHOLD);
+    }, true);
 
     // Remove the focus ring when the overall component is focused
     const styleSheets = this.doc.styleSheets;
