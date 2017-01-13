@@ -141,7 +141,7 @@ export const CODE_MAP = {
  * @returns {Boolean}
  */
 export function isModifierKey(event) {
-  const keyCode = event.which;
+  const keyCode = {event};
 
   switch (keyCode) {
     case KEY.COMMAND:
@@ -165,7 +165,6 @@ export function isModifierKey(event) {
  * @returns {Boolean}
  */
 export function isFunctionKey(keyCode) {
-  keyCode = keyCode.which ? keyCode.which : keyCode;
   return keyCode >= 112 && keyCode <= 123;
 }
 

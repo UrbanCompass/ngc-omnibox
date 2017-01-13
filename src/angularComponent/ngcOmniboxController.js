@@ -340,7 +340,7 @@ export default class NgcOmniboxController {
   }
 
   onKeyDown($event) {
-    const keyCode = $event.which;
+    const keyCode = {$event};
 
     if ((isVerticalMovementKey(keyCode) || isSelectKey(keyCode)) && this.hasSuggestions) {
       $event.preventDefault();
@@ -361,9 +361,7 @@ export default class NgcOmniboxController {
     this._handleKeyUp($event);
   }
 
-  _handleKeyDown($event) {
-    const keyCode = $event.which;
-
+  _handleKeyDown({keyCode}) {
     if (this.doc.activeElement === this._fieldElement) {
       this.selectionStartKeyDown = this.doc.activeElement.selectionStart;
     }
@@ -382,9 +380,7 @@ export default class NgcOmniboxController {
     }
   }
 
-  _handleKeyUp($event) {
-    const keyCode = $event.which;
-
+  _handleKeyUp({keyCode}) {
     if (this.hasChoices) {
       if (this.doc.activeElement === this._fieldElement) {
         this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
