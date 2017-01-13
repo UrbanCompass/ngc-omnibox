@@ -1,12 +1,6 @@
 (function (angular, Fuse) {
   angular
     .module('demoApp', ['ngc.omnibox'])
-    .config(function ($sceDelegateProvider) {
-      $sceDelegateProvider.resourceUrlWhitelist([
-        'self',
-        'http://www.carqueryapi.com/api/0.3/**'
-      ]);
-    })
     .controller('OmniboxExampleController', function ($http, $q) {
       var demo = this;
       var fuse;
@@ -17,27 +11,29 @@
           if (fuse) {
             resolve(fuse);
           } else {
-            $http.jsonp('http://www.carqueryapi.com/api/0.3/?cmd=getMakes', {
-              jsonpCallbackParam: 'callback'
-            })
-            .then(function (response) {
-              fuse = new Fuse(response.data.Makes, {keys: ['make_display'], threshold: 0.3});
-              resolve(fuse);
-            });
+            $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
+              .then(function (response) {
+                fuse = new Fuse(response.data.objects, {
+                  keys: ['party', 'person.name'],
+                  threshold: 0.3
+                });
+
+                resolve(fuse);
+              });
           }
         });
       }
 
-      // Takes results from JSON API and categorizes the results by `make_country`
+      // Takes results from JSON API and categorizes the results by `state`
       function formatResults(results) {
         const grouped = {};
 
         // Populate groups with results
         results.forEach((result) => {
-          const groupName = result.make_country;
+          const groupName = result.state;
           if (!grouped[groupName]) {
             grouped[groupName] = {
-              make_country: result.make_country,
+              state: result.state,
               children: []
             };
           }
@@ -45,7 +41,7 @@
           grouped[groupName].children.push(result);
         });
 
-        return Object.keys(grouped).map((groupName) => grouped[groupName]);
+        return Object.keys(grouped).sort().map((groupName) => grouped[groupName]);
       }
 
       this.model = [];

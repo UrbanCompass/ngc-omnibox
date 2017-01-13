@@ -25,13 +25,12 @@
   </head>
   <body>
     <main class="container" ng-controller="OmniboxExampleController as demo">
-      <h1>Categorized Results Example - Materialize CSS Framework</h1>
-      <h2>Search For a Car Make by Country</h2>
-      <p>Model value: {{demo.model}}</p>
+      <h3>Categorized Results Example - Materialize CSS Framework</h3>
+      <h4>Search For a Senator by State</h4>
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Enter a car make (e.g. Ford)..."
+          placeholder="Search for a US Senator by Name or Party"
           autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
@@ -40,8 +39,12 @@
         <div class="chips" ng-class="{'focus': omnibox.fieldHasFocus}">
           <ngc-omnibox-choices>
             <div class="chip"
-                ng-class="{'selected': omnibox.isChoiceHighlighted(choice)}">
-              {{choice.make_display}}
+                ng-class="{
+                  'selected': omnibox.isChoiceHighlighted(choice),
+                  'red lighten-3': choice.party === 'Republican',
+                  'blue lighten-3': choice.party === 'Democrat'
+                  }">
+              {{choice.person.name}}
               <i class="close material-icons" ng-click="omnibox.unchoose(choice)">
                 close
               </i>
@@ -59,13 +62,16 @@
             <dt class="collection-header">
               <h5 ngc-omnibox-suggestion-header class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
-                {{suggestion.make_country}}
+                {{suggestion.state}}
               </h5>
             </dt>
             <dd>
               <div ngc-omnibox-suggestion-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
-                {{suggestion.make_display}}
+                <h6>
+                  <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
+                </h6>
+                <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
               </div>
             </dd>
           </dl>
@@ -80,6 +86,11 @@
 
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>

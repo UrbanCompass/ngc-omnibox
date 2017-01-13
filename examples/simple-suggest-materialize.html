@@ -16,7 +16,6 @@
     <main class="container" ng-controller="OmniboxExampleController as demo">
       <h1>Simple Example - Materialize CSS Framework</h1>
       <h2>Search through Github's emoji</h2>
-      <p>Model value: {{demo.model}}</p>
 
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
@@ -46,6 +45,11 @@
 
         </ngc-omnibox-suggestions>
       </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
