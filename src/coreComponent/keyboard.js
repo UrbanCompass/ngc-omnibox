@@ -141,7 +141,7 @@ export const CODE_MAP = {
  * @returns {Boolean}
  */
 export function isModifierKey(event) {
-  const keyCode = {event};
+  const {keyCode} = event;
 
   switch (keyCode) {
     case KEY.COMMAND:
