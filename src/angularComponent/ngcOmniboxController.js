@@ -369,7 +369,7 @@ export default class NgcOmniboxController {
       this.selectionStartKeyDown = this.doc.activeElement.selectionStart;
     }
 
-    if (this.hasSuggestions) {
+    if (this.shouldShowSuggestions()) {
       if (keyCode === KEY.UP) {
         this.highlightPreviousSuggestion();
       } else if (keyCode === KEY.DOWN) {
