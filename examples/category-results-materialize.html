@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="demoApp">
   <head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, width=device-width">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
@@ -16,6 +17,7 @@
       }
       .chips .input {
         width: 100% !important;
+        font-size: 16px; /* stops iOS Safari from zooming in */
       }
       ngc-omnibox-field {
         flex-grow: 1;
