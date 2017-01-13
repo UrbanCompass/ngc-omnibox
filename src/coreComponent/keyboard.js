@@ -194,7 +194,6 @@ export function isHorizontalMovementKey(keyCode) {
   switch (keyCode) {
     case KEY.LEFT:
     case KEY.RIGHT:
-    case KEY.TAB:
       return true;
   }
 
