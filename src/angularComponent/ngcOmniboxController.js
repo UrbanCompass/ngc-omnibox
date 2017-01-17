@@ -137,6 +137,21 @@ export default class NgcOmniboxController {
     } else {
       this._highlightedItem = null;
     }
+
+    // Wait until next render cycle
+    setTimeout(() => {
+      const selectedEl = this.element.querySelector('[aria-selected]');
+
+      if (selectedEl) {
+        if (selectedEl.scrollIntoView) {
+          // Standard way
+          selectedEl.scrollIntoView();
+        } else if (selectedEl.scrollIntoViewIfNeeded) {
+          // Non-standard way (webkit-like browsers)
+          selectedEl.scrollIntoViewIfNeeded();
+        }
+      }
+    }, 0);
   }
 
   get highlightedIndex() {
