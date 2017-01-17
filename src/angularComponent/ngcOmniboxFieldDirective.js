@@ -1,7 +1,7 @@
 ngcOmniboxFieldDirective.$inject = ['$document'];
 export default function ngcOmniboxFieldDirective($document) {
   return {
-    restrict: 'E',
+    restrict: 'AE',
     require: {
       omnibox: '^^ngcOmnibox'
     },
@@ -16,16 +16,20 @@ export default function ngcOmniboxFieldDirective($document) {
       const doc = $document[0];
       const el = tElement[0];
 
-      const input = doc.createElement('input');
+      const input = el.querySelector('input') || doc.createElement('input');
 
-      input.setAttribute('class', el.getAttribute('class'));
-      input.setAttribute('type', el.getAttribute('type') || 'text');
-      input.setAttribute('ng-attr-tabindex', el.getAttribute('tabindex') || 'undefined');
-      input.setAttribute('ng-attr-placeholder', '{{omnibox.placeholder || undefined}}');
-      input.setAttribute('ng-attr-autofocus', '{{::omnibox.autofocus === \'true\' || undefined}}');
+      if (!input.parentNode) {
+        el.appendChild(input);
+      }
+
+      if (!input.getAttribute('type')) {
+        input.setAttribute('type', 'text');
+      }
 
       input.setAttribute('role', 'combobox');
       input.setAttribute('aria-autocomplete', 'list');
+      input.setAttribute('tabindex', input.getAttribute('tabindex') || 0);
+
       input.setAttribute('ng-attr-aria-expanded', '{{omnibox.hasSuggestions}}');
       input.setAttribute('ng-attr-aria-multiselectable', '{{omnibox.multiple || undefined}}');
 
@@ -35,12 +39,6 @@ export default function ngcOmniboxFieldDirective($document) {
 
       input.setAttribute('ng-focus', 'omniboxField.ngFocus()');
       input.setAttribute('ng-blur', 'omniboxField.ngBlur()');
-
-      el.removeAttribute('class');
-      el.removeAttribute('tabindex');
-      el.removeAttribute('type');
-      el.innerHTML = '';
-      el.appendChild(input);
 
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {

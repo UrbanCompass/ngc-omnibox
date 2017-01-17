@@ -4,14 +4,12 @@ export default {
   controller: NgcOmniboxController,
   controllerAs: 'omnibox',
   bindings: {
+    source: '&',
     ngModel: '=',
-    placeholder: '@',
-    autofocus: '@',
-    hideOnBlur: '@',
     ngDisabled: '&',
+    multiple: '<?',
+    hideOnBlur: '@',
     isSelectable: '&',
-    canShow: '&',
-    multiple: '<',
-    source: '&'
+    canShow: '&'
   }
 };

@@ -1,6 +1,6 @@
 export default function ngcOmniboxChoicesDirective() {
   return {
-    restrict: 'E',
+    restrict: 'AE',
     require: {
       omnibox: '^^ngcOmnibox'
     },

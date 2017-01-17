@@ -5,8 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-      ngc-omnibox-suggestions {
-        display: block;
+      [ngc-omnibox-suggestions] {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         max-height: 500px;
@@ -26,7 +25,7 @@
         width: 100% !important;
         font-size: 16px; /* stops iOS Safari from zooming in */
       }
-      ngc-omnibox-field {
+      [ngc-omnibox-field] {
         flex-grow: 1;
         flex-basis: 200px;
       }
@@ -39,14 +38,12 @@
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Search for a US Senator by Name or Party"
-          autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
           source="demo.sourceFn(query)">
 
         <div class="chips" ng-class="{'focus': demoCtrl.fieldHasFocus}">
-          <ngc-omnibox-choices>
+          <div ngc-omnibox-choices>
             <div class="chip"
                 ng-class="{
                   'selected': omnibox.isChoiceHighlighted(choice),
@@ -58,14 +55,16 @@
                 close
               </i>
             </div>
-          </ngc-omnibox-choices>
+          </div>
 
-          <ngc-omnibox-field class="input" type="text" tabindex="0"
-              ng-focus="demoCtrl.fieldHasFocus = true" ng-blur="demoCtrl.fieldHasFocus = false">
-          </ngc-omnibox-field>
+          <div ngc-omnibox-field ng-focus="demoCtrl.fieldHasFocus = true"
+                ng-blur="demoCtrl.fieldHasFocus = false">
+            <input class="input" type="text" autofocus="true"
+                placeholder="Search for a US Senator by Name or Party">
+          </div>
         </div>
 
-        <ngc-omnibox-suggestions class="collection with-header">
+        <div ngc-omnibox-suggestions class="collection with-header">
 
           <dl ngc-omnibox-suggestion-category>
             <dt class="collection-header">
@@ -93,7 +92,7 @@
             <span class="blue-grey-text text-lighten-3">No results...</span>
           </div>
 
-        </ngc-omnibox-suggestions>
+        </div>
       </ngc-omnibox>
 
       <p>

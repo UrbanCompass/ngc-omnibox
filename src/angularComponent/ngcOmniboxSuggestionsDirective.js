@@ -2,7 +2,7 @@ ngcOmniboxSuggestionsDirective.$inject = ['ngcModifySuggestionsTemplate'];
 export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTemplate) {
 
   return {
-    restrict: 'E',
+    restrict: 'AE',
     require: '^^ngcOmnibox',
     scope: true,
     controller() {},

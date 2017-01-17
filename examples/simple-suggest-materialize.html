@@ -20,13 +20,14 @@
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Type in the name of an emoji (2 characters minimum)..."
-          autofocus="true"
           ng-disabled="demo.isDisabled"
           can-show="demo.shouldShowSuggestions(query)"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-field type="text"></ngc-omnibox-field>
+        <ngc-omnibox-field>
+          <input type="text" autofocus="true"
+              placeholder="Type in the name of an emoji (2 characters minimum)...">
+        </ngc-omnibox-field>
 
         <ngc-omnibox-suggestions class="collection">
 
