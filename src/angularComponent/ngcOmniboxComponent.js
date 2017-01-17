@@ -7,6 +7,7 @@ export default {
     ngModel: '=',
     placeholder: '@',
     autofocus: '@',
+    hideOnBlur: '@',
     ngDisabled: '&',
     isSelectable: '&',
     canShow: '&',
