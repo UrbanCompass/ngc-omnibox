@@ -143,10 +143,10 @@ export default class NgcOmniboxController {
       const selectedEl = this.element.querySelector('[aria-selected]');
 
       if (selectedEl) {
-        if (selectedEl.scrollIntoView) {
+        if (typeof selectedEl.scrollIntoView === 'function') {
           // Standard way
           selectedEl.scrollIntoView();
-        } else if (selectedEl.scrollIntoViewIfNeeded) {
+        } else if (typeof selectedEl.scrollIntoViewIfNeeded === 'function') {
           // Non-standard way (webkit-like browsers)
           selectedEl.scrollIntoViewIfNeeded();
         }
