@@ -357,7 +357,7 @@ export default class NgcOmniboxController {
    */
   shouldShowSuggestions() {
     return !this.hideSuggestions && (this.shouldShowLoadingElement || this.hasSuggestions) &&
-        this.canShow({query: this.query}) !== false;
+        this.canShowSuggestions({query: this.query}) !== false;
   }
 
   onInputChange() {
