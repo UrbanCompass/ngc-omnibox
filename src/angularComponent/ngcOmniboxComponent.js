@@ -32,6 +32,18 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  * - canShowSuggestions ({query}) {Boolean}: A function that should return a Boolean that
  *       determines whether or not the list of suggestions can be displayed. It receives, in its
  *       scope, access to a String called `query` which is the current query being searched on.
+ *
+ * The component has no template, all content that does not map to one of the sub-components will
+ * be displayed in the final output as-is and un-modified.
+ *
+ * Sample usage:
+ *     <ngc-omnibox
+ *         source="myController.getSuggestions(query)"
+ *         ng-model="myController.choices"
+ *         multiple="true"
+ *         isSelectable="!suggestion.children"
+ *         canShowSuggestions="query.length >= 2">
+ *     </ngc-omnibox>
  */
 export default {
   controller: NgcOmniboxController,
