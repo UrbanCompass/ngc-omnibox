@@ -8,7 +8,9 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       addEventListener() {},
       removeEventListener() {},
       removeAttribute() {},
-      setAttribute() {}
+      setAttribute() {},
+      querySelector() {},
+      querySelectorAll() {}
     };
 
     omniboxController = new NgcOmniboxController([fakeEl], [fakeEl], {$apply() {}});

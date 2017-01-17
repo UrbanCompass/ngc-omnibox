@@ -57,7 +57,8 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       );
       if (itemHeader) {
         itemHeader.setAttribute('suggestion', 'suggestion');
-        itemHeader.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+        itemHeader.setAttribute('ng-attr-aria-selected',
+            '{{suggestionItem.isHighlighted() || undefined}}');
         itemHeader.setAttribute('ng-attr-aria-readonly',
             '{{suggestionItem.isSelectable() === false || undefined}}');
         itemHeader.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
@@ -69,7 +70,8 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       categoryContainer.appendChild(itemEl);
       itemEl.setAttribute('ng-if', '!suggestion.children');
       itemEl.setAttribute('suggestion', 'suggestion');
-      itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+      itemEl.setAttribute('ng-attr-aria-selected',
+          '{{suggestionItem.isHighlighted() || undefined}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
@@ -82,7 +84,8 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
     } else if (itemEl) {
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
       itemEl.setAttribute('suggestion', 'suggestion');
-      itemEl.setAttribute('ng-attr-aria-selected', '{{suggestionItem.isHighlighted()}}');
+      itemEl.setAttribute('ng-attr-aria-selected',
+          '{{suggestionItem.isHighlighted() || undefined}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
           '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');

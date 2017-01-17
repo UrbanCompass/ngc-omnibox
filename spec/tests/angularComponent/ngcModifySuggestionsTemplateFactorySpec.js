@@ -12,7 +12,8 @@ const unCategorizedTemplate = [
 
 const unCategorizedTemplateOutput = [
   '<ngc-omnibox-suggestion-item ng-repeat="suggestion in omnibox.suggestions" ',
-      'suggestion="suggestion" ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+      'suggestion="suggestion" ',
+      'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
       'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
@@ -33,7 +34,7 @@ const categorizedTemplateOutput = [
   '<div ng-repeat="suggestion in suggestion.children || omnibox.suggestions">',
     '<div ngc-omnibox-suggestion-category="" ng-if="suggestion.children">',
       '<h5 ngc-omnibox-suggestion-header="" suggestion="suggestion" ',
-          'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+          'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
           'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
           'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
           'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
@@ -43,7 +44,7 @@ const categorizedTemplateOutput = [
       '<div ng-repeat="suggestion in suggestion.children" ng-include="\'category-tmpl\'"></div>',
     '</div>',
     '<ngc-omnibox-suggestion-item ng-if="!suggestion.children" suggestion="suggestion" ',
-        'ng-attr-aria-selected="{{suggestionItem.isHighlighted()}}" ',
+        'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
         'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
         'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
         'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
