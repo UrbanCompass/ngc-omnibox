@@ -145,7 +145,7 @@ export default class NgcOmniboxController {
       if (selectedEl) {
         if (typeof selectedEl.scrollIntoView === 'function') {
           // Standard way
-          selectedEl.scrollIntoView();
+          selectedEl.scrollIntoView(false);
         } else if (typeof selectedEl.scrollIntoViewIfNeeded === 'function') {
           // Non-standard way (webkit-like browsers)
           selectedEl.scrollIntoViewIfNeeded();
