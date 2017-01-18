@@ -29,7 +29,7 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  *       its scope, access to an object called `suggestion` which is the current sugestion that is
  *       being interacted with. A non-selectable suggestion cannot be clicked on, hovered over, or
  *       interacted with via the keyboard.
- * - canShowSuggestions ({query}) {Boolean}: A function that should return a Boolean that
+ * - canShowSuggestions({query}) {Boolean}: A function that should return a Boolean that
  *       determines whether or not the list of suggestions can be displayed. It receives, in its
  *       scope, access to a String called `query` which is the current query being searched on.
  *
