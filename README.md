@@ -69,6 +69,9 @@ category:
 </ngc-omnibox>
 ```
 
+For more complicated and realistic use cases, including some that implement CSS, check out the
+[examples](examples/).
+
 ## Component Architecture
 
 The way to configure the markup for the Omnibox is by use of its sub-components. The Omnibox library
