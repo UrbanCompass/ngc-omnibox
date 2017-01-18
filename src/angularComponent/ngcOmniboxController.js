@@ -166,7 +166,7 @@ export default class NgcOmniboxController {
   * @param {Object} item
   */
   highlightSuggestion(item) {
-    const uiItemMatch = this._suggestionsUiList.find((uiItem) => uiItem.data === item);
+    const [uiItemMatch] = this._suggestionsUiList.filter((uiItem) => uiItem.data === item);
 
     if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
       this.highlightedIndex = uiItemMatch.index;

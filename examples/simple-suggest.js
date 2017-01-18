@@ -13,7 +13,7 @@
             $http.get('https://api.github.com/emojis').then(function (response) {
               var emoji = Object.keys(response.data).map(function (id) {
                 return {
-                  id,
+                  id: id,
                   url: response.data[id]
                 };
               });
