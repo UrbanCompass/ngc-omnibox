@@ -144,7 +144,7 @@ When your markup receives a `suggestion` or a `choice`, it is simply a reference
 the items in the top-level array, or one of the items in the children array. No other modifications
 are made to your data.
 
-## Omnibox Options
+## Omnibox Binding Options
 
 The following bindings are available on the main `<ngc-omnibox>` component:
 
@@ -175,3 +175,69 @@ via the keyboard.
 - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
 determines whether or not the list of suggestions can be displayed. It receives, in its scope,
 access to a string called `query` which is the current query being searched on.
+
+## Omnibox Controller
+
+The Omnibox Controller handles most of the behavior for the Omnibox Component. It provides a set
+of functions and properties that can be accessed from anywhere inside the Omnibox Component markup
+via the `omnibox` object on the scope.
+
+*Any options not documented here should be considered private.* Accessing or using undocumented
+methods could break at any time, and changes to those methods or properties will not be considered
+when semantic versioning. Please refrain from using them.
+
+### Available Properties
+
+- `omnibox.fieldElement {HTML Element}`: A reference to the DOM node of the input field
+- `omnibox.suggestions {Array}` _readonly_: A reference to the array of suggestions. This value
+should never be updated or modified directly. To update the list of suggestions, use the `source`
+function.
+- `omnibox.hasSuggestions {Boolean}`: Whether the Omnibox has any suggestions loaded.
+- `omnibox.hasChoices {Boolean}`: Whether the Omnibox has any suggestions chosen. This is only
+available when `multiple` is set to `true`.
+- `omnibox.isLoading {Boolean}`: Whether the Omnibox is waiting for the `source` function to resolve
+its `Promise` and load the suggestions.
+- `omnibox.ngModel {Any}`: Reference to the current choice or choices for the Omnibox.
+
+### Available Methods
+
+### General
+
+- `omnibox.focus()`: Focuses the input field.
+- `omnibox.blur()`: Blurs the input field.
+
+#### Suggestions
+
+- `omnibox.choose(suggestion, shouldFocusField)`: Chooses a suggestion item and adds it to the list
+of choices. If `multiple` is off, then only one choice can be chosen at a time, and the choice
+becomes the `ngModel`. `shouldFocusField` defaults to `true`, but if set to `false`, then the input
+field isn't automatically re-focused after choosing a suggestion.
+- `omnibox.unchoose(suggestion, shouldFocusField)`: Removes a suggestion item from the list of
+choices. If `multiple` is off, then the `ngModel` is cleared. `shouldFocusField` defaults to `true`,
+but if set to `false`, then the input field isn't automatically re-focused after unchoosing a
+suggestion.
+- `omnibox.shouldShowSuggestions()`: Whether or not the suggestions menu should be visible.
+- `omnibox.highlightSuggestion(suggestion)`: Highlights a particular suggestion item in the list of
+suggestions. If the suggestion is not visible on screen, it will be scrolled into view.
+- `omnibox.highlightPreviousSuggestion(startIndex)`: Highlights the previous suggestion before the
+current one. If no suggestion is highlighted, then the last suggestion is highlighted. If the first
+suggestion was highilighted, then it highlights the last suggestion. You can optionally pass a
+startIndex override what the current suggestion should be.
+- `omnibox.highlightNextSuggestion(startIndex)`: Highlights the next suggestion after the
+current one. If no suggestion is highlighted, then the first suggestion is highlighted. If the last
+suggestion was highilighted, then it highlights the first suggestion. You can optionally pass a
+startIndex override what the current suggestion should be.
+- `omnibox.highlightNone()`: Un-highlights any highlighted suggestion.
+- `omnibox.isHighlighted(suggestion)`: Whether the provided suggestion is currently highlighted.
+
+#### Choices (only work when `multiple` is set to `true`)
+
+- `omnibox.highlightChoice(choice)`: Highlights the submitted choice.
+- `omnibox.highlightPreviousChoice()`: Highlights the previous suggestion before the currently
+higlighted one. If the first one is highlighted then the field is focused.
+- `omnibox.highlightNextChoice()`: Highlights the next suggestion after the currently higlighted
+one. If the last one is highlighted then the field is focused.
+- `omnibox.highlightFirstChoice()`: Highlights the first choice in the list of choices.
+- `omnibox.highlightLastChoice()`: Highlights the last choice in the list of choices.
+- `omnibox.highlightNoChoice()`: Un-highlights all choices.
+- `omnibox.isChoiceHighlighted()`: Whether the submitted choice is currently highlighted.
