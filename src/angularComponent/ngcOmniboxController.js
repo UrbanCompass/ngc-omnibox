@@ -264,7 +264,26 @@ export default class NgcOmniboxController {
     return item === this._highlightedItem;
   }
 
+  /**
+   * Highlights the submitted choice.
+   *
+   * @param {Object} choice
+   */
+  highlightChoice(choice) {
+    if (this.multiple) {
+      this.highlightedChoice = choice;
+    }
+  }
+
+  /**
+   * Highlights the next suggestion after the currently higlighted one. If the last one is
+   * highlighted then the field is focused.
+   */
   highlightNextChoice() {
+    if (!this.multiple || !Array.isArray(this.ngModel)) {
+      return;
+    }
+
     const index = this.ngModel.indexOf(this.highlightedChoice);
 
     if (index < this.ngModel.length - 1) {
@@ -274,7 +293,15 @@ export default class NgcOmniboxController {
     }
   }
 
+  /**
+   * Highlights the previous suggestion before the currently higlighted one. If the first one is
+   * highlighted then the field is focused.
+   */
   highlightPreviousChoice() {
+    if (!this.multiple || !Array.isArray(this.ngModel)) {
+      return;
+    }
+
     const index = this.ngModel.indexOf(this.highlightedChoice);
 
     if (index > 0) {
@@ -284,20 +311,41 @@ export default class NgcOmniboxController {
     }
   }
 
+  /**
+   * Highlights the first choice in the list of choices.
+   */
   highlightFirstChoice() {
-    this.highlightedChoice = this.ngModel[0];
+    if (this.multiple) {
+      this.highlightedChoice = this.ngModel[0];
+    }
   }
 
+/**
+ * Highlights the first choice in the list of choices.
+ */
   highlightLastChoice() {
-    this.highlightedChoice = this.ngModel[this.ngModel.length - 1];
+    if (this.multiple) {
+      this.highlightedChoice = this.ngModel[this.ngModel.length - 1];
+    }
   }
 
+  /**
+   * Un-highlights all choices.
+   */
   highlightNoChoice() {
-    this.highlightedChoice = null;
+    if (this.multiple) {
+      this.highlightedChoice = null;
+    }
   }
 
+  /**
+   * Whether the submitted choice is currently highlighted.
+   *
+   * @param {Any} choice
+   * @returns {Boolean}
+   */
   isChoiceHighlighted(choice) {
-    return this.highlightedChoice === choice;
+    return this.multiple && this.highlightedChoice === choice;
   }
 
   focus() {
