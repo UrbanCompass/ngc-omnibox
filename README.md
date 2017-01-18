@@ -6,8 +6,8 @@ UI and style assumptions as possible. It is currently implemented in AngularJS 1
 
 The primary goal of Omnibox is to make as few assumptions about the scenarios in which it will
 be used as possible. This means that this component is not ready to be used in a project out of the
-box: it *requires configuration and styling*. However, this means that it can be the basis for just
-about any autocomplete implementation possible given the following assumptions:
+box: it **requires configuration and styling**. However, this means that it can be the basis for
+just about any autocomplete implementation possible given the following assumptions:
 
 1. You need a field in which you type text in to
 2. You exepect that field to return a list of suggestions to choose from
@@ -91,8 +91,8 @@ The Omnibox field controls where inside the Omnibox component you'd like the inp
 
 Omnibox Suggestions is a container for where your list of suggestions will be rendered. It has
 additional sub-components that allow you to slot in markup for different parts needed for the
-suggestions to render. Please note that this is the only component which *will not respect all of
-the markup you provide*. Any markup inside here that is not one of the documented sub-components
+suggestions to render. Please note that this is the only component which **will not respect all of
+the markup you provide**. Any markup inside here that is not one of the documented sub-components
 will be removed.
 
 #### Omnibox Suggestion Item `<ngc-omnibox-suggestion-item>` _(Required)_
@@ -182,7 +182,7 @@ The Omnibox Controller handles most of the behavior for the Omnibox Component. I
 of functions and properties that can be accessed from anywhere inside the Omnibox Component markup
 via the `omnibox` object on the scope.
 
-*Any options not documented here should be considered private.* Accessing or using undocumented
+**Any options not documented here should be considered private.** Accessing or using undocumented
 methods could break at any time, and changes to those methods or properties will not be considered
 when semantic versioning. Please refrain from using them.
 
