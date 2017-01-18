@@ -22,7 +22,7 @@ Omnibox.
 A simple implementation that renders a list of suggestions:
 
 ```html
-<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.sourceFn(query)">
+<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.getSuggestions(query)">
   <ngc-omnibox-field></ngc-omnibox-field>
 
   <ngc-omnibox-suggestions>
@@ -38,7 +38,7 @@ A more complicated implementation that supports multiple choices and suggestions
 category:
 
 ```html
-<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.sourceFn(query)" multiple="true">
+<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.getSuggestions(query)" multiple="true">
 
   <ngc-omnibox-choices>
     <span>
