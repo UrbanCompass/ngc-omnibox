@@ -19,7 +19,7 @@ Omnibox.
 
 ## Usage
 
-A simple implementation that simply renders a list of suggestions:
+A simple implementation that renders a list of suggestions:
 
 ```html
 <ngc-omnibox ng-model="myCtrl.model" source="myCtrl.sourceFn(query)">
