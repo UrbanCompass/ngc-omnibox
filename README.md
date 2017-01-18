@@ -106,7 +106,7 @@ asynchronously.
 
 #### Omnibox Suggestion Empty `<ngc-omnibox-suggestion-empty>`
 The Suggestion Empty component gives you a slot for markup for when there are no suggestions. The
-list of suggestions is considered empty when it is either falsy or an Array with no length.
+list of suggestions is considered empty when it is either falsy or an array with no length.
 
 #### Omnibox Suggestion Category `<ngc-omnibox-suggestion-category>`
 The Suggestion Category component is a container for markup for when a suggestion has `children`
@@ -134,14 +134,42 @@ data is structured:
 key on your suggestion named `children`, and that must be an array.
 
 Everything else is completely up to you. To populate the list of suggestions, you return a `Promise`
-in the `source` &-bound callback on the `Omnibox Controller` that resolves to an Array of
-suggestions. The Omnibox will render whatever is in that array. All filtering, data manipulation,
-slicing, and dicing _must be done before resolving this promise_. The Omnibox component provides no
-search algorithm of it's own: it expects the suggestions it receives to already be sorted and
-formatted correctly.
+in the `source` &-bound callback binding on the `Omnibox` that resolves to an array of suggestions.
+The Omnibox will render whatever is in that array. All filtering, data manipulation, slicing, and
+dicing _must be done before resolving this promise_. The Omnibox component provides no search
+algorithm of it's own: it expects the suggestions it receives to already be sorted and formatted
+correctly.
 
 When your markup receives a `suggestion` or a `choice`, it is simply a reference to either one of
 the items in the top-level array, or one of the items in the children array. No other modifications
 are made to your data.
 
 ## Options
+
+The following bindings are
+
+- source({query, suggestions}) {Promise}: This function populates the list of suggestions by
+returning a Promise that resolves to an array of suggestions. The individual suggestions can be of
+any type, but the list of suggestions must be an array. If you wish to provide nested suggestions
+(such as category headers, or a tree structure) then you must provide a key called `children` which
+will then be looped through to find more children, or the end of the list. It receives, in its
+scope, access to a String called `query` which the current query in the input field, and an array
+called `suggestions`, which is the current list of suggestions being displayed.
+- ngModel {Any}: This is a one-way binding to the ngModel for the Omnibox. When the `multiple`
+option is set to true, then the ngModel should be an Array. Each item in the Array will be populated
+with choices from the objects passed via the source function. If the `multiple` option is false
+(default), then the ngModel will be set to the singular chosen suggestion.
+- ngDisabled() {Boolean}: This function should return a boolean that determines if the Omnibox
+component should be disabled.
+- multiple {Boolean}: Whether to allow multiple choices from the list of suggestions. This option
+controls whether the ngModel will be an Array (multiple is on) or a single choice (off).
+- hideOnBlur {Boolean}: Whether the list of suggestions should automatically hide when the component
+itself loses focus. Hitting ESC will always close the list of suggestions.
+- isSelectable({suggestion}) {Boolean}: A function that should return a Boolean that determines if a
+suggestion is able to be interacted with. This function will be called whenever a suggestion is
+attempted to be highlighted either by the keyboard or mouse. It receives, in its scope, access to an
+object called `suggestion` which is the current sugestion that is being interacted with. A
+non-selectable suggestion cannot be clicked on, hovered over, or interacted with via the keyboard.
+- canShowSuggestions ({query}) {Boolean}: A function that should return a Boolean that determines
+whether or not the list of suggestions can be displayed. It receives, in its scope, access to a
+String called `query` which is the current query being searched on.
