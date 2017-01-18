@@ -74,28 +74,30 @@ For more complicated and realistic use cases, including some that implement CSS,
 
 ## Component Architecture
 
-The way to configure the markup for the Omnibox is by use of its sub-components. The Omnibox library
+The way to configure the markup for the Omnibox is by use of its subcomponents. The Omnibox library
 does not have its own template, so all of the markup that is displayed is completely under your
-control. Each sub-component provides you a slot for custom markup and access to your data.
+control. Each subcomponent provides you a slot for custom markup and access to your data.
 
 ### Omnibox `<ngc-omnibox>`
 
-This is the main, base-level component. All of the other sub-components must be
+This is the main, base-level component. All of the other subcomponents must be
 included inside of this element. Since the component does not provide a template of its own, most of
-the markup you provide inside (with some slight exceptions) will be maintained. All sub-components
+the markup you provide inside (with some slight exceptions) will be maintained. All subcomponents
 of the Omnibox have access to the `omnibox` object in the scope of their markup, which is a
 reference to the top-level `Omnibox Controller`.
 
 ### Omnibox Field `<ngc-omnibox-field>` _(Required)_
 
-The Omnibox field controls where inside the Omnibox component you'd like the input field rendered.
+The Omnibox field controls the position of the input field markup inside the Omnibox component. If
+you want to customize the actual input field element, you add an `<input>` inside this component.
+This allows you to change attributes such as `type`, `placeholder`, etc. as well as add a css class.
 
 ### Omnibox Suggestions `<ngc-omnibox-suggestions>` _(Required)_
 
 Omnibox Suggestions is a container for where your list of suggestions will be rendered. It has
-additional sub-components that allow you to slot in markup for different parts needed for the
+additional subcomponents that allow you to slot in markup for different parts needed for the
 suggestions to render. Please note that this is the only component which **will not respect all of
-the markup you provide**. Any markup inside here that is not one of the documented sub-components
+the markup you provide**. Any markup inside here that is not one of the documented subcomponents
 will be removed.
 
 #### Omnibox Suggestion Item `<ngc-omnibox-suggestion-item>` _(Required)_
@@ -137,7 +139,7 @@ data is structured:
 key on your suggestion named `children`, and that must be an array.
 
 Everything else is completely up to you. To populate the list of suggestions, you return a `Promise`
-in the `source` &-bound callback binding on the `Omnibox` that resolves to an array of suggestions.
+in the `source` &-bound callback binding on the Omnibox that resolves to an array of suggestions.
 The Omnibox will render whatever is in that array. All filtering, data manipulation, slicing, and
 dicing _must be done before resolving this promise_. The Omnibox component provides no search
 algorithm of it's own: it expects the suggestions it receives to already be sorted and formatted
