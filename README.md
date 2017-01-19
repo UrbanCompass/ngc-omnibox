@@ -89,14 +89,15 @@ reference to the top-level `Omnibox Controller`.
 ### Omnibox Field `<ngc-omnibox-field>` _(Required)_
 
 The Omnibox field controls the position of the input field markup inside the Omnibox component. If
-you want to customize the actual input field element, you add an `<input>` inside this component.
-This allows you to change attributes such as `type`, `placeholder`, etc. as well as add a css class.
+you want to customize the actual input field element, you can add an `<input>` inside this
+component. This allows you to change attributes such as `type`, `placeholder`, etc. as well as add
+css classes.
 
 ### Omnibox Suggestions `<ngc-omnibox-suggestions>` _(Required)_
 
-Omnibox Suggestions is a container for where your list of suggestions will be rendered. It has
+Omnibox Suggestions is a container for your lists of suggestions to be rendered in. It has
 additional subcomponents that allow you to slot in markup for different parts needed for the
-suggestions to render. Please note that this is the only component which **will not respect all of
+suggestions to render. Please note that this is the only component which **will not respect any of
 the markup you provide**. Any markup inside here that is not one of the documented subcomponents
 will be removed.
 
