@@ -5,7 +5,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
+      ngc-omnibox {
+        position: relative;
+        display: block;
+      }
+
       [ngc-omnibox-suggestions] {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         max-height: 500px;

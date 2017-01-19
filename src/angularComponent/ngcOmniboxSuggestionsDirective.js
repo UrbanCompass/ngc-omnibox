@@ -37,6 +37,7 @@ export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTempl
           scope.$watch(() => omnibox.shouldShowSuggestions(), () => {
             if (omnibox.shouldShowSuggestions()) {
               iElement.css('display', '');
+              iElement[0].scrollTop = 0;
             } else {
               iElement.css('display', 'none');
             }
