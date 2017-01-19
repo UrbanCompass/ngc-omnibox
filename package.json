@@ -1,7 +1,7 @@
 {
   "name": "ngc-omnibox",
   "version": "0.0.1",
-  "description": "",
+  "description": "A modern, flexible autocomplete library with limited assumptions to help you build custom autocompletes.",
   "main": "src/index.js",
   "scripts": {
     "bundle": "webpack --progress --colors",
