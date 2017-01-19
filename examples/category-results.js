@@ -35,7 +35,7 @@
         var grouped = {};
 
         // Populate groups with results
-        results.forEach((result) => {
+        results.forEach(function (result) {
           var groupName = result.state;
           if (!grouped[groupName]) {
             grouped[groupName] = {
@@ -47,11 +47,13 @@
           grouped[groupName].children.push(result);
         });
 
-        return Object.keys(grouped).sort().map((groupName) => grouped[groupName]);
+        return Object.keys(grouped).sort().map(function (groupName) {
+          return grouped[groupName];
+        });
       }
 
       function filterOutChosen(result) {
-        return !demo.model.includes(result);
+        return demo.model.indexOf(result) === -1;
       }
 
       this.model = [];

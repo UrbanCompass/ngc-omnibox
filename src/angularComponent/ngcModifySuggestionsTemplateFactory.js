@@ -38,7 +38,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       noResultsEl.setAttribute('ng-if', '!omnibox.hasSuggestions && !omnibox.isLoading');
     }
 
-    if (categoryEl) {
+    if (!itemEl) {
+      throw new Error('An ngcOmniboxSuggestionItem is required.');
+    } else if (categoryEl) {
       const categoryContainer = doc.createElement('div');
       categoryContainer.setAttribute('ng-repeat',
           'suggestion in suggestion.children || omnibox.suggestions');
@@ -81,7 +83,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
 
       return element.innerHTML;
-    } else if (itemEl) {
+    } else {
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected',
@@ -93,8 +95,6 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
 
       return element.innerHTML;
-    } else {
-      throw new Error('An ngcOmniboxSuggestionItem is required.');
     }
   };
 }

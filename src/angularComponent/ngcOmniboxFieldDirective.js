@@ -1,7 +1,27 @@
+/**
+ * Omnibox Field Directive
+ *
+ * The Field Directive is used to determine where in the Omnibox Component to render the input field
+ * element. It can be used either as a custom element, or an attribute on a standard HTML element.
+ * Once included, an input field element will be appended inside and used for all typing events.
+ * If you need access to the actual input field used (or want it to be rendered on the page before
+ * Angular is init'd), then you can include an input element inside this directive and that will
+ * be used instead of a new one being created.
+ *
+ * This directive also has the following bindings available:
+ *
+ * - ngFocus(): This callback is executed when the input field receives focus.
+ * - ngBlur(): This callback is executed when the input field loses focus.
+ *
+ * Sample usage:
+ *     <ngc-omnibox source="myController.getSuggestions(query)" ng-model="myController.choices">
+ *       <ngc-omnibox-field><input type="text" placeholder="Search here..."></ngc-omnibox-field>
+ *     </ngc-omnibox>
+ */
 ngcOmniboxFieldDirective.$inject = ['$document'];
 export default function ngcOmniboxFieldDirective($document) {
   return {
-    restrict: 'E',
+    restrict: 'AE',
     require: {
       omnibox: '^^ngcOmnibox'
     },
@@ -16,16 +36,20 @@ export default function ngcOmniboxFieldDirective($document) {
       const doc = $document[0];
       const el = tElement[0];
 
-      const input = doc.createElement('input');
+      const input = el.querySelector('input') || doc.createElement('input');
 
-      input.setAttribute('class', el.getAttribute('class'));
-      input.setAttribute('type', el.getAttribute('type') || 'text');
-      input.setAttribute('ng-attr-tabindex', el.getAttribute('tabindex') || 'undefined');
-      input.setAttribute('ng-attr-placeholder', '{{omnibox.placeholder || undefined}}');
-      input.setAttribute('ng-attr-autofocus', '{{::omnibox.autofocus === \'true\' || undefined}}');
+      if (!input.parentNode) {
+        el.appendChild(input);
+      }
+
+      if (!input.getAttribute('type')) {
+        input.setAttribute('type', 'text');
+      }
 
       input.setAttribute('role', 'combobox');
       input.setAttribute('aria-autocomplete', 'list');
+      input.setAttribute('tabindex', input.getAttribute('tabindex') || 0);
+
       input.setAttribute('ng-attr-aria-expanded', '{{omnibox.hasSuggestions}}');
       input.setAttribute('ng-attr-aria-multiselectable', '{{omnibox.multiple || undefined}}');
 
@@ -35,12 +59,6 @@ export default function ngcOmniboxFieldDirective($document) {
 
       input.setAttribute('ng-focus', 'omniboxField.ngFocus()');
       input.setAttribute('ng-blur', 'omniboxField.ngBlur()');
-
-      el.removeAttribute('class');
-      el.removeAttribute('tabindex');
-      el.removeAttribute('type');
-      el.innerHTML = '';
-      el.appendChild(input);
 
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {

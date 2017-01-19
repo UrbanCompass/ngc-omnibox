@@ -127,7 +127,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     beforeEach(() => {
       omniboxController.shouldShowLoadingElement = false;
       omniboxController.hasSuggestions = false;
-      omniboxController.canShow = () => false;
+      omniboxController.canShowSuggestions = () => false;
     });
 
     it('should not be determined just by if the suggestions are loading', () => {
@@ -144,24 +144,24 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should not be controllable by just the canShow binding function', () => {
+    it('should not be controllable by just the canShowSuggestions binding function', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
 
-      omniboxController.canShow = () => true;
+      omniboxController.canShowSuggestions = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
-    it('should be determined by loading state, having suggestions, and canShow binding', () => {
+    it('should be determined by loading state, having suggestions, and can-show binding', () => {
       omniboxController.shouldShowLoadingElement = true;
       omniboxController.hasSuggestions = true;
-      omniboxController.canShow = () => true;
+      omniboxController.canShowSuggestions = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
 
-    it('should be visible when done loading if has suggestions and canShow passes', () => {
+    it('should be visible when done loading if has suggestions and can-show passes', () => {
       omniboxController.shouldShowLoadingElement = false;
       omniboxController.hasSuggestions = true;
-      omniboxController.canShow = () => true;
+      omniboxController.canShowSuggestions = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
   });

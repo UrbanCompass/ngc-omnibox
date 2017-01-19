@@ -12,13 +12,14 @@
 
       <ngc-omnibox
           ng-model="demo.model"
-          placeholder="Search for a US Senator by Name or Party"
-          autofocus="true"
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
           source="demo.sourceFn(query)">
 
-        <ngc-omnibox-field type="text"></ngc-omnibox-field>
+        <ngc-omnibox-field>
+          <input type="text" placeholder="Search for a US Senator by Name or Party"
+              autofocus="true">
+        </ngc-omnibox-field>
 
         <ngc-omnibox-choices>
           <span>
