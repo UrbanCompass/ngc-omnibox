@@ -1,12 +1,13 @@
 {
   "name": "ngc-omnibox",
-  "version": "0.0.1",
-  "description": "A modern, flexible autocomplete library with limited assumptions to help you build custom autocompletes.",
-  "main": "src/index.js",
+  "version": "0.0.2",
+  "description": "A modern, flexible, Angular 1.x autocomplete library with limited assumptions.",
+  "main": "dist/ngc-omnibox.js",
   "scripts": {
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
-    "test": "istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine && eslint ."
+    "test": "istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine && eslint .",
+    "prepublish": "npm run bundle"
   },
   "repository": {
     "type": "git",
