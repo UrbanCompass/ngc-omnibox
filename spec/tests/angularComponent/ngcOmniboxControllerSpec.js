@@ -125,8 +125,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   describe('suggestion visibility', () => {
     beforeEach(() => {
+      omniboxController.suggestions = null;
       omniboxController.shouldShowLoadingElement = false;
-      omniboxController.hasSuggestions = false;
       omniboxController.canShowSuggestions = () => false;
     });
 
@@ -140,7 +140,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     it('should not be determined by just the presence of suggestions', () => {
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
 
-      omniboxController.hasSuggestions = true;
+      omniboxController.suggestions = [];
       expect(omniboxController.shouldShowSuggestions()).toBe(false);
     });
 
@@ -153,14 +153,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
     it('should be determined by loading state, having suggestions, and can-show binding', () => {
       omniboxController.shouldShowLoadingElement = true;
-      omniboxController.hasSuggestions = true;
+      omniboxController.suggestions = [];
       omniboxController.canShowSuggestions = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
 
     it('should be visible when done loading if has suggestions and can-show passes', () => {
       omniboxController.shouldShowLoadingElement = false;
-      omniboxController.hasSuggestions = true;
+      omniboxController.suggestions = [];
       omniboxController.canShowSuggestions = () => true;
       expect(omniboxController.shouldShowSuggestions()).toBe(true);
     });
