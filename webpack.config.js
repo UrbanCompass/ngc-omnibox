@@ -4,7 +4,9 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'ngc-omnibox.js'
+    filename: 'ngc-omnibox.js',
+    library: 'ngc-omnibox',
+    libraryTarget: 'umd'
   },
   externals: {
       angular: 'angular'
