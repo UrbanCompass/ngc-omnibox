@@ -6,6 +6,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'ngc-omnibox.js'
   },
+  externals: {
+      angular: 'angular'
+  },
   module: {
     rules: [{
       test: /\.js$/,
