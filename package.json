@@ -7,7 +7,7 @@
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
     "test": "istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine && eslint .",
-    "prepublish": "npm run build"
+    "prepublish": "npm run bundle"
   },
   "repository": {
     "type": "git",
