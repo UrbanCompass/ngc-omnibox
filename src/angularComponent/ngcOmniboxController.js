@@ -404,7 +404,7 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.shouldShowLoadingElement || this.hasSuggestions) &&
+    return !this.hideSuggestions && (this.shouldShowLoadingElement || !!this.suggestions) &&
         this.canShowSuggestions({query: this.query}) !== false;
   }
 
