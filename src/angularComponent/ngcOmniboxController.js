@@ -9,8 +9,6 @@ const LOADING_SCREEN_THRESHOLD = 150;
 // Time in miliseconds to wait before closing the suggestions after focus is lost
 const SUGGESTIONS_BLUR_THRESHOLD = 10;
 
-const customArrayPrototype = Object.create(Array.prototype);
-
 export default class NgcOmniboxController {
   static get $inject() {
     return ['$document', '$element', '$scope'];
@@ -31,16 +29,6 @@ export default class NgcOmniboxController {
     this.shouldShowLoadingElement = false; // Been loading for long enough we should show loading UI
 
     this.highlightNone();
-
-    // Listen for updates to the model when it's an array
-    const omnibox = this;
-    ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((property) => {
-      customArrayPrototype[property] = function (...args) {
-        const ret = Array.prototype[property].apply(this, args);
-        omnibox._onNgModelChange();
-        return ret;
-      };
-    });
 
     // Need our overall component to be focusable so that it can continue listening to keyboard
     // events when we stop focusing on the input field and focus on the choices
@@ -104,7 +92,19 @@ export default class NgcOmniboxController {
     this._ngModel = newModel;
 
     if (Array.isArray(this._ngModel)) {
-      Object.setPrototypeOf(this._ngModel, customArrayPrototype);
+      const currentPrototype = Object.getPrototypeOf(this._ngModel);
+      const newPrototype = Object.create(currentPrototype);
+      Object.setPrototypeOf(this._ngModel, newPrototype);
+
+      // Listen for updates to the model when it's an array
+      const omnibox = this;
+      ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((property) => {
+        newPrototype[property] = function (...args) {
+          const ret = currentPrototype[property].apply(this, args);
+          omnibox._onNgModelChange();
+          return ret;
+        };
+      });
     }
 
     this._onNgModelChange();
