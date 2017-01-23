@@ -94,7 +94,6 @@ export default class NgcOmniboxController {
     if (Array.isArray(this._ngModel)) {
       const currentPrototype = Object.getPrototypeOf(this._ngModel);
       const newPrototype = Object.create(currentPrototype);
-      Object.setPrototypeOf(this._ngModel, newPrototype);
 
       // Listen for updates to the model when it's an array
       const omnibox = this;
@@ -105,6 +104,8 @@ export default class NgcOmniboxController {
           return ret;
         };
       });
+
+      Object.setPrototypeOf(this._ngModel, newPrototype);
     }
 
     this._onNgModelChange();
