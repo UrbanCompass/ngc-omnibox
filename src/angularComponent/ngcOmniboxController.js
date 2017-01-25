@@ -17,6 +17,7 @@ export default class NgcOmniboxController {
   constructor($document, $element, $scope) {
     this.doc = $document[0];
     this.element = $element[0];
+    this.$scope = $scope;
 
     this.hideSuggestions = false; // Whether to forcibly hide the list of suggestions
     this.hasSuggestions = false; // Whether we have any suggestions loaded
@@ -140,21 +141,6 @@ export default class NgcOmniboxController {
     } else {
       this._highlightedItem = null;
     }
-
-    // Wait until next render cycle
-    setTimeout(() => {
-      const selectedEl = this.element.querySelector('[aria-selected]');
-
-      if (selectedEl) {
-        if (typeof selectedEl.scrollIntoView === 'function') {
-          // Standard way
-          selectedEl.scrollIntoView(false);
-        } else if (typeof selectedEl.scrollIntoViewIfNeeded === 'function') {
-          // Non-standard way (webkit-like browsers)
-          selectedEl.scrollIntoViewIfNeeded();
-        }
-      }
-    }, 0);
   }
 
   get highlightedIndex() {
@@ -208,6 +194,8 @@ export default class NgcOmniboxController {
       this.highlightPreviousSuggestion(startHighlightIndex);
     }
 
+    this._scrollSuggestionIntoView();
+
     return newIndex;
   }
 
@@ -244,6 +232,8 @@ export default class NgcOmniboxController {
 
       this.highlightNextSuggestion(startHighlightIndex);
     }
+
+    this._scrollSuggestionIntoView();
 
     return newIndex;
   }
@@ -504,7 +494,6 @@ export default class NgcOmniboxController {
 
     this.highlightNone();
     this._showLoading();
-    this.hideSuggestions = false;
 
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
@@ -524,6 +513,8 @@ export default class NgcOmniboxController {
       } else {
         throw new Error('Suggestions must be an Array');
       }
+
+      this.hideSuggestions = false;
     });
   }
 
@@ -577,5 +568,24 @@ export default class NgcOmniboxController {
    */
   _onNgModelChange() {
     this.hasChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
+  }
+
+  _scrollSuggestionIntoView() {
+    this.$scope.$apply();
+
+    // Wait until next render cycle
+    setTimeout(() => {
+      const selectedEl = this.element.querySelector('[aria-selected]');
+
+      if (selectedEl) {
+        if (typeof selectedEl.scrollIntoView === 'function') {
+          // Standard way
+          selectedEl.scrollIntoView(false);
+        } else if (typeof selectedEl.scrollIntoViewIfNeeded === 'function') {
+          // Non-standard way (webkit-like browsers)
+          selectedEl.scrollIntoViewIfNeeded();
+        }
+      }
+    }, 0);
   }
 }
