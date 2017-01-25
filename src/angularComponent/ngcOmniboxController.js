@@ -17,6 +17,7 @@ export default class NgcOmniboxController {
   constructor($document, $element, $scope) {
     this.doc = $document[0];
     this.element = $element[0];
+    this.$scope = $scope;
 
     this.hideSuggestions = false; // Whether to forcibly hide the list of suggestions
     this.hasSuggestions = false; // Whether we have any suggestions loaded
