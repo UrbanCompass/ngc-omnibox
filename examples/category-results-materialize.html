@@ -10,7 +10,7 @@
         display: block;
       }
 
-      [ngc-omnibox-suggestions] {
+      .collection {
         position: absolute;
         top: 100%;
         left: 0;
@@ -34,7 +34,7 @@
         width: 100% !important;
         font-size: 16px; /* stops iOS Safari from zooming in */
       }
-      [ngc-omnibox-field] {
+      .omniboxField {
         flex-grow: 1;
         flex-basis: 200px;
       }
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div ngc-omnibox-field ng-focus="demoCtrl.fieldHasFocus = true"
+          <div class="omniboxField" ngc-omnibox-field ng-focus="demoCtrl.fieldHasFocus = true"
                 ng-blur="demoCtrl.fieldHasFocus = false">
             <input class="input" type="text" autofocus="true"
                 placeholder="Search for a US Senator by Name or Party">

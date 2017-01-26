@@ -153,6 +153,10 @@ export default class NgcOmniboxController {
   * @param {Object} item
   */
   highlightSuggestion(item) {
+    if (this.isHighlightingDisabled) {
+      return;
+    }
+
     const [uiItemMatch] = this._suggestionsUiList.filter((uiItem) => uiItem.data === item);
 
     if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
@@ -191,7 +195,7 @@ export default class NgcOmniboxController {
         startHighlightIndex = newIndex;
       }
 
-      this.highlightPreviousSuggestion(startHighlightIndex);
+      return this.highlightPreviousSuggestion(startHighlightIndex);
     }
 
     this._scrollSuggestionIntoView();
@@ -230,7 +234,7 @@ export default class NgcOmniboxController {
         startHighlightIndex = newIndex;
       }
 
-      this.highlightNextSuggestion(startHighlightIndex);
+      return this.highlightNextSuggestion(startHighlightIndex);
     }
 
     this._scrollSuggestionIntoView();
@@ -242,6 +246,10 @@ export default class NgcOmniboxController {
    * Un-highlights all suggestions.
    */
   highlightNone() {
+    if (this.isHighlightingDisabled) {
+      return;
+    }
+
     this.highlightedIndex = -1; // -1 means nothing is highlighted
   }
 
@@ -494,6 +502,7 @@ export default class NgcOmniboxController {
 
     this.highlightNone();
     this._showLoading();
+    this.hideSuggestions = false;
 
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
@@ -504,8 +513,6 @@ export default class NgcOmniboxController {
         return;
       }
 
-      this._hideLoading();
-
       if (!suggestions) {
         this.suggestions = null;
       } else if (Array.isArray(suggestions)) {
@@ -514,7 +521,7 @@ export default class NgcOmniboxController {
         throw new Error('Suggestions must be an Array');
       }
 
-      this.hideSuggestions = false;
+      this._hideLoading();
     });
   }
 
@@ -573,6 +580,9 @@ export default class NgcOmniboxController {
   _scrollSuggestionIntoView() {
     this.$scope.$apply();
 
+    // Disable highlighting while scrolling so the mouse doesn't accidentally highlight a new item
+    this.isHighlightingDisabled = true;
+
     // Wait until next render cycle
     setTimeout(() => {
       const selectedEl = this.element.querySelector('[aria-selected]');
@@ -587,5 +597,9 @@ export default class NgcOmniboxController {
         }
       }
     }, 0);
+
+    setTimeout(() => {
+      this.isHighlightingDisabled = false;
+    }, 10);
   }
 }
