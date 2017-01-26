@@ -494,6 +494,7 @@ export default class NgcOmniboxController {
 
     this.highlightNone();
     this._showLoading();
+    this.hideSuggestions = false;
 
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
@@ -504,8 +505,6 @@ export default class NgcOmniboxController {
         return;
       }
 
-      this._hideLoading();
-
       if (!suggestions) {
         this.suggestions = null;
       } else if (Array.isArray(suggestions)) {
@@ -514,7 +513,7 @@ export default class NgcOmniboxController {
         throw new Error('Suggestions must be an Array');
       }
 
-      this.hideSuggestions = false;
+      this._hideLoading();
     });
   }
 

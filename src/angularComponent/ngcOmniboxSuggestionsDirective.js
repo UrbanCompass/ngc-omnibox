@@ -18,8 +18,8 @@
  *
  * @returns {Object}
  */
-ngcOmniboxSuggestionsDirective.$inject = ['ngcModifySuggestionsTemplate'];
-export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTemplate) {
+ngcOmniboxSuggestionsDirective.$inject = ['$document', 'ngcModifySuggestionsTemplate'];
+export default function ngcOmniboxSuggestionsDirective($document, ngcModifySuggestionsTemplate) {
 
   return {
     restrict: 'AE',
@@ -28,7 +28,36 @@ export default function ngcOmniboxSuggestionsDirective(ngcModifySuggestionsTempl
     controller() {},
     controllerAs: 'suggestions',
     compile(tElement) {
-      tElement.html(ngcModifySuggestionsTemplate(tElement[0]));
+      const doc = $document[0];
+      const element = tElement[0];
+      const tmpl = ngcModifySuggestionsTemplate(element);
+      const isElemDirective = element.localName === 'ngc-omnibox-suggestions';
+
+      // Wrap all of the element contents so we can put an ng-if on it. The wrapper should use
+      // all the attributes passed in by the app-maker except for the directive since that would
+      // cause an infinite loop
+      const wrapper = doc.createElement(isElemDirective ? 'div' : element.localName);
+      wrapper.innerHTML = tmpl;
+      wrapper.setAttribute('ng-if', 'omnibox.shouldShowSuggestions()');
+
+      const attributes = Array.prototype.slice.apply(element.attributes);
+      attributes.forEach((attr) => {
+        // If the element is using the attribute directive, don't apply it to avoid infinite loop
+        if (attr.name !== 'ngc-omnibox-suggestions') {
+          wrapper.setAttribute(attr.name, attr.value);
+        }
+      });
+
+      // Use the same direcrive strategy (attribute or element) for the new wrapping element as
+      // the app-maker did.
+      if (element.localName === 'ngc-omnibox-suggestions') {
+        element.outerHTML = '<ngc-omnibox-suggestions>' + wrapper.outerHTML +
+            '</ngc-omnibox-suggestions>';
+      } else if (element.hasAttribute('ngc-omnibox-suggestions')) {
+        element.outerHTML = '<div ngc-omnibox-suggestions>' + wrapper.outerHTML + '</div>';
+      } else {
+        element.innerHTML = wrapper.outerHTML;
+      }
 
       return {
         pre(scope, iElement, iAttrs, omnibox) {
