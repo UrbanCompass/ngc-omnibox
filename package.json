@@ -1,6 +1,6 @@
 {
   "name": "ngc-omnibox",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A modern, flexible, Angular 1.x autocomplete library with limited assumptions.",
   "main": "dist/ngc-omnibox.js",
   "scripts": {
