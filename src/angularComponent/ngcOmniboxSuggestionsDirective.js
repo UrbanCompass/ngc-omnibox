@@ -31,7 +31,7 @@ export default function ngcOmniboxSuggestionsDirective($document, ngcModifySugge
       const doc = $document[0];
       const element = tElement[0];
       const tmpl = ngcModifySuggestionsTemplate(element);
-      const isElemDirective = element.localName === 'ngc-omnibox-suggestions';
+      const isElemDirective = element.tagName === 'NGC-OMNIBOX-SUGGESTIONS';
 
       // Wrap all of the element contents so we can put an ng-if on it. The wrapper should use
       // all the attributes passed in by the app-maker except for the directive since that would
@@ -48,9 +48,9 @@ export default function ngcOmniboxSuggestionsDirective($document, ngcModifySugge
         }
       });
 
-      // Use the same direcrive strategy (attribute or element) for the new wrapping element as
+      // Use the same directive strategy (attribute or element) for the new wrapping element as
       // the app-maker did.
-      if (element.localName === 'ngc-omnibox-suggestions') {
+      if (isElemDirective) {
         element.outerHTML = '<ngc-omnibox-suggestions>' + wrapper.outerHTML +
             '</ngc-omnibox-suggestions>';
       } else if (element.hasAttribute('ngc-omnibox-suggestions')) {
