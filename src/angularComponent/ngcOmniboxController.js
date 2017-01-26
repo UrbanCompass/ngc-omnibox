@@ -195,7 +195,7 @@ export default class NgcOmniboxController {
         startHighlightIndex = newIndex;
       }
 
-      return  this.highlightPreviousSuggestion(startHighlightIndex);
+      return this.highlightPreviousSuggestion(startHighlightIndex);
     }
 
     this._scrollSuggestionIntoView();
