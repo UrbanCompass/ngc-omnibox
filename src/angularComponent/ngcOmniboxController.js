@@ -29,8 +29,6 @@ export default class NgcOmniboxController {
     this.isLoading = false; // Loading suggestions is in progress
     this.shouldShowLoadingElement = false; // Been loading for long enough we should show loading UI
 
-    this._requireMatch = this.requireMatch === 'true';
-
     this.highlightNone();
 
     // Need our overall component to be focusable so that it can continue listening to keyboard
@@ -63,6 +61,10 @@ export default class NgcOmniboxController {
     if (styleSheets && styleSheets.length) {
       styleSheets[styleSheets.length - 1].insertRule('ngc-omnibox:focus {outline: none}', 0);
     }
+  }
+
+  $onInit() {
+    this._requireMatch = this.requireMatch === 'true';
   }
 
   set fieldElement(el) {
