@@ -168,7 +168,10 @@ option is `false` (default), then the `ngModel` will be set to the singular chos
 - `ngDisabled() {Boolean}`: This expression should evaluate to a boolean that determines if the
 Omnibox component should be disabled.
 - `multiple {Boolean}`: Whether to allow multiple choices from the list of suggestions. This option
-controls whether the `ngModel` will be an array (multiple is on) or a single choice (off).
+controls whether the `ngModel` will be an array (multiple is on) or a single choice (off). Note that
+if multiple is set to `true`, then `requireMatch` will behave as if it has been set to `true`. If
+you need to support a "free-text" suggestion with multiple on, be sure to add it in your source
+function as a suggestion.
 - `hideOnBlur {Boolean}`: Whether the list of suggestions should automatically hide when the
 component itself loses focus. Hitting ESC will always close the list of suggestions.
 - `isSelectable({suggestion}) {Boolean}`: An expression that should evaluate to a Boolean that
@@ -190,6 +193,8 @@ behavior of the omnibox:
        beginning and hitting up will highlight nothing.
     4. Hitting ESC when there is a match highlighted will un-highlight it. Hitting ESC again will
        close the list of suggestions.
+    5. If multiple is `false`, then the entered becomes the model value when chosen. If multiple is
+       `true`, then `requireMatch` is treated as `true`.
   - `requireMatch = true`:
     1. A suggestion is always higlighted (as long as there are some available)
     2. Hitting ENTER or TAB will always choose a suggestion.

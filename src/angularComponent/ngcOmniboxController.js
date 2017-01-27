@@ -467,8 +467,8 @@ export default class NgcOmniboxController {
 
         if (selection) {
           this.choose(selection.data);
-        } else {
-          this.hideSuggestions = true;
+        } else if (!this.multiple && !this.requireMatch) {
+          this.choose(this.query);
         }
       }
     } else if (keyCode === KEY.DOWN) {
