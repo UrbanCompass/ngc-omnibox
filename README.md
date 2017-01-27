@@ -181,10 +181,22 @@ via the keyboard.
 determines whether or not the list of suggestions can be displayed. It receives, in its scope,
 access to a string called `query` which is the current query being searched on.
 - `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
-matched suggestion is required for the field (defaults to `false`). If a match is not required, then
-suggestions are not automatically highlighted and hitting enter keeps in whatever text the user
-has typed. If a match is required, then a suggestion is always higlighted (as long as there are
-some available) and hitting ENTER or TAB will always choose one of the suggestions.
+matched suggestion is required for the field (defaults to `false`). This has a few effects on the
+behavior of the omnibox:
+  - `requireMatch = false`:
+    1. A suggestion is always higlighted (as long as there are some available)
+    2. Hitting ENTER or TAB will always choose one of the suggestions.
+    3. When using the keyboard to highlight suggestions, going to the end and hitting down or the
+       beginning and hitting up will highlight nothing.
+    4. Hitting ESC when there is a match highlighted will un-highlight it. Hitting ESC again will
+       close the list of suggestions.
+  - `requireMatch = true`:
+    1. Suggestions are not automatically highlighted.
+    2. Hitting enter keeps in whatever text the user has typed.
+    3. When using the keyboard to highlight suggestions, going to the end and hitting down will then
+       highlight the first suggestion, and going to the beginning and hitting up will highlight the
+       last.
+    4. Hitting ESC with close the list of suggestions and clear the field.
 
 ## Omnibox Controller
 

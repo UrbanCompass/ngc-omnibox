@@ -256,7 +256,7 @@ export default class NgcOmniboxController {
    * Un-highlights all suggestions.
    */
   highlightNone() {
-    if (this.isHighlightingDisabled) {
+    if (this.isHighlightingDisabled || this._requireMatch) {
       return;
     }
 
@@ -458,7 +458,10 @@ export default class NgcOmniboxController {
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
       } else if (keyCode === KEY.ESC) {
-        if (this._highlightedItem) {
+        if (this._requireMatch) {
+          this.query = '';
+          this.hideSuggestions = true;
+        } else if (this._highlightedItem) {
           this.highlightNone();
         } else {
           this.hideSuggestions = true;
@@ -510,7 +513,7 @@ export default class NgcOmniboxController {
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
 
-    this.highlightNone();
+    this.highlightedIndex = -1; // Forcibly select nothing
     this._showLoading();
     this.hideSuggestions = false;
 
