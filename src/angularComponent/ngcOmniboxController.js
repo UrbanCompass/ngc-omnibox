@@ -63,10 +63,6 @@ export default class NgcOmniboxController {
     }
   }
 
-  $onInit() {
-    this._requireMatch = this.requireMatch === 'true';
-  }
-
   set fieldElement(el) {
     if (this._fieldElement) {
       this._fieldElement.removeEventListener('focus', this.highlightNoChoice.bind(this));
@@ -181,7 +177,7 @@ export default class NgcOmniboxController {
 
     if (newIndex > 0) {
       newIndex--;
-    } else if (!this._requireMatch && newIndex === 0) {
+    } else if (!this.requireMatch && newIndex === 0) {
       // If a match isn't required, select nothing when looping around
       newIndex = -1;
     } else {
@@ -223,7 +219,7 @@ export default class NgcOmniboxController {
 
     if (newIndex < this._suggestionsUiList.length - 1) {
       newIndex++;
-    } else if (!this._requireMatch && newIndex === this._suggestionsUiList.length - 1) {
+    } else if (!this.requireMatch && newIndex === this._suggestionsUiList.length - 1) {
       // If a match isn't required, select nothing when looping around
       newIndex = -1;
     } else {
@@ -256,7 +252,7 @@ export default class NgcOmniboxController {
    * Un-highlights all suggestions.
    */
   highlightNone() {
-    if (this.isHighlightingDisabled || this._requireMatch) {
+    if (this.isHighlightingDisabled || this.requireMatch) {
       return;
     }
 
@@ -458,7 +454,7 @@ export default class NgcOmniboxController {
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
       } else if (keyCode === KEY.ESC) {
-        if (this._requireMatch) {
+        if (this.requireMatch) {
           this.query = '';
           this.hideSuggestions = true;
         } else if (this._highlightedItem) {
@@ -541,7 +537,7 @@ export default class NgcOmniboxController {
 
       this._hideLoading();
 
-      if (this._requireMatch) {
+      if (this.requireMatch) {
         this.highlightNextSuggestion();
       }
     });

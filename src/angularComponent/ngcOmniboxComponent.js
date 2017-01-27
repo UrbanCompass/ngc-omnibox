@@ -58,6 +58,6 @@ export default {
     hideOnBlur: '@',
     isSelectable: '&',
     canShowSuggestions: '&',
-    requireMatch: '@'
+    requireMatch: '<?'
   }
 };

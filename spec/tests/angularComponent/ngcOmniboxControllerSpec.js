@@ -114,8 +114,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     it('should wrap around the selection if match is required', () => {
       omniboxController.suggestions = ['test', 'me', 'again', 'please'];
       omniboxController.highlightedIndex = 0;
-      omniboxController.requireMatch = 'true';
-      omniboxController.$onInit();
+      omniboxController.requireMatch = true;
 
       omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(3);
@@ -127,8 +126,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     it('should select nothing when wrapping around the selection if match isn\'t  required', () => {
       omniboxController.suggestions = ['test', 'me', 'again', 'please'];
       omniboxController.highlightedIndex = 0;
-      omniboxController.requireMatch = 'false';
-      omniboxController.$onInit();
+      omniboxController.requireMatch = false;
 
       omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(-1);
