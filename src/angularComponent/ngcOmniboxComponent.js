@@ -57,6 +57,7 @@ export default {
     multiple: '<?',
     hideOnBlur: '@',
     isSelectable: '&',
-    canShowSuggestions: '&'
+    canShowSuggestions: '&',
+    requireMatch: '@'
   }
 };

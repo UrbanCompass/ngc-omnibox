@@ -29,6 +29,8 @@ export default class NgcOmniboxController {
     this.isLoading = false; // Loading suggestions is in progress
     this.shouldShowLoadingElement = false; // Been loading for long enough we should show loading UI
 
+    this._requireMatch = this.requireMatch === 'true';
+
     this.highlightNone();
 
     // Need our overall component to be focusable so that it can continue listening to keyboard
@@ -177,6 +179,9 @@ export default class NgcOmniboxController {
 
     if (newIndex > 0) {
       newIndex--;
+    } else if (!this._requireMatch && newIndex === 0) {
+      // If a match isn't required, select nothing when looping around
+      newIndex = -1;
     } else {
       newIndex = this._suggestionsUiList.length - 1;
     }
@@ -216,6 +221,9 @@ export default class NgcOmniboxController {
 
     if (newIndex < this._suggestionsUiList.length - 1) {
       newIndex++;
+    } else if (!this._requireMatch && newIndex === this._suggestionsUiList.length - 1) {
+      // If a match isn't required, select nothing when looping around
+      newIndex = -1;
     } else {
       newIndex = 0;
     }
@@ -522,6 +530,10 @@ export default class NgcOmniboxController {
       }
 
       this._hideLoading();
+
+      if (this._requireMatch) {
+        this.highlightNextSuggestion();
+      }
     });
   }
 

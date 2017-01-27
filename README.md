@@ -4,15 +4,14 @@ The Omnibox is a lightweight implementation of an autocomplete field and menu th
 implementor as much control as possible over the markup and data structure used, and makes as few
 UI and style assumptions as possible. It is currently implemented in AngularJS 1.x.
 
-The primary goal of Omnibox is to make as few assumptions about the scenarios in which it will
-be used as possible. This means that this component is not ready to be used in a project out of the
-box: it **requires configuration and styling**. However, this means that it can be the basis for
-just about any autocomplete implementation possible given the following assumptions:
+The primary goal of Omnibox is to give app makers as close to full control as possible. This means
+that this component is not ready to be used in a project out of the box: it **requires configuration
+and styling**. However, this means that it can be the basis for just about any autocomplete
+implementation possible given the following assumptions:
 
 1. You need a field in which you type text in to
 2. You exepect that field to return a list of suggestions to choose from
-3. You can choose one of the suggestions
-4. You can optionally choose more than one suggestion
+3. You can choose one (or more, optionaly) of the suggestions
 
 And that's it. If your autocomplete needs are compatible with those assumptions, you can use
 Omnibox.
@@ -181,6 +180,11 @@ via the keyboard.
 - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
 determines whether or not the list of suggestions can be displayed. It receives, in its scope,
 access to a string called `query` which is the current query being searched on.
+- `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
+matched suggestion is required for the field (defaults to `false`). If a match is not required, then
+suggestions are not automatically highlighted and hitting enter keeps in whatever text the user
+has typed. If a match is required, then a suggestion is always higlighted (as long as there are
+some available) and hitting ENTER or TAB will always choose one of the suggestions.
 
 ## Omnibox Controller
 
