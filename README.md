@@ -4,15 +4,14 @@ The Omnibox is a lightweight implementation of an autocomplete field and menu th
 implementor as much control as possible over the markup and data structure used, and makes as few
 UI and style assumptions as possible. It is currently implemented in AngularJS 1.x.
 
-The primary goal of Omnibox is to make as few assumptions about the scenarios in which it will
-be used as possible. This means that this component is not ready to be used in a project out of the
-box: it **requires configuration and styling**. However, this means that it can be the basis for
-just about any autocomplete implementation possible given the following assumptions:
+The primary goal of Omnibox is to give app makers as close to full control as possible. This means
+that this component is not ready to be used in a project out of the box: it **requires configuration
+and styling**. However, this means that it can be the basis for just about any autocomplete
+implementation possible given the following assumptions:
 
 1. You need a field in which you type text in to
 2. You exepect that field to return a list of suggestions to choose from
-3. You can choose one of the suggestions
-4. You can optionally choose more than one suggestion
+3. You can choose one (or more, optionaly) of the suggestions
 
 And that's it. If your autocomplete needs are compatible with those assumptions, you can use
 Omnibox.
@@ -169,7 +168,10 @@ option is `false` (default), then the `ngModel` will be set to the singular chos
 - `ngDisabled() {Boolean}`: This expression should evaluate to a boolean that determines if the
 Omnibox component should be disabled.
 - `multiple {Boolean}`: Whether to allow multiple choices from the list of suggestions. This option
-controls whether the `ngModel` will be an array (multiple is on) or a single choice (off).
+controls whether the `ngModel` will be an array (multiple is on) or a single choice (off). Note that
+if multiple is set to `true`, then `requireMatch` will behave as if it has been set to `true`. If
+you need to support a "free-text" suggestion with multiple on, be sure to add it in your source
+function as a suggestion.
 - `hideOnBlur {Boolean}`: Whether the list of suggestions should automatically hide when the
 component itself loses focus. Hitting ESC will always close the list of suggestions.
 - `isSelectable({suggestion}) {Boolean}`: An expression that should evaluate to a Boolean that
@@ -181,6 +183,25 @@ via the keyboard.
 - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
 determines whether or not the list of suggestions can be displayed. It receives, in its scope,
 access to a string called `query` which is the current query being searched on.
+- `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
+matched suggestion is required for the field (defaults to `false`). This has a few effects on the
+behavior of the omnibox:
+  - `requireMatch = false`:
+    1. Suggestions are not automatically highlighted.
+    2. Hitting enter keeps whatever text the user has typed and closes the list of suggestions.
+    3. When using the keyboard to highlight suggestions, going to the end and hitting down or the
+       beginning and hitting up will highlight nothing.
+    4. Hitting ESC when there is a match highlighted will un-highlight it. Hitting ESC again will
+       close the list of suggestions.
+    5. If multiple is `false`, then the entered becomes the model value when chosen. If multiple is
+       `true`, then `requireMatch` is treated as `true`.
+  - `requireMatch = true`:
+    1. A suggestion is always higlighted (as long as there are some available)
+    2. Hitting ENTER or TAB will always choose a suggestion.
+    3. When using the keyboard to highlight suggestions, going to the end and hitting down will then
+       highlight the first suggestion, and going to the beginning and hitting up will highlight the
+       last.
+    4. Hitting ESC will close the list of suggestions and clear the field.
 
 ## Omnibox Controller
 

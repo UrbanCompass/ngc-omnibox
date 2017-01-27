@@ -177,6 +177,9 @@ export default class NgcOmniboxController {
 
     if (newIndex > 0) {
       newIndex--;
+    } else if (!this.requireMatch && newIndex === 0) {
+      // If a match isn't required, select nothing when looping around
+      newIndex = -1;
     } else {
       newIndex = this._suggestionsUiList.length - 1;
     }
@@ -216,6 +219,9 @@ export default class NgcOmniboxController {
 
     if (newIndex < this._suggestionsUiList.length - 1) {
       newIndex++;
+    } else if (!this.requireMatch && newIndex === this._suggestionsUiList.length - 1) {
+      // If a match isn't required, select nothing when looping around
+      newIndex = -1;
     } else {
       newIndex = 0;
     }
@@ -246,7 +252,7 @@ export default class NgcOmniboxController {
    * Un-highlights all suggestions.
    */
   highlightNone() {
-    if (this.isHighlightingDisabled) {
+    if (this.isHighlightingDisabled || this.requireMatch) {
       return;
     }
 
@@ -448,14 +454,22 @@ export default class NgcOmniboxController {
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
       } else if (keyCode === KEY.ESC) {
-        if (this._highlightedItem) {
+        if (this.requireMatch) {
+          this.query = '';
+          this.hideSuggestions = true;
+        } else if (this._highlightedItem) {
           this.highlightNone();
         } else {
           this.hideSuggestions = true;
         }
       } else if (isSelectKey(keyCode)) {
         const selection = this._suggestionsUiList[this.highlightedIndex];
-        selection && this.choose(selection.data);
+
+        if (selection) {
+          this.choose(selection.data);
+        } else if (!this.multiple && !this.requireMatch) {
+          this.choose(this.query);
+        }
       }
     } else if (keyCode === KEY.DOWN) {
       this._updateSuggestions();
@@ -500,7 +514,7 @@ export default class NgcOmniboxController {
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
 
-    this.highlightNone();
+    this.highlightedIndex = -1; // Forcibly select nothing
     this._showLoading();
     this.hideSuggestions = false;
 
@@ -522,6 +536,10 @@ export default class NgcOmniboxController {
       }
 
       this._hideLoading();
+
+      if (this.requireMatch) {
+        this.highlightNextSuggestion();
+      }
     });
   }
 
