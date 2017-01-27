@@ -184,19 +184,19 @@ access to a string called `query` which is the current query being searched on.
 matched suggestion is required for the field (defaults to `false`). This has a few effects on the
 behavior of the omnibox:
   - `requireMatch = false`:
-    1. A suggestion is always higlighted (as long as there are some available)
-    2. Hitting ENTER or TAB will always choose one of the suggestions.
+    1. Suggestions are not automatically highlighted.
+    2. Hitting enter keeps whatever text the user has typed.
     3. When using the keyboard to highlight suggestions, going to the end and hitting down or the
        beginning and hitting up will highlight nothing.
     4. Hitting ESC when there is a match highlighted will un-highlight it. Hitting ESC again will
        close the list of suggestions.
   - `requireMatch = true`:
-    1. Suggestions are not automatically highlighted.
-    2. Hitting enter keeps in whatever text the user has typed.
+    1. A suggestion is always higlighted (as long as there are some available)
+    2. Hitting ENTER or TAB will always choose a suggestion.
     3. When using the keyboard to highlight suggestions, going to the end and hitting down will then
        highlight the first suggestion, and going to the beginning and hitting up will highlight the
        last.
-    4. Hitting ESC with close the list of suggestions and clear the field.
+    4. Hitting ESC will close the list of suggestions and clear the field.
 
 ## Omnibox Controller
 

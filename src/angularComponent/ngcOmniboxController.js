@@ -468,7 +468,12 @@ export default class NgcOmniboxController {
         }
       } else if (isSelectKey(keyCode)) {
         const selection = this._suggestionsUiList[this.highlightedIndex];
-        selection && this.choose(selection.data);
+
+        if (selection) {
+          this.choose(selection.data);
+        } else {
+          this.hideSuggestions = true;
+        }
       }
     } else if (keyCode === KEY.DOWN) {
       this._updateSuggestions();
