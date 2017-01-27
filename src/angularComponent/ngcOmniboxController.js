@@ -596,8 +596,6 @@ export default class NgcOmniboxController {
   }
 
   _scrollSuggestionIntoView() {
-    this.$scope.$apply();
-
     // Disable highlighting while scrolling so the mouse doesn't accidentally highlight a new item
     this.isHighlightingDisabled = true;
 
