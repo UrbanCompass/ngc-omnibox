@@ -14,18 +14,10 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       templateCacheName = `category-tmpl-${new Date().getTime() * Math.random()}`) {
     const doc = $document[0];
 
-    const categoryEl = element.querySelector(
-      'ngc-omnibox-suggestion-category, [ngc-omnibox-suggestion-category]'
-    );
-    const itemEl = element.querySelector(
-      'ngc-omnibox-suggestion-item, [ngc-omnibox-suggestion-item]'
-    );
-    const loadingEl = element.querySelector(
-      'ngc-omnibox-suggestion-loading, [ngc-omnibox-suggestion-loading]'
-    );
-    const noResultsEl = element.querySelector(
-      'ngc-omnibox-suggestion-empty, [ngc-omnibox-suggestion-empty]'
-    );
+    const categoryEl = getSubcomponent(element, 'ngc-omnibox-suggestion-category');
+    const itemEl = getSubcomponent(element, 'ngc-omnibox-suggestion-item');
+    const loadingEl = getSubcomponent(element, 'ngc-omnibox-suggestion-loading');
+    const noResultsEl = getSubcomponent(element, 'ngc-omnibox-suggestion-empty');
 
     element.setAttribute('role', 'listbox');
 
@@ -54,9 +46,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
       itemEl.parentNode.appendChild(itemChildrenEl);
 
-      const itemHeader = element.querySelector(
-        'ngc-omnibox-suggestion-header, [ngc-omnibox-suggestion-header]'
-      );
+      const itemHeader = getSubcomponent(element, 'ngc-omnibox-suggestion-header');
       if (itemHeader) {
         itemHeader.setAttribute('suggestion', 'suggestion');
         itemHeader.setAttribute('ng-attr-aria-selected',
@@ -97,4 +87,25 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       return element.innerHTML;
     }
   };
+}
+
+/**
+ * Queries a container for an element reference of a subcomponent, either via a custom element or
+ * via an attribute.
+ *
+ * @private
+ * @param {HTMLElement} container
+ * @param {String} directive
+ * @returns {HTMLElement}
+ */
+function getSubcomponent(container, directive) {
+  const element = container.querySelectorAll(`${directive}, [${directive}]`);
+
+  if (element.length > 1) {
+    throw new Error('Cannot include more than one instance of \'' + directive + '\'');
+  } else if (!element.length) {
+    return null;
+  }
+
+  return element[0];
 }

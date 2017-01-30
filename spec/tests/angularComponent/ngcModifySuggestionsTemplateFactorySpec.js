@@ -79,4 +79,19 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
     expect(ngcModifySuggestionsTemplate(element, 'category-tmpl')).toBe(categorizedTemplateOutput);
   });
+
+  it('should only allow one instance of a subcomponent', () => {
+    const elementTemplate = `
+      <ngc-omnibox-suggestions>
+        <ngc-omnibox-suggestion-item></ngc-omnibox-suggestion-item>
+        <ngc-omnibox-suggestion-item></ngc-omnibox-suggestion-item>
+      </ngc-omnibox-suggestions>
+    `;
+    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const element = document.querySelector('ngc-omnibox-suggestions');
+
+    ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
+    expect(() => ngcModifySuggestionsTemplate(element))
+        .toThrowError('Cannot include more than one instance of \'ngc-omnibox-suggestion-item\'');
+  });
 });
