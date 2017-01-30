@@ -96,9 +96,8 @@ css classes.
 
 Omnibox Suggestions is a container for your lists of suggestions to be rendered in. It has
 additional subcomponents that allow you to slot in markup for different parts needed for the
-suggestions to render. Please note that this is the only component which **will not respect any of
-the markup you provide**. Any markup inside here that is not one of the documented subcomponents
-will be removed.
+suggestions to render. You can include at most one instance of an individual subcomponent. If you
+include more than one, an Error will be thrown.
 
 #### Omnibox Suggestion Item `<ngc-omnibox-suggestion-item>` _(Required)_
 The Suggestion Item component gives you a slot for markup for a single suggestion. This markup
