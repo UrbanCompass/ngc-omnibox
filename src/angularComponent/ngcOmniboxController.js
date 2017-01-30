@@ -486,10 +486,11 @@ export default class NgcOmniboxController {
         if (this.selectionStartKeyDown === this.selectionStartKeyUp) {
           const inputLength = this._fieldElement.value.length;
 
-          if ((keyCode === KEY.LEFT || keyCode === KEY.BACKSPACE) &&
+          if ((keyCode === KEY.LEFT || (keyCode === KEY.BACKSPACE && !this.query)) &&
               this.selectionStartKeyUp === 0) {
             this.highlightLastChoice();
-          } else if (keyCode === KEY.RIGHT && this.selectionStartKeyUp === inputLength) {
+          } else if ((keyCode === KEY.RIGHT || keyCode === KEY.DELETE && !this.query) &&
+              this.selectionStartKeyUp === inputLength) {
             this.highlightFirstChoice();
           }
         }
