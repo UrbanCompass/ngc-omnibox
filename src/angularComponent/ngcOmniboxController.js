@@ -446,6 +446,7 @@ export default class NgcOmniboxController {
   _handleKeyDown({keyCode}) {
     if (this.doc.activeElement === this._fieldElement) {
       this.selectionStartKeyDown = this.doc.activeElement.selectionStart;
+      this.selectionEndKeyDown = this.doc.activeElement.selectionEnd;
     }
 
     if (this.shouldShowSuggestions()) {
@@ -480,10 +481,12 @@ export default class NgcOmniboxController {
     if (this.hasChoices) {
       if (this.doc.activeElement === this._fieldElement) {
         this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
+        this.selectionEndKeyUp = this.doc.activeElement.selectionEnd;
 
         // We should now consider navigating out of the input field. We only want to trigger this
         // when we are already at the beginning or end of the field and hit Left or Right *again*.
-        if (this.selectionStartKeyDown === this.selectionStartKeyUp) {
+        if (this.selectionStartKeyDown === this.selectionStartKeyUp && this.selectionEndKeyDown ===
+            this.selectionEndKeyUp) {
           const inputLength = this._fieldElement.value.length;
 
           if ((keyCode === KEY.LEFT || (keyCode === KEY.BACKSPACE && !this.query)) &&
