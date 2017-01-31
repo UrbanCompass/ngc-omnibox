@@ -58,6 +58,11 @@ export default {
     hideOnBlur: '@',
     isSelectable: '&',
     canShowSuggestions: '&',
-    requireMatch: '<?'
+    requireMatch: '<?',
+    onChosen: '&',
+    onUnchosen: '&',
+    onNgModelChange: '&',
+    onSuggestionsShown: '&',
+    onSuggestionsHidden: '&'
   }
 };

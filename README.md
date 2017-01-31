@@ -202,6 +202,23 @@ behavior of the omnibox:
        last.
     4. Hitting ESC will close the list of suggestions and clear the field.
 
+## Omnibox Event Bindings
+
+The following &-callback functions are available for binding on the `ngc-omnibox` component in
+response to events:
+
+- `onChosen({choice})`: An expression that's called when a suggestion is chosen. It receives, in its
+scope, access to `choice`, which is the item that was chosen.
+- `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a
+choice). It receives, in its scope, access to `choice`, which is the item that was unchosen.
+- `onNgModelChange({ngModel})`: An expression that's called when the `ngModel` is updated (choices
+are added or removed). It receives, in its scope, access to the `ngModel` object with the changes
+applied.
+- `onSuggestionsShown({suggestions})`: An expression that's called when the suggestions UI is shown.
+It receives, in its scope, access to `suggestions`.
+- `onSuggestionsHidden({suggestions})`: An expression that's called when the suggestions UI is
+hidden. It receives, in its scope, access to `suggestions`.
+
 ## Omnibox Controller
 
 The Omnibox Controller handles most of the behavior for the Omnibox Component. It provides a set

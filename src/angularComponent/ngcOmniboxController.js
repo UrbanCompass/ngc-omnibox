@@ -378,6 +378,8 @@ export default class NgcOmniboxController {
         this.ngModel = item;
       }
 
+      this.onChosen({choice: item});
+
       this.query = '';
       shouldFocusField && this.focus();
       this.hideSuggestions = true;
@@ -399,6 +401,8 @@ export default class NgcOmniboxController {
         this.ngModel = null;
       }
 
+      this.onUnchosen({choice: item});
+
       shouldFocusField && this.focus();
     }
   }
@@ -409,8 +413,21 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.shouldShowLoadingElement || !!this.suggestions) &&
+    const shouldShowSuggestionsCurrently = this._shouldShowSuggestions;
+
+    this._shouldShowSuggestions = !this.hideSuggestions &&
+        (this.shouldShowLoadingElement || !!this.suggestions) &&
         this.canShowSuggestions({query: this.query}) !== false;
+
+    if (this._shouldShowSuggestions &&
+        this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
+      this.onSuggestionsShown && this.onSuggestionsShown({suggestions: this.suggestions});
+    } else if (!this._shouldShowSuggestions &&
+        this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
+      this.onSuggestionsHidden && this.onSuggestionsHidden({suggestions: this.suggestions});
+    }
+
+    return this._shouldShowSuggestions;
   }
 
   onInputChange() {
@@ -596,7 +613,12 @@ export default class NgcOmniboxController {
    * array and its contents are modified using the array modification functions.
    */
   _onNgModelChange() {
+    const hasChoicesCurrently = this.hasChoices;
     this.hasChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
+
+    if (this.hasChoices !== hasChoicesCurrently) {
+      this.onNgModelChange && this.onNgModelChange({ngModel: this._ngModel});
+    }
   }
 
   _scrollSuggestionIntoView() {
