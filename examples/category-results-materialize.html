@@ -24,6 +24,10 @@
         margin: 0;
       }
 
+      .collection-item strong {
+        color: #fdd835;
+      }
+
       /* Small work around Materialize so input field takes up the remainder of the space from chips */
       .chips {
         display: flex;
@@ -87,7 +91,10 @@
               <div ngc-omnibox-suggestion-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 <h6>
-                  <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
+                  <span ng-bind-html="suggestion.person.firstname | ngcOmniboxHighlightMatch:omnibox.query">
+                  </span>
+                  <span ng-bind-html="suggestion.person.lastname | ngcOmniboxHighlightMatch:omnibox.query:'<strong class=\'orange-text lighten-4\'>$&</strong>'">
+                  </span>
                 </h6>
                 <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
               </div>
