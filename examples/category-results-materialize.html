@@ -18,6 +18,7 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         max-height: 500px;
+        background: white;
       }
 
       dl, dt, dd {
@@ -96,7 +97,10 @@
                   <span ng-bind-html="suggestion.person.lastname | ngcOmniboxHighlightMatch:omnibox.query:'<strong class=\'orange-text lighten-4\'>$&</strong>'">
                   </span>
                 </h6>
-                <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
+                <em>
+                  {{suggestion.description}} &mdash;
+                  <span ng-bind-html="suggestion.party | ngcOmniboxHighlightMatch:omnibox.query:'<strong class=\'deep-purple-text lighten-4\'>$&</strong>'"></span>
+                </em>
               </div>
             </dd>
           </dl>
