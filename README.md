@@ -270,7 +270,7 @@ one. If the last one is highlighted then the field is focused.
 
 ## Highlight Match Filter
 The `ngcOmniboxHighlightMatch` Angular filter can be used to highlight some text in your suggestion
-that matches the query being searched against. It uses a regular expressio to search for the exact
+that matches the query being searched against. It uses a regular expression to search for the exact
 query being passed, and wraps that match in HTML. By default the filter will wrap it in a `<strong>`
 tag, but you can customize this to be any HTML you like.
 
