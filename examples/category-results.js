@@ -1,15 +1,15 @@
-(function (angular, Fuse) {
+(function (angular, FuzzySearch) {
   angular
     .module('demoApp', ['ngc.omnibox'])
     .controller('OmniboxExampleController', function ($http, $q) {
       var demo = this;
-      var fuse, states;
+      var searcher, states;
 
       // Loads the remote data and populates the search engine
       function populateSearch() {
         return $q(function (resolve) {
-          if (fuse) {
-            resolve(fuse);
+          if (searcher) {
+            resolve(searcher);
           } else {
             $q.all([
               /* eslint-disable max-len, lines-around-comment */
@@ -19,12 +19,10 @@
             ])
             .then(function (responses) {
               states = responses[0].data;
-              fuse = new Fuse(responses[1].data.objects, {
-                keys: ['party', 'person.firstname', 'person.lastname'],
-                threshold: 0.3
-              });
+              searcher = new FuzzySearch(responses[1].data.objects,
+                  ['party', 'person.firstname', 'person.lastname']);
 
-              resolve(fuse);
+              resolve(searcher);
             });
           }
         });
@@ -71,11 +69,11 @@
        * @returns {Promise}
        */
       this.sourceFn = function (query) {
-        return populateSearch().then(function (fuse) {
-          var results = fuse.list.filter(filterOutChosen); // Default to showing all results
+        return populateSearch().then(function (searcher) {
+          var results = searcher.haystack.filter(filterOutChosen); // Default to showing all results
 
           if (query) {
-            results = fuse.search(query).filter(filterOutChosen);
+            results = searcher.search(query).filter(filterOutChosen);
           }
 
           return $q.resolve(formatResults(results));
@@ -113,7 +111,11 @@
               }
             });
 
-            return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
+            if (hintMatch) {
+              return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
+            } else {
+              return null;
+            }
           } else {
             return null;
           }
@@ -121,4 +123,4 @@
       };
     });
 
-})(window.angular, window.Fuse);
+})(window.angular, window.FuzzySearch);

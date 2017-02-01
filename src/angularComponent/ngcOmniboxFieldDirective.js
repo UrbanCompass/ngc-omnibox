@@ -81,7 +81,7 @@ export default function ngcOmniboxFieldDirective($document, $window) {
           scope.$watch('omnibox.hint', (hint) => {
             const position = $window.getComputedStyle(el).position;
 
-            if (hint && (!position || position === 'static')) {
+            if (hint && (position === 'static')) {
               el.style.position = 'relative';
             } else {
               el.style.position = '';
