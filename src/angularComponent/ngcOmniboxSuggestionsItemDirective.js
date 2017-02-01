@@ -1,4 +1,4 @@
-import NgcOmniboxSuggestionItemController from './ngcOmniboxSuggestionItemController.js';
+import ngcOmniboxSuggestionsItemController from './ngcOmniboxSuggestionsItemController.js';
 
 /**
  * Omnibox Suggestion Item Directive
@@ -19,7 +19,7 @@ import NgcOmniboxSuggestionItemController from './ngcOmniboxSuggestionItemContro
  *       <ngc-omnibox-suggestions>
  *         <ngc-omnibox-sugestion-item>
  *           {{suggestion.title}} - {{suggestion.summary}}
- *         <ngc-omnibox-suggestion-item>
+ *         <ngc-omnibox-suggestions-item>
  *       </ngc-omnibox-suggestions>
  *     </ngc-omnibox>
  *
@@ -28,20 +28,20 @@ import NgcOmniboxSuggestionItemController from './ngcOmniboxSuggestionItemContro
  *     <ngc-omnibox source="myController.getSuggestions(query)" ng-model="myController.choices">
  *       <ngc-omnibox-suggestions>
  *         <ngc-omnibox-category>
- *           <ngc-omnibox-suggestion-header>
+ *           <ngc-omnibox-suggestions-header>
  *             {{suggestion.categoryTitle}}
- *           </ngc-omnibox-suggestion-header>
+ *           </ngc-omnibox-suggestions-header>
  *
  *           <ngc-omnibox-sugestion-item>
  *             {{suggestion.title}} - {{suggestion.summary}}
- *           <ngc-omnibox-suggestion-item>
+ *           <ngc-omnibox-suggestions-item>
  *         </ngc-omnibox-category>
  *       </ngc-omnibox-suggestions>
  *     </ngc-omnibox>
  *
  * @returns {Object}
  */
-export default function ngcOmniboxSuggestionItemDirective() {
+export default function ngcOmniboxSuggestionsItemDirective() {
   return {
     restrict: 'AE',
     require: {
@@ -52,7 +52,7 @@ export default function ngcOmniboxSuggestionItemDirective() {
     bindToController: {
       suggestion: '<'
     },
-    controller: NgcOmniboxSuggestionItemController,
+    controller: ngcOmniboxSuggestionsItemController,
     controllerAs: 'suggestionItem',
     compile(tElement) {
       tElement.attr('role', 'option');

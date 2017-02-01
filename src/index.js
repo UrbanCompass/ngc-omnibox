@@ -5,7 +5,7 @@ import ngcOmniboxHighlightMatchFilter from './angularComponent/ngcOmniboxHighlig
 import ngcModifySuggestionsTemplateFactory from './angularComponent/ngcModifySuggestionsTemplateFactory.js';
 import ngcOmniboxFieldDirective from './angularComponent/ngcOmniboxFieldDirective.js';
 import ngcOmniboxSuggestionsDirective from './angularComponent/ngcOmniboxSuggestionsDirective.js';
-import ngcOmniboxSuggestionItemDirective from './angularComponent/ngcOmniboxSuggestionItemDirective.js';
+import ngcOmniboxSuggestionsItemDirective from './angularComponent/ngcOmniboxSuggestionsItemDirective.js';
 import ngcOmniboxChoicesDirective from './angularComponent/ngcOmniboxChoicesDirective.js';
 
 export default angular.module('ngc.omnibox', [])
@@ -14,7 +14,7 @@ export default angular.module('ngc.omnibox', [])
   .filter('ngcOmniboxHighlightMatch', ngcOmniboxHighlightMatchFilter)
   .directive('ngcOmniboxField', ngcOmniboxFieldDirective)
   .directive('ngcOmniboxSuggestions', ngcOmniboxSuggestionsDirective)
-  .directive('ngcOmniboxSuggestionHeader', ngcOmniboxSuggestionItemDirective)
-  .directive('ngcOmniboxSuggestionItem', ngcOmniboxSuggestionItemDirective)
+  .directive('ngcOmniboxSuggestionsHeader', ngcOmniboxSuggestionsItemDirective)
+  .directive('ngcOmniboxSuggestionsItem', ngcOmniboxSuggestionsItemDirective)
   .directive('ngcOmniboxChoices', ngcOmniboxChoicesDirective)
   .name;

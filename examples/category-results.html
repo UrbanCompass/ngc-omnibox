@@ -30,25 +30,25 @@
 
         <ngc-omnibox-suggestions class="collection with-header">
 
-          <dl ngc-omnibox-suggestion-category>
+          <dl ngc-omnibox-suggestions-category>
             <dt>
               <h5>{{suggestion.state}}</h5>
             </dt>
             <dd>
-              <ngc-omnibox-suggestion-item>
+              <ngc-omnibox-suggestions-item>
                 <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
                 <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
-              </ngc-omnibox-suggestion-item>
+              </ngc-omnibox-suggestions-item>
             </dd>
           </dl>
 
-          <ngc-omnibox-suggestion-loading>
+          <ngc-omnibox-suggestions-loading>
             Loading...
-          </ngc-omnibox-suggestion-loading>
+          </ngc-omnibox-suggestions-loading>
 
-          <ngc-omnibox-suggestion-empty>
+          <ngc-omnibox-suggestions-empty>
             No results...
-          </ngc-omnibox-suggestion-empty>
+          </ngc-omnibox-suggestions-empty>
 
         </ngc-omnibox-suggestions>
       </ngc-omnibox>

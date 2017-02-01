@@ -3,9 +3,9 @@
  * on a similar filter in the uib-typeahead project https://github.com/angular-ui/bootstrap
  *
  * Usage:
- *   <ngc-omnibox-suggestion-item
+ *   <ngc-omnibox-suggestions-item
  *       ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query">
- *   </ngc-omnibox-suggestion-item>
+ *   </ngc-omnibox-suggestions-item>
  */
 ngcOmniboxHighlightMatchFilter.$inject = ['$injector', '$log', '$sce'];
 export default function ngcOmniboxHighlightMatchFilter($injector, $log, $sce) {

@@ -37,16 +37,16 @@
 
         <ngc-omnibox-suggestions class="collection">
 
-          <ngc-omnibox-suggestion-item class="collection-item"
+          <ngc-omnibox-suggestions-item class="collection-item"
               ng-class="{'active': omnibox.isHighlighted(suggestion)}">
              {{suggestion.person.name}}
-          </ngc-omnibox-suggestion-item>
+          </ngc-omnibox-suggestions-item>
 
-          <div ngc-omnibox-suggestion-loading class="progress">
+          <div ngc-omnibox-suggestions-loading class="progress">
             <div class="indeterminate"></div>
           </div>
 
-          <div ngc-omnibox-suggestion-empty class="center-align">
+          <div ngc-omnibox-suggestions-empty class="center-align">
             <span class="blue-grey-text text-lighten-3">No results...</span>
           </div>
 
