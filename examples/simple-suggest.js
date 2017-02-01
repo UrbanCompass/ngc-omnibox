@@ -23,7 +23,7 @@
 
       // Only show suggestions when at least 2 characters have been entered
       this.shouldShowSuggestions = function (query) {
-        return query.length >= 2;
+        return query && query.length >= 2;
       };
 
       /**

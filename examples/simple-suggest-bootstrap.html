@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <style>
+    ngc-omnibox-field [readonly],
+    .form-control[readonly],
+    .no-results {
+      background: transparent;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+  <body>
+    <main class="container" ng-controller="OmniboxExampleController as demo">
+      <h3>Simple Example - Materialize CSS Framework</h1>
+      <h4>Search For a U.S. Senator</h4>
+
+      <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
+      <ngc-omnibox class="dropdown d-block"
+          ng-model="demo.model"
+          ng-disabled="demo.isDisabled"
+          can-show-suggestions="demo.shouldShowSuggestions(query)"
+          source="demo.sourceFn(query)">
+
+        <div ngc-omnibox-field>
+          <input class="form-control" type="text" autofocus="true"
+              placeholder="Search for a US Senator by Name (2 character minimum)...">
+        </div>
+
+        <div class="show" ngc-omnibox-suggestions>
+
+          <div class="dropdown-menu">
+
+            <div class="dropdown-item" ngc-omnibox-suggestions-item
+                ng-class="{'active': omnibox.isHighlighted(suggestion)}">
+              {{suggestion.person.name}}
+            </div>
+
+            <div class="progress d-block" ngc-omnibox-suggestions-loading>
+              <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+            </div>
+
+            <div ngc-omnibox-suggestions-empty class="dropdown-item">
+              <span class="no-results">No results...</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
+    <script src="https://rawgit.com/wouter2203/fuzzy-search/master/dist/FuzzySearch.js"></script>
+    <script src="../dist/ngc-omnibox.js"></script>
+    <script src="./simple-suggest.js"></script>
+  </body>
+</html>
