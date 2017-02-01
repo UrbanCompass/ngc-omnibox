@@ -61,7 +61,6 @@ export default {
     requireMatch: '<?',
     onChosen: '&',
     onUnchosen: '&',
-    onNgModelChange: '&',
     onShowSuggestions: '&',
     onHideSuggestions: '&'
   }

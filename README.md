@@ -211,8 +211,6 @@ response to events:
 has access to `choice`, which is the item that was chosen.
 - `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a
 choice). In its locals it has access to `choice`, which is the item that was unchosen.
-- `onNgModelChange({ngModel})`: An expression that's called when the `ngModel` is updated (choices
-are added or removed). In its locals it has access to the `ngModel` object with the changes applied.
 - `onSuggestionsShown({suggestions})`: An expression that's called when the suggestions UI is shown.
 In its locals it has access to `suggestions`.
 - `onSuggestionsHidden({suggestions})`: An expression that's called when the suggestions UI is

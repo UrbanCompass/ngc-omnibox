@@ -613,12 +613,7 @@ export default class NgcOmniboxController {
    * array and its contents are modified using the array modification functions.
    */
   _onNgModelChange() {
-    const hasChoicesCurrently = this.hasChoices;
     this.hasChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
-
-    if (this.hasChoices !== hasChoicesCurrently) {
-      this.onNgModelChange && this.onNgModelChange({ngModel: this._ngModel});
-    }
   }
 
   _scrollSuggestionIntoView() {
