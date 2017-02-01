@@ -79,12 +79,12 @@ export default function ngcOmniboxFieldDirective($document, $window) {
           omnibox.fieldElement = input;
 
           scope.$watch('omnibox.hint', (hint) => {
-            const position = $window.getComputedStyle(el, 'position');
+            const position = $window.getComputedStyle(el).position;
 
             if (hint && (!position || position === 'static')) {
-              el.setAttribute('position', 'relative');
+              el.style.position = 'relative';
             } else {
-              el.setAttribute('position', '');
+              el.style.position = '';
             }
           });
         }
