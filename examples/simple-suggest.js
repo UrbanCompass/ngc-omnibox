@@ -10,17 +10,11 @@
           if (searcher) {
             resolve(searcher);
           } else {
-            $http.get('https://api.github.com/emojis').then(function (response) {
-              var emoji = Object.keys(response.data).map(function (id) {
-                return {
-                  id: id,
-                  url: response.data[id]
-                };
+            $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
+              .then(function (response) {
+                searcher = new FuzzySearch(response.data.objects, ['person.name']);
+                resolve(searcher);
               });
-
-              searcher = new FuzzySearch(emoji, ['id']);
-              resolve(searcher);
-            });
           }
         });
       }
@@ -62,11 +56,12 @@
         return this.sourceFn(query).then(function (suggestions) {
           if (suggestions && suggestions.length) {
             var hintMatch = suggestions.filter(function (suggestion) {
-              return suggestion.id.indexOf(query.toLowerCase()) === 0;
+              var name = suggestion.person.firstname + ' ' + suggestion.person.lastname;
+              return name.toLowerCase().indexOf(query.toLowerCase()) === 0;
             })[0];
 
             if (hintMatch) {
-              return hintMatch.id;
+              return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
             } else {
               return null;
             }
