@@ -553,7 +553,7 @@ export default class NgcOmniboxController {
     const promise = this.inputHint({query: this.query});
     this._hintFunctionPromise = promise;
 
-    promise && promise.then((hint) => {
+    promise.then((hint) => {
       // Bail out if the promise has changed
       if (promise !== this._hintFunctionPromise) {
         return;
@@ -577,7 +577,7 @@ export default class NgcOmniboxController {
     const promise = this.source({query: this.query, suggestions: this.suggestions});
     this._sourceFunctionPromise = promise;
 
-    promise && promise.then((suggestions) => {
+    promise.then((suggestions) => {
       // Bail out if the promise has changed
       if (promise !== this._sourceFunctionPromise) {
         return;
