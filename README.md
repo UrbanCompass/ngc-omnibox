@@ -82,8 +82,8 @@ control. Each subcomponent provides you a slot for custom markup and access to y
 This is the main, base-level component. All of the other subcomponents must be
 included inside of this element. Since the component does not provide a template of its own, most of
 the markup you provide inside (with some slight exceptions) will be maintained. All subcomponents
-of the Omnibox have access to the `omnibox` object in the scope of their markup, which is a
-reference to the top-level `Omnibox Controller`.
+of the Omnibox have access to the `omnibox` object in their markup, which is a reference to the
+top-level `Omnibox Controller`.
 
 ### Omnibox Field `<ngc-omnibox-field>` _(Required)_
 
@@ -157,9 +157,9 @@ suggestions by returning a `Promise` that resolves to an array of suggestions. T
 suggestions can be of any type, but the list of suggestions must be an array. If you wish to provide
 nested suggestions (such as category headers, or a tree structure) then you must provide a key
 called `children` on your suggestion which will then be looped through to find more children, or the
-end of the list. It receives, in its scope, access to a string called `query` with the current
-query in the input field, and an array called `suggestions`, which is the current list of
-suggestions being displayed.
+end of the list. In its locals it has access to a string called `query` with the current query in
+the input field, and an array called `suggestions`, which is the current list of suggestions being
+displayed.
 - `ngModel {Any}` _(Required)_: This is a one-way binding to the ngModel for the Omnibox. When the
 `multiple` option is set to `true`, then the `ngModel` should be an array. Each item in the array
 will be populated with choices from the objects passed via the `source` function. If the `multiple`
@@ -175,13 +175,13 @@ function as a suggestion.
 component itself loses focus. Hitting ESC will always close the list of suggestions.
 - `isSelectable({suggestion}) {Boolean}`: An expression that should evaluate to a Boolean that
 determines if a suggestion is able to be interacted with. This expression will be executed whenever
-a suggestion is attempted to be highlighted either by the keyboard or mouse. It receives, in its
-scope, access to an object called `suggestion` which is the current suggestion that is being
-interacted with. A non-selectable suggestion cannot be clicked on, hovered over, or interacted with
-via the keyboard.
+a suggestion is attempted to be highlighted either by the keyboard or mouse. In its locals it has
+access to an object called `suggestion` which is the current suggestion that is being interacted
+with. A non-selectable suggestion cannot be clicked on, hovered over, or interacted with via the
+keyboard.
 - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
-determines whether or not the list of suggestions can be displayed. It receives, in its scope,
-access to a string called `query` which is the current query being searched on.
+determines whether or not the list of suggestions can be displayed. In its locals it has access to a
+string called `query` which is the current query being searched on.
 - `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
 matched suggestion is required for the field (defaults to `false`). This has a few effects on the
 behavior of the omnibox:
@@ -207,23 +207,22 @@ behavior of the omnibox:
 The following &-callback functions are available for binding on the `ngc-omnibox` component in
 response to events:
 
-- `onChosen({choice})`: An expression that's called when a suggestion is chosen. It receives, in its
-scope, access to `choice`, which is the item that was chosen.
+- `onChosen({choice})`: An expression that's called when a suggestion is chosen. In its locals it
+has access to `choice`, which is the item that was chosen.
 - `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a
-choice). It receives, in its scope, access to `choice`, which is the item that was unchosen.
+choice). In its locals it has access to `choice`, which is the item that was unchosen.
 - `onNgModelChange({ngModel})`: An expression that's called when the `ngModel` is updated (choices
-are added or removed). It receives, in its scope, access to the `ngModel` object with the changes
-applied.
+are added or removed). In its locals it has access to the `ngModel` object with the changes applied.
 - `onSuggestionsShown({suggestions})`: An expression that's called when the suggestions UI is shown.
-It receives, in its scope, access to `suggestions`.
+In its locals it has access to `suggestions`.
 - `onSuggestionsHidden({suggestions})`: An expression that's called when the suggestions UI is
-hidden. It receives, in its scope, access to `suggestions`.
+hidden. In its locals it has access to `suggestions`.
 
 ## Omnibox Controller
 
 The Omnibox Controller handles most of the behavior for the Omnibox Component. It provides a set
-of functions and properties that can be accessed from anywhere inside the Omnibox Component markup
-via the `omnibox` object on the scope.
+of functions and properties that can be accessed from subcomponents inside the Omnibox Component
+via the `omnibox` object in their locals.
 
 **Any options not documented here should be considered private.** Accessing or using undocumented
 methods could break at any time, and changes to those methods or properties will not be considered
