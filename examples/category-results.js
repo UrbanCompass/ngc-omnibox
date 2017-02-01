@@ -76,24 +76,12 @@
             results = searcher.search(query).filter(filterOutChosen);
           }
 
-          return $q.resolve(formatResults(results));
-        });
-      };
-
-      /**
-       * Searches through our suggestions from the sourceFn to try and find a Senator's full name
-       * that starts with our query. If our query is the beginning of someone's name, then we can
-       * hint as to the rest of their name.
-       *
-       * @param {String} query
-       * @returns {Promise}
-       */
-      this.hint = function (query) {
-        return this.sourceFn(query).then(function (suggestions) {
-          if (suggestions && suggestions.length) {
-            // Try and find a name to hint with
+          if (results && results.length) {
+            // Search through our suggestions to try and find a Senator's full name that starts with
+            // our query. If our query is the beginning of someone's name, then we can hint as to
+            // the rest of their name.
             var hintMatch;
-            suggestions.forEach(function (category) {
+            results.forEach(function (category) {
               if (hintMatch) {
                 return;
               }
@@ -112,13 +100,14 @@
             });
 
             if (hintMatch) {
-              return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
-            } else {
-              return null;
+              return $q.resolve({
+                suggestions: formatResults(results),
+                hint: hintMatch.person.firstname + ' ' + hintMatch.person.lastname
+              });
             }
-          } else {
-            return null;
           }
+
+          return $q.resolve(formatResults(results));
         });
       };
     });

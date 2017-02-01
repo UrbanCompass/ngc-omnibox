@@ -31,11 +31,6 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  *       receives, in its scope, access to an object called `suggestion` which is the current \
  *       suggestion that is being interacted with. A non-selectable suggestion cannot be clicked on,
  *       hovered over, or interacted with via the keyboard.
- * - `inputHint({query}) {Promise}`: An expression that hints at a suggestion by resolving a
- *       Promise to a String. The hint is displayed to the right of the text that has been input
- *       by the user. Pressing RIGHT on the keyboard replaces the input text query with the hint.
- *       The expression has access to `query` in its scope, which is the text that is currently
- *       input in the search field.
  * - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
  *       determines whether or not the list of suggestions can be displayed. It receives, in its
  *       scope, access to a string called `query` which is the current query being searched on.
@@ -64,7 +59,6 @@ export default {
     multiple: '<?',
     hideOnBlur: '@',
     isSelectable: '&',
-    inputHint: '&',
     canShowSuggestions: '&',
     requireMatch: '<?',
     onChosen: '&',

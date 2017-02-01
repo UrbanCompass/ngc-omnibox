@@ -37,36 +37,26 @@
         return populateSearch().then(function (searcher) {
           if (query) {
             var results = searcher.search(query);
+
+            if (results && results.length) {
+              // Search through our suggestions for a Senator whose name starts with our query. If
+              // our query is the beginning of the name, then we can hint as to the rest of its name
+              var hintMatch = results.filter(function (suggestion) {
+                var name = suggestion.person.firstname + ' ' + suggestion.person.lastname;
+                return name.toLowerCase().indexOf(query.toLowerCase()) === 0;
+              })[0];
+
+              if (hintMatch) {
+                return $q.resolve({
+                  suggestions: results,
+                  hint: hintMatch.person.firstname + ' ' + hintMatch.person.lastname
+                });
+              }
+            }
+
             return $q.resolve(results);
           } else {
             return $q.resolve(); // Hides the suggestions
-          }
-        });
-      };
-
-      /**
-       * Searches through our suggestions from the sourceFn for an emoji whose name starts with our
-       * query. If our query is the beginning of an emoji name, then we can hint as to the rest of
-       * its name.
-       *
-       * @param {String} query
-       * @returns {Promise}
-       */
-      this.hint = function (query) {
-        return this.sourceFn(query).then(function (suggestions) {
-          if (suggestions && suggestions.length) {
-            var hintMatch = suggestions.filter(function (suggestion) {
-              var name = suggestion.person.firstname + ' ' + suggestion.person.lastname;
-              return name.toLowerCase().indexOf(query.toLowerCase()) === 0;
-            })[0];
-
-            if (hintMatch) {
-              return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
-            } else {
-              return null;
-            }
-          } else {
-            return null;
           }
         });
       };

@@ -435,7 +435,6 @@ export default class NgcOmniboxController {
       this.hideSuggestions = true;
       this.hint = null;
     } else {
-      this._updateHint();
       this._updateSuggestions();
     }
   }
@@ -547,28 +546,9 @@ export default class NgcOmniboxController {
     }
   }
 
-  _updateHint() {
-    this.hint = null;
-
-    const promise = this.inputHint({query: this.query});
-    this._hintFunctionPromise = promise;
-
-    promise.then((hint) => {
-      // Bail out if the promise has changed
-      if (promise !== this._hintFunctionPromise) {
-        return;
-      }
-
-      if (hint) {
-        // Hint with just the part of the hint that isn't the query
-        this.hint = this.query + hint.slice(this.query.length, hint.length);
-        this._fullHint = hint; // Store this for completion of the hint
-      }
-    });
-  }
-
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
+    this.hint = null;
 
     this.highlightedIndex = -1; // Forcibly select nothing
     this._showLoading();
@@ -583,12 +563,24 @@ export default class NgcOmniboxController {
         return;
       }
 
+      let hint;
+      if (typeof suggestions === 'object') {
+        hint = suggestions.hint;
+        suggestions = suggestions.suggestions;
+      }
+
       if (!suggestions) {
         this.suggestions = null;
       } else if (Array.isArray(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
+      }
+
+      if (hint) {
+        // Hint with just the part of the hint that isn't the query
+        this.hint = this.query + hint.slice(this.query.length, hint.length);
+        this._fullHint = hint; // Store this for completion of the hint
       }
 
       this._hideLoading();

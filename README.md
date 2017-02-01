@@ -160,6 +160,10 @@ called `children` on your suggestion which will then be looped through to find m
 end of the list. In its locals it has access to a string called `query` with the current query in
 the input field, and an array called `suggestions`, which is the current list of suggestions being
 displayed.
+To display a hint to the user in addition to suggestions, resolve the promise with an object that
+has keys for `hint` and `suggestions`: `{hint: 'My hint', suggestions: [...]}`. A hint is displayed
+to the right of the text that has been input by the user. Pressing RIGHT on the keyboard replaces
+the input text query with the hint.
 - `ngModel {Any}` _(Required)_: This is a one-way binding to the ngModel for the Omnibox. When the
 `multiple` option is set to `true`, then the `ngModel` should be an array. Each item in the array
 will be populated with choices from the objects passed via the `source` function. If the `multiple`
