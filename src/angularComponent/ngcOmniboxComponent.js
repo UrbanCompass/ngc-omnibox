@@ -34,6 +34,8 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  * - `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
  *       determines whether or not the list of suggestions can be displayed. It receives, in its
  *       scope, access to a string called `query` which is the current query being searched on.
+ * - `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
+ *       matched suggestion is required for the field (defaults to `false`).
  *
  * The component has no template, all content that does not map to one of the sub-components will
  * be displayed in the final output as-is and un-modified.

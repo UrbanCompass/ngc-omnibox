@@ -11,24 +11,24 @@
   <body>
     <main ng-controller="OmniboxExampleController as demo">
       <h1>Simple Omnibox Example</h1>
-      <h2>Search through Github's emoji</h2>
+      <h2>Search For a U.S. Senator</h2>
 
       <button ng-click="demo.isDisabled = !demo.isDisabled">Toggle Disabled</button>
       <ngc-omnibox
           ng-model="demo.model"
           ng-disabled="demo.isDisabled"
-          can-show="demo.shouldShowSuggestions(query)"
+          can-show-suggestions="demo.shouldShowSuggestions(query)"
           source="demo.sourceFn(query)">
 
         <ngc-omnibox-field>
           <input type="text" autofocus="true"
-              placeholder="Type in the name of an emoji (2 characters minimum)...">
+              placeholder="Search for a US Senator by Name (2 character minimum)...">
         </ngc-omnibox-field>
 
         <ngc-omnibox-suggestions>
 
           <ngc-omnibox-suggestion-item>
-            <img ng-attr-src="{{suggestion.url}}" >
+            {{suggestion.person.name}}
           </ngc-omnibox-suggestion-item>
 
           <ngc-omnibox-suggestion-loading>
@@ -49,7 +49,7 @@
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <script src="https://rawgit.com/wouter2203/fuzzy-search/master/dist/FuzzySearch.js"></script>
     <script src="../dist/ngc-omnibox.js"></script>
     <script src="./simple-suggest.js"></script>
   </body>

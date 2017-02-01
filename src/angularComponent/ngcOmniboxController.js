@@ -433,6 +433,7 @@ export default class NgcOmniboxController {
   onInputChange() {
     if (!this.query) {
       this.hideSuggestions = true;
+      this.hint = null;
     } else {
       this._updateSuggestions();
     }
@@ -460,10 +461,23 @@ export default class NgcOmniboxController {
     this._handleKeyUp($event);
   }
 
-  _handleKeyDown({keyCode}) {
+  _handleKeyDown(event) {
+    const keyCode = event.keyCode;
+
     if (this.doc.activeElement === this._fieldElement) {
       this.selectionStartKeyDown = this.doc.activeElement.selectionStart;
       this.selectionEndKeyDown = this.doc.activeElement.selectionEnd;
+
+      const inputLength = this._fieldElement.value.length;
+
+      if (this.hint) {
+        if (keyCode === KEY.RIGHT && this.selectionEndKeyDown === inputLength) {
+          this.query = this._fullHint;
+          this.onInputChange();
+        } else if (keyCode === KEY.ESC) {
+          this.hint = null;
+        }
+      }
     }
 
     if (this.shouldShowSuggestions()) {
@@ -471,7 +485,7 @@ export default class NgcOmniboxController {
         this.highlightPreviousSuggestion();
       } else if (keyCode === KEY.DOWN) {
         this.highlightNextSuggestion();
-      } else if (keyCode === KEY.ESC) {
+      } else if (keyCode === KEY.ESC && !this.hint) { // Prioritize hiding the hint on ESC
         if (this.requireMatch) {
           this.query = '';
           this.hideSuggestions = true;
@@ -503,7 +517,7 @@ export default class NgcOmniboxController {
         // We should now consider navigating out of the input field. We only want to trigger this
         // when we are already at the beginning or end of the field and hit Left or Right *again*.
         if (this.selectionStartKeyDown === this.selectionStartKeyUp && this.selectionEndKeyDown ===
-            this.selectionEndKeyUp) {
+            this.selectionEndKeyUp && !this.hint) {
           const inputLength = this._fieldElement.value.length;
 
           if ((keyCode === KEY.LEFT || (keyCode === KEY.BACKSPACE && !this.query)) &&
@@ -534,6 +548,7 @@ export default class NgcOmniboxController {
 
   _updateSuggestions() {
     this._suggestionsUiList.length = 0;
+    this.hint = null;
 
     this.highlightedIndex = -1; // Forcibly select nothing
     this._showLoading();
@@ -548,12 +563,24 @@ export default class NgcOmniboxController {
         return;
       }
 
+      let hint;
+      if (typeof suggestions === 'object') {
+        hint = suggestions.hint;
+        suggestions = suggestions.suggestions;
+      }
+
       if (!suggestions) {
         this.suggestions = null;
       } else if (Array.isArray(suggestions)) {
         this.suggestions = suggestions;
       } else {
         throw new Error('Suggestions must be an Array');
+      }
+
+      if (hint) {
+        // Hint with just the part of the hint that isn't the query
+        this.hint = this.query + hint.slice(this.query.length, hint.length);
+        this._fullHint = hint; // Store this for completion of the hint
       }
 
       this._hideLoading();

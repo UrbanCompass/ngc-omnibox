@@ -1,15 +1,15 @@
-(function (angular, Fuse) {
+(function (angular, FuzzySearch) {
   angular
     .module('demoApp', ['ngc.omnibox'])
     .controller('OmniboxExampleController', function ($http, $q) {
       var demo = this;
-      var fuse, states;
+      var searcher, states;
 
       // Loads the remote data and populates the search engine
       function populateSearch() {
         return $q(function (resolve) {
-          if (fuse) {
-            resolve(fuse);
+          if (searcher) {
+            resolve(searcher);
           } else {
             $q.all([
               /* eslint-disable max-len, lines-around-comment */
@@ -19,12 +19,10 @@
             ])
             .then(function (responses) {
               states = responses[0].data;
-              fuse = new Fuse(responses[1].data.objects, {
-                keys: ['party', 'person.firstname', 'person.lastname'],
-                threshold: 0.3
-              });
+              searcher = new FuzzySearch(responses[1].data.objects,
+                  ['party', 'person.firstname', 'person.lastname']);
 
-              resolve(fuse);
+              resolve(searcher);
             });
           }
         });
@@ -63,16 +61,55 @@
         return !item.children;
       };
 
+      /**
+       * Searches through our dataset using Fuse and returns a Promise that resolves to a list of
+       * suggested Senators, grouped by State.
+       *
+       * @param {String} query
+       * @returns {Promise}
+       */
       this.sourceFn = function (query) {
-        return populateSearch().then(function (fuse) {
-          var results = fuse.list.filter(filterOutChosen); // Default to showing all results
+        return populateSearch().then(function (searcher) {
+          var results = searcher.haystack.filter(filterOutChosen); // Default to showing all results
 
           if (query) {
-            results = fuse.search(query).filter(filterOutChosen);
+            results = searcher.search(query).filter(filterOutChosen);
+          }
+
+          if (results && results.length) {
+            // Search through our suggestions to try and find a Senator's full name that starts with
+            // our query. If our query is the beginning of someone's name, then we can hint as to
+            // the rest of their name.
+            var hintMatch;
+            results.forEach(function (category) {
+              if (hintMatch) {
+                return;
+              }
+
+              var personMatch = category.children.filter(function (item) {
+                var person = item.person;
+                var name = person.firstname + ' ' + person.lastname;
+
+                // We can hint the full name if the query is the beginning of their name
+                return name.toLowerCase().indexOf(query.toLowerCase()) === 0;
+              })[0];
+
+              if (personMatch) {
+                hintMatch = personMatch;
+              }
+            });
+
+            if (hintMatch) {
+              return $q.resolve({
+                suggestions: formatResults(results),
+                hint: hintMatch.person.firstname + ' ' + hintMatch.person.lastname
+              });
+            }
           }
 
           return $q.resolve(formatResults(results));
         });
       };
     });
-})(window.angular, window.Fuse);
+
+})(window.angular, window.FuzzySearch);

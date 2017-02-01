@@ -29,6 +29,10 @@
         color: #fdd835;
       }
 
+      .omniboxField [readonly] {
+        opacity: 0.5;
+      }
+
       /* Small work around Materialize so input field takes up the remainder of the space from chips */
       .chips {
         display: flex;
@@ -48,7 +52,7 @@
   <body>
     <main class="container" ng-controller="OmniboxExampleController as demo">
       <h3>Categorized Results Example - Materialize CSS Framework</h3>
-      <h4>Search For a Senator by State</h4>
+      <h4>Search For a U.S. Senator by State</h4>
 
       <ngc-omnibox
           ng-model="demo.model"
@@ -123,7 +127,7 @@
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.5.0/fuse.min.js"></script>
+    <script src="https://rawgit.com/wouter2203/fuzzy-search/master/dist/FuzzySearch.js"></script>
     <script src="../dist/ngc-omnibox.js"></script>
     <script src="./category-results.js"></script>
   </body>
