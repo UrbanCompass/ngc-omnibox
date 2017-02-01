@@ -83,7 +83,7 @@ export default function ngcOmniboxFieldDirective($document, $window) {
 
             if (hint && (position === 'static')) {
               el.style.position = 'relative';
-            } else {
+            } else if (!hint) {
               el.style.position = '';
             }
           });
