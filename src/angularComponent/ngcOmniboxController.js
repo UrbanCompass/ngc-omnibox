@@ -421,10 +421,10 @@ export default class NgcOmniboxController {
 
     if (this._shouldShowSuggestions &&
         this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
-      this.onSuggestionsShown && this.onSuggestionsShown({suggestions: this.suggestions});
+      this.onShowSuggestions && this.onShowSuggestions({suggestions: this.suggestions});
     } else if (!this._shouldShowSuggestions &&
         this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
-      this.onSuggestionsHidden && this.onSuggestionsHidden({suggestions: this.suggestions});
+      this.onHideSuggestions && this.onHideSuggestions({suggestions: this.suggestions});
     }
 
     return this._shouldShowSuggestions;

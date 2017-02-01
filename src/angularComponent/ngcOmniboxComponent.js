@@ -62,7 +62,7 @@ export default {
     onChosen: '&',
     onUnchosen: '&',
     onNgModelChange: '&',
-    onSuggestionsShown: '&',
-    onSuggestionsHidden: '&'
+    onShowSuggestions: '&',
+    onHideSuggestions: '&'
   }
 };
