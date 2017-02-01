@@ -58,6 +58,10 @@ export default {
     hideOnBlur: '@',
     isSelectable: '&',
     canShowSuggestions: '&',
-    requireMatch: '<?'
+    requireMatch: '<?',
+    onChosen: '&',
+    onUnchosen: '&',
+    onShowSuggestions: '&',
+    onHideSuggestions: '&'
   }
 };

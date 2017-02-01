@@ -378,6 +378,8 @@ export default class NgcOmniboxController {
         this.ngModel = item;
       }
 
+      this.onChosen({choice: item});
+
       this.query = '';
       shouldFocusField && this.focus();
       this.hideSuggestions = true;
@@ -399,6 +401,8 @@ export default class NgcOmniboxController {
         this.ngModel = null;
       }
 
+      this.onUnchosen({choice: item});
+
       shouldFocusField && this.focus();
     }
   }
@@ -409,8 +413,21 @@ export default class NgcOmniboxController {
    * @returns {Boolean}
    */
   shouldShowSuggestions() {
-    return !this.hideSuggestions && (this.shouldShowLoadingElement || !!this.suggestions) &&
+    const shouldShowSuggestionsCurrently = this._shouldShowSuggestions;
+
+    this._shouldShowSuggestions = !this.hideSuggestions &&
+        (this.shouldShowLoadingElement || !!this.suggestions) &&
         this.canShowSuggestions({query: this.query}) !== false;
+
+    if (this._shouldShowSuggestions &&
+        this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
+      this.onShowSuggestions && this.onShowSuggestions({suggestions: this.suggestions});
+    } else if (!this._shouldShowSuggestions &&
+        this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
+      this.onHideSuggestions && this.onHideSuggestions({suggestions: this.suggestions});
+    }
+
+    return this._shouldShowSuggestions;
   }
 
   onInputChange() {
