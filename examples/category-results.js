@@ -63,6 +63,13 @@
         return !item.children;
       };
 
+      /**
+       * Searches through our dataset using Fuse and returns a Promise that resolves to a list of
+       * suggested Senators, grouped by State.
+       *
+       * @param {String} query
+       * @returns {Promise}
+       */
       this.sourceFn = function (query) {
         return populateSearch().then(function (fuse) {
           var results = fuse.list.filter(filterOutChosen); // Default to showing all results
@@ -74,5 +81,44 @@
           return $q.resolve(formatResults(results));
         });
       };
+
+      /**
+       * Searches through our suggestions from the sourceFn to try and find a Senator's full name
+       * that starts with our query. If our query is the beginning of someone's name, then we can
+       * hint as to the rest of their name.
+       *
+       * @param {String} query
+       * @returns {Promise}
+       */
+      this.hint = function (query) {
+        return this.sourceFn(query).then(function (suggestions) {
+          if (suggestions && suggestions.length) {
+            // Try and find a name to hint with
+            var hintMatch;
+            suggestions.forEach(function (category) {
+              if (hintMatch) {
+                return;
+              }
+
+              var personMatch = category.children.filter(function (item) {
+                var person = item.person;
+                var name = person.firstname + ' ' + person.lastname;
+
+                // We can hint the full name if the query is the beginning of their name
+                return name.toLowerCase().indexOf(query.toLowerCase()) === 0;
+              })[0];
+
+              if (personMatch) {
+                hintMatch = personMatch;
+              }
+            });
+
+            return hintMatch.person.firstname + ' ' + hintMatch.person.lastname;
+          } else {
+            return null;
+          }
+        });
+      };
     });
+
 })(window.angular, window.Fuse);

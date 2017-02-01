@@ -29,6 +29,10 @@
         color: #fdd835;
       }
 
+      .omniboxField [readonly] {
+        opacity: 0.5;
+      }
+
       /* Small work around Materialize so input field takes up the remainder of the space from chips */
       .chips {
         display: flex;
@@ -55,7 +59,8 @@
           is-selectable="demo.isSelectable(suggestion)"
           multiple="true"
           source="demo.sourceFn(query)"
-          require-match="true">
+          require-match="true"
+          input-hint="demo.hint(query)">
 
         <div class="chips" ng-class="{'focus': demoCtrl.fieldHasFocus}">
           <div ngc-omnibox-choices>

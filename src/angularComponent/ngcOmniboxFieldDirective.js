@@ -18,8 +18,8 @@
  *       <ngc-omnibox-field><input type="text" placeholder="Search here..."></ngc-omnibox-field>
  *     </ngc-omnibox>
  */
-ngcOmniboxFieldDirective.$inject = ['$document'];
-export default function ngcOmniboxFieldDirective($document) {
+ngcOmniboxFieldDirective.$inject = ['$document', '$window'];
+export default function ngcOmniboxFieldDirective($document, $window) {
   return {
     restrict: 'AE',
     require: {
@@ -37,6 +37,7 @@ export default function ngcOmniboxFieldDirective($document) {
       const el = tElement[0];
 
       const input = el.querySelector('input') || doc.createElement('input');
+      const inputHint = input.cloneNode();
 
       if (!input.parentNode) {
         el.appendChild(input);
@@ -60,10 +61,32 @@ export default function ngcOmniboxFieldDirective($document) {
       input.setAttribute('ng-focus', 'omniboxField.ngFocus()');
       input.setAttribute('ng-blur', 'omniboxField.ngBlur()');
 
+      inputHint.setAttribute('ng-if',
+          'omnibox.query && omnibox.hint && omnibox.query !== omnibox.hint');
+      inputHint.setAttribute('tabindex', -1);
+      inputHint.setAttribute('readonly', true);
+      inputHint.setAttribute('ng-model', 'omnibox.hint');
+      inputHint.removeAttribute('placeholder');
+      inputHint.style.pointerEvents = 'none';
+      inputHint.style.position = 'absolute';
+      inputHint.style.top = 0;
+      inputHint.style.left = 0;
+      input.parentNode.insertBefore(inputHint, input);
+
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
           omnibox.fieldElement = input;
+
+          scope.$watch('omnibox.hint', (hint) => {
+            const position = $window.getComputedStyle(el, 'position');
+
+            if (hint && (!position || position === 'static')) {
+              el.setAttribute('position', 'relative');
+            } else {
+              el.setAttribute('position', '');
+            }
+          });
         }
       };
     }
