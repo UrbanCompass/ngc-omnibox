@@ -20,7 +20,7 @@
             .then(function (responses) {
               states = responses[0].data;
               fuse = new Fuse(responses[1].data.objects, {
-                keys: ['party', 'person.name'],
+                keys: ['party', 'person.firstname', 'person.lastname'],
                 threshold: 0.3
               });
 

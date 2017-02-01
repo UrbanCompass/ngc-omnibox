@@ -18,10 +18,15 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         max-height: 500px;
+        background: white;
       }
 
       dl, dt, dd {
         margin: 0;
+      }
+
+      .collection-item strong {
+        color: #fdd835;
       }
 
       /* Small work around Materialize so input field takes up the remainder of the space from chips */
@@ -87,9 +92,15 @@
               <div ngc-omnibox-suggestion-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 <h6>
-                  <strong>{{suggestion.person.firstname}} {{suggestion.person.lastname}}</strong>
+                  <span ng-bind-html="suggestion.person.firstname | ngcOmniboxHighlightMatch:omnibox.query">
+                  </span>
+                  <span ng-bind-html="suggestion.person.lastname | ngcOmniboxHighlightMatch:omnibox.query:'<strong class=\'orange-text lighten-4\'>$&</strong>'">
+                  </span>
                 </h6>
-                <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
+                <em>
+                  {{suggestion.description}} &mdash;
+                  <span ng-bind-html="suggestion.party | ngcOmniboxHighlightMatch:omnibox.query:'<strong class=\'deep-purple-text lighten-4\'>$&</strong>'"></span>
+                </em>
               </div>
             </dd>
           </dl>

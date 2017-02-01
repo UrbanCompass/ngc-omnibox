@@ -267,3 +267,46 @@ one. If the last one is highlighted then the field is focused.
 - `omnibox.highlightLastChoice()`: Highlights the last choice in the list of choices.
 - `omnibox.highlightNoChoice()`: Un-highlights all choices.
 - `omnibox.isChoiceHighlighted()`: Whether the submitted choice is currently highlighted.
+
+## Highlight Match Filter
+The `ngcOmniboxHighlightMatch` Angular filter can be used to highlight some text in your suggestion
+that matches the query being searched against. It uses a regular expression to search for the exact
+query being passed, and wraps that match in HTML. By default the filter will wrap it in a `<strong>`
+tag, but you can customize this to be any HTML you like.
+
+_Note that since we're parsing a String as HTML, the filter will throw a warning if you're not using
+`ngSanitize` to make your string safe to convert to HTML._
+
+### Usage
+
+#### Basic Example
+
+```html
+<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.getSuggestions(query)">
+  <ngc-omnibox-field></ngc-omnibox-field>
+
+  <ngc-omnibox-suggestions>
+    <ngc-omnibox-suggestion-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query">
+    </ngc-omnibox-suggestion-item>
+  </ngc-omnibox-suggestions>
+</ngc-omnibox>
+```
+
+#### Custom Markup
+
+If you wish to customize the markup used to wrap your text, you can do so in the second parameter
+passed to the filter. The parameter is a string replacement pattern, which should follow the
+replacement rules for JavaScript's `String.prototype.replace()` function. More information can
+be [found on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter)
+
+```html
+<ngc-omnibox ng-model="myCtrl.model" source="myCtrl.getSuggestions(query)">
+  <ngc-omnibox-field></ngc-omnibox-field>
+
+  <ngc-omnibox-suggestions>
+    <ngc-omnibox-suggestion-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query:'<em class=\'my-highlighted-text\'>$&</em>'">
+    </ngc-omnibox-suggestion-item>
+  </ngc-omnibox-suggestions>
+</ngc-omnibox>
+```
+
