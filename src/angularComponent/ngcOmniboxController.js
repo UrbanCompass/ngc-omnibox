@@ -80,6 +80,8 @@ export default class NgcOmniboxController {
     if (Array.isArray(suggestions)) {
       this._suggestions = Array.prototype.slice.apply(suggestions);
       this._buildSuggestionsUiList();
+    } else {
+      this._suggestions = suggestions;
     }
 
     this.hasSuggestions = Array.isArray(suggestions) && !!suggestions.length;
