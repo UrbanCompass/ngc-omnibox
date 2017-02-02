@@ -18,6 +18,55 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     omniboxController.isSelectable = () => {};
   });
 
+  describe('when populating suggestions via the source function', () => {
+    it('it should empty out the suggestions when resolving to a falsy value', (done) => {
+      omniboxController.query = 'my query';
+      omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
+      omniboxController.source = () => Promise.resolve(null);
+      omniboxController.updateSuggestions().then(() => {
+        expect(omniboxController.suggestions).toBe(null);
+        done();
+      });
+    });
+
+    it('it should set the suggestions when resolving to an Array', (done) => {
+      omniboxController.query = 'my query';
+      omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
+      omniboxController.source = () => Promise.resolve(['new suggestion 1', 'new suggestion 2']);
+      omniboxController.updateSuggestions().then(() => {
+        expect(omniboxController.suggestions.join(',')).toBe('new suggestion 1,new suggestion 2');
+        done();
+      });
+    });
+
+    it('it should throw an error when resolving to a truthy value that\'s not an Array', (done) => {
+      omniboxController.query = 'my query';
+      omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
+      omniboxController.source = () => Promise.resolve(true);
+      omniboxController.updateSuggestions().catch((e) => {
+        expect(e.message).toBe('Suggestions must be an Array');
+        done();
+      });
+    });
+
+    it('should support resolving suggestions and hints', (done) => {
+      omniboxController.query = 'my query';
+      omniboxController.suggestions = [];
+      omniboxController.source = () => {
+        return Promise.resolve({
+          suggestions: ['new suggestion 1', 'new suggestion 2'],
+          hint: 'My Query is Awesome'
+        });
+      };
+      omniboxController.updateSuggestions().then(() => {
+        expect(omniboxController.suggestions.join(',')).toBe('new suggestion 1,new suggestion 2');
+        expect(omniboxController.hint).toBe('my query is Awesome');
+        expect(omniboxController.fullHint).toBe('My Query is Awesome');
+        done();
+      });
+    });
+  });
+
   describe('when determining if there are suggestions', () => {
     it('should return false for falsy values', () => {
       omniboxController.suggestions = false;
@@ -30,18 +79,13 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.hasSuggestions).toBe(false);
     });
 
-    it('should return false for suggestions that aren\'t an Array', () => {
-      omniboxController.suggestions = 'false';
-      expect(omniboxController.hasSuggestions).toBe(false);
+    it('should throw an Error for suggestions that aren\'t an Array', () => {
+      const errorMsg = 'Suggestions must be an Array';
 
-      omniboxController.suggestions = true;
-      expect(omniboxController.hasSuggestions).toBe(false);
-
-      omniboxController.suggestions = 100;
-      expect(omniboxController.hasSuggestions).toBe(false);
-
-      omniboxController.suggestions = {test: 'me'};
-      expect(omniboxController.hasSuggestions).toBe(false);
+      expect(() => omniboxController.suggestions = 'false').toThrowError(errorMsg);
+      expect(() => omniboxController.suggestions = true).toThrowError(errorMsg);
+      expect(() => omniboxController.suggestions = 100).toThrowError(errorMsg);
+      expect(() => omniboxController.suggestions = {test: 'me'}).toThrowError(errorMsg);
     });
 
     it('should return false for empty Arrays', () => {
