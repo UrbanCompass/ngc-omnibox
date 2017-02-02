@@ -19,37 +19,34 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   });
 
   describe('when populating suggestions via the source function', () => {
-    it('it should empty out the suggestions when resolving to a falsy value', (done) => {
+    it('it should empty out the suggestions when resolving to a falsy value', (done, fail) => {
       omniboxController.query = 'my query';
       omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
       omniboxController.source = () => Promise.resolve(null);
       omniboxController.updateSuggestions().then(() => {
         expect(omniboxController.suggestions).toBe(null);
-        done();
-      });
+      }).then(done, fail);
     });
 
-    it('it should set the suggestions when resolving to an Array', (done) => {
+    it('it should set the suggestions when resolving to an Array', (done, fail) => {
       omniboxController.query = 'my query';
       omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
       omniboxController.source = () => Promise.resolve(['new suggestion 1', 'new suggestion 2']);
       omniboxController.updateSuggestions().then(() => {
         expect(omniboxController.suggestions.join(',')).toBe('new suggestion 1,new suggestion 2');
-        done();
-      });
+      }).then(done, fail);
     });
 
-    it('it should throw an error when resolving to a truthy value that\'s not an Array', (done) => {
+    it('it should throw an error when resolving to a truthy, non-Array value', (done, fail) => {
       omniboxController.query = 'my query';
       omniboxController.suggestions = ['suggestion 1', 'suggestion 2'];
       omniboxController.source = () => Promise.resolve(true);
-      omniboxController.updateSuggestions().catch((e) => {
+      omniboxController.updateSuggestions().then(fail, (e) => {
         expect(e.message).toBe('Suggestions must be an Array');
-        done();
-      });
+      }).then(done, fail);
     });
 
-    it('should support resolving suggestions and hints', (done) => {
+    it('should support resolving suggestions and hints', (done, fail) => {
       omniboxController.query = 'my query';
       omniboxController.suggestions = [];
       omniboxController.source = () => {
@@ -62,8 +59,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
         expect(omniboxController.suggestions.join(',')).toBe('new suggestion 1,new suggestion 2');
         expect(omniboxController.hint).toBe('my query is Awesome');
         expect(omniboxController.fullHint).toBe('My Query is Awesome');
-        done();
-      });
+      }).then(done, fail);
     });
   });
 
