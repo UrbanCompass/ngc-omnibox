@@ -77,11 +77,13 @@ export default class NgcOmniboxController {
   }
 
   set suggestions(suggestions) {
-    if (Array.isArray(suggestions)) {
+    if (!suggestions) {
+      this._suggestions = null;
+    } else if (Array.isArray(suggestions)) {
       this._suggestions = Array.prototype.slice.apply(suggestions);
       this._buildSuggestionsUiList();
     } else {
-      this._suggestions = suggestions;
+      throw new Error('Suggestions must be an Array');
     }
 
     this.hasSuggestions = Array.isArray(suggestions) && !!suggestions.length;
@@ -571,13 +573,7 @@ export default class NgcOmniboxController {
         suggestions = suggestions.suggestions;
       }
 
-      if (!suggestions) {
-        this.suggestions = null;
-      } else if (Array.isArray(suggestions)) {
-        this.suggestions = suggestions;
-      } else {
-        throw new Error('Suggestions must be an Array');
-      }
+      this.suggestions = suggestions;
 
       if (hint) {
         // Hint with just the part of the hint that isn't the query
