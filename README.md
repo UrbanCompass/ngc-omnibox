@@ -163,7 +163,14 @@ displayed.
 To display a hint to the user in addition to suggestions, resolve the promise with an object that
 has keys for `hint` and `suggestions`: `{hint: 'My hint', suggestions: [...]}`. A hint is displayed
 to the right of the text that has been input by the user. Pressing RIGHT on the keyboard replaces
-the input text query with the hint.
+the input text query with the hint. The hint should include the entirety of the query, plus whatever
+else you want to hint with. When displayed, only the addition to the query is shown as a hint, but
+if the user presses RIGHT to complete it, it will use the entirety of the hint provided. For
+example, if the query is 'my query' and you want to hinted text to display ' is awesome', then you
+should pass 'my query is awesome' as the hint. However, if you want the completed hint to be
+formatted as 'My Query is Awesome', you should set that as the hint. When hinted, it will be
+displayed as 'my query is Awesome', but when completed via RIGHT on the keyboard, it will replace
+the query with the submitted formatting: 'My Query is Awesome'.
 - `ngModel {Any}` _(Required)_: This is a one-way binding to the ngModel for the Omnibox. When the
 `multiple` option is set to `true`, then the `ngModel` should be an array. Each item in the array
 will be populated with choices from the objects passed via the `source` function. If the `multiple`

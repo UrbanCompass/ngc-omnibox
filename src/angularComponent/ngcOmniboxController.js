@@ -77,9 +77,13 @@ export default class NgcOmniboxController {
   }
 
   set suggestions(suggestions) {
-    if (Array.isArray(suggestions)) {
+    if (!suggestions) {
+      this._suggestions = null;
+    } else if (Array.isArray(suggestions)) {
       this._suggestions = Array.prototype.slice.apply(suggestions);
       this._buildSuggestionsUiList();
+    } else {
+      throw new Error('Suggestions must be an Array');
     }
 
     this.hasSuggestions = Array.isArray(suggestions) && !!suggestions.length;
@@ -430,12 +434,56 @@ export default class NgcOmniboxController {
     return this._shouldShowSuggestions;
   }
 
+  /**
+   * Updates the list of suggestions based on the current query and the source function.
+   *
+   * @returns {Promise} -- Resolved after the suggestions have been updated
+   */
+  updateSuggestions() {
+    this._suggestionsUiList.length = 0;
+    this.hint = null;
+
+    this.highlightedIndex = -1; // Forcibly select nothing
+    this._showLoading();
+    this.hideSuggestions = false;
+
+    const promise = this.source({query: this.query, suggestions: this.suggestions});
+    this._sourceFunctionPromise = promise;
+
+    return promise.then((suggestions) => {
+      // Bail out if the promise has changed
+      if (promise !== this._sourceFunctionPromise) {
+        return;
+      }
+
+      let hint;
+      if (suggestions && !Array.isArray(suggestions) && typeof suggestions === 'object') {
+        hint = suggestions.hint;
+        suggestions = suggestions.suggestions;
+      }
+
+      this.suggestions = suggestions;
+
+      if (hint) {
+        // Hint with just the part of the hint that isn't the query
+        this.hint = this.query + hint.slice(this.query.length, hint.length);
+        this.fullHint = hint; // Store this for completion of the hint
+      }
+
+      this._hideLoading();
+
+      if (this.requireMatch) {
+        this.highlightNextSuggestion();
+      }
+    });
+  }
+
   onInputChange() {
     if (!this.query) {
       this.hideSuggestions = true;
       this.hint = null;
     } else {
-      this._updateSuggestions();
+      this.updateSuggestions();
     }
   }
 
@@ -472,7 +520,7 @@ export default class NgcOmniboxController {
 
       if (this.hint) {
         if (keyCode === KEY.RIGHT && this.selectionEndKeyDown === inputLength) {
-          this.query = this._fullHint;
+          this.query = this.fullHint;
           this.onInputChange();
         } else if (keyCode === KEY.ESC) {
           this.hint = null;
@@ -504,7 +552,7 @@ export default class NgcOmniboxController {
         }
       }
     } else if (keyCode === KEY.DOWN) {
-      this._updateSuggestions();
+      this.updateSuggestions();
     }
   }
 
@@ -544,51 +592,6 @@ export default class NgcOmniboxController {
         }
       }
     }
-  }
-
-  _updateSuggestions() {
-    this._suggestionsUiList.length = 0;
-    this.hint = null;
-
-    this.highlightedIndex = -1; // Forcibly select nothing
-    this._showLoading();
-    this.hideSuggestions = false;
-
-    const promise = this.source({query: this.query, suggestions: this.suggestions});
-    this._sourceFunctionPromise = promise;
-
-    promise.then((suggestions) => {
-      // Bail out if the promise has changed
-      if (promise !== this._sourceFunctionPromise) {
-        return;
-      }
-
-      let hint;
-      if (typeof suggestions === 'object') {
-        hint = suggestions.hint;
-        suggestions = suggestions.suggestions;
-      }
-
-      if (!suggestions) {
-        this.suggestions = null;
-      } else if (Array.isArray(suggestions)) {
-        this.suggestions = suggestions;
-      } else {
-        throw new Error('Suggestions must be an Array');
-      }
-
-      if (hint) {
-        // Hint with just the part of the hint that isn't the query
-        this.hint = this.query + hint.slice(this.query.length, hint.length);
-        this._fullHint = hint; // Store this for completion of the hint
-      }
-
-      this._hideLoading();
-
-      if (this.requireMatch) {
-        this.highlightNextSuggestion();
-      }
-    });
   }
 
   _showLoading() {
