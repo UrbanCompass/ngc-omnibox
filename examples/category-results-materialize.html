@@ -85,15 +85,15 @@
 
         <div ngc-omnibox-suggestions class="collection with-header">
 
-          <dl ngc-omnibox-suggestion-category>
+          <dl ngc-omnibox-suggestions-category>
             <dt class="collection-header">
-              <h5 ngc-omnibox-suggestion-header
+              <h5 ngc-omnibox-suggestions-header
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 {{suggestion.state}}
               </h5>
             </dt>
             <dd>
-              <div ngc-omnibox-suggestion-item class="collection-item"
+              <div ngc-omnibox-suggestions-item class="collection-item"
                   ng-class="{'active': omnibox.isHighlighted(suggestion)}">
                 <h6>
                   <span ng-bind-html="suggestion.person.firstname | ngcOmniboxHighlightMatch:omnibox.query">
@@ -109,11 +109,11 @@
             </dd>
           </dl>
 
-          <div ngc-omnibox-suggestion-loading class="progress">
+          <div ngc-omnibox-suggestions-loading class="progress">
             <div class="indeterminate"></div>
           </div>
 
-          <div ngc-omnibox-suggestion-empty class="center-align">
+          <div ngc-omnibox-suggestions-empty class="center-align">
             <span class="blue-grey-text text-lighten-3">No results...</span>
           </div>
 

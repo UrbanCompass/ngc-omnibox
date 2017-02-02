@@ -99,25 +99,25 @@ additional subcomponents that allow you to slot in markup for different parts ne
 suggestions to render. You can include at most one instance of an individual subcomponent. If you
 include more than one, an Error will be thrown.
 
-#### Omnibox Suggestion Item `<ngc-omnibox-suggestion-item>` _(Required)_
+#### Omnibox Suggestions Item `<ngc-omnibox-suggestions-item>` _(Required)_
 The Suggestion Item component gives you a slot for markup for a single suggestion. This markup
 will be repeated once for each suggestion in your list of suggestions. It has access to a
 `suggestion`, which represents a single suggestion in your list of suggestions.
 
-#### Omnibox Suggestion Loading `<ngc-omnibox-suggestion-loading>`
+#### Omnibox Suggestions Loading `<ngc-omnibox-suggestions-loading>`
 The Suggestion Loading component gives you a slot for markup for when suggestions are loading
 asynchronously.
 
-#### Omnibox Suggestion Empty `<ngc-omnibox-suggestion-empty>`
+#### Omnibox Suggestions Empty `<ngc-omnibox-suggestions-empty>`
 The Suggestion Empty component gives you a slot for markup for when there are no suggestions. The
 list of suggestions is considered empty when it is either falsy or an array with no length.
 
-#### Omnibox Suggestion Category `<ngc-omnibox-suggestion-category>`
+#### Omnibox Suggestions Category `<ngc-omnibox-suggestions-category>`
 The Suggestion Category component is a container for markup for when a suggestion has `children`
 and needs to loop through them recursively. If the category component is not provided in the markup
 then the suggestions will be rendered as a flat list, ignoring any children.
 
-#### Omnibox Suggestion Header `<ngc-omnibox-suggestion-header>`
+#### Omnibox Suggestions Header `<ngc-omnibox-suggestions-header>`
 The Suggestion Header is an optional component when using in conjunction with a Suggestion Category.
 It provides a slot for markup and access to a `suggestion` that contains the `children`.
 

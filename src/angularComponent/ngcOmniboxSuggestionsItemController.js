@@ -1,4 +1,4 @@
-export default class NgcOmniboxSuggestionItemController {
+export default class ngcOmniboxSuggestionsItemController {
 
   handleMouseEnter() {
     this.omnibox.highlightSuggestion(this.suggestion);

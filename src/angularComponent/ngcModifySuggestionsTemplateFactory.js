@@ -1,7 +1,7 @@
 /**
  * Takes in the public API template submitted by the app-maker and modifies it to repeat through
  * the data structure of the Omnibox. The template will be different depending on whether it finds
- * an ngc-omnibox-suggestion-category or not.
+ * an ngc-omnibox-suggestions-category or not.
  *
  * @param {HTMLElement} element -- HTMLElement that contains the template to modify
  * @param {String} templateCacheName -- Unique string to use as the template cache name for
@@ -14,10 +14,10 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       templateCacheName = `category-tmpl-${new Date().getTime() * Math.random()}`) {
     const doc = $document[0];
 
-    const categoryEl = getSubcomponent(element, 'ngc-omnibox-suggestion-category');
-    const itemEl = getSubcomponent(element, 'ngc-omnibox-suggestion-item');
-    const loadingEl = getSubcomponent(element, 'ngc-omnibox-suggestion-loading');
-    const noResultsEl = getSubcomponent(element, 'ngc-omnibox-suggestion-empty');
+    const categoryEl = getSubcomponent(element, 'ngc-omnibox-suggestions-category');
+    const itemEl = getSubcomponent(element, 'ngc-omnibox-suggestions-item');
+    const loadingEl = getSubcomponent(element, 'ngc-omnibox-suggestions-loading');
+    const noResultsEl = getSubcomponent(element, 'ngc-omnibox-suggestions-empty');
 
     element.setAttribute('role', 'listbox');
 
@@ -31,7 +31,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
     }
 
     if (!itemEl) {
-      throw new Error('An ngcOmniboxSuggestionItem is required.');
+      throw new Error('An ngcOmniboxSuggestionsItem is required.');
     } else if (categoryEl) {
       const categoryContainer = doc.createElement('div');
       categoryContainer.setAttribute('ng-repeat',
@@ -46,7 +46,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
 
       itemEl.parentNode.appendChild(itemChildrenEl);
 
-      const itemHeader = getSubcomponent(element, 'ngc-omnibox-suggestion-header');
+      const itemHeader = getSubcomponent(element, 'ngc-omnibox-suggestions-header');
       if (itemHeader) {
         itemHeader.setAttribute('suggestion', 'suggestion');
         itemHeader.setAttribute('ng-attr-aria-selected',
