@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <style>
+      ngc-omnibox-field [readonly],
+      .form-control[readonly],
+      .no-results {
+        background: transparent;
+        opacity: 0.5;
+      }
+
+      .badge .close {
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" ng-controller="OmniboxExampleController as demo">
+      <h3>Categorized Results Example - Bootstrap CSS Framework</h3>
+      <h4>Search For a U.S. Senator by State</h4>
+
+      <ngc-omnibox class="dropdown d-block"
+          ng-model="demo.model"
+          is-selectable="demo.isSelectable(suggestion)"
+          multiple="true"
+          source="demo.sourceFn(query)"
+          require-match="true">
+
+        <div class="form-group" ngc-omnibox-field>
+          <input class="form-control" type="text"
+              placeholder="Search for a US Senator by Name or Party" autofocus="true">
+        </div>
+
+        <div class="form-inline form-group" ngc-omnibox-choices>
+          <span class="badge badge-pill d-inline-flex align-items-center"
+              ng-class="{
+                'active': omnibox.isChoiceHighlighted(choice),
+                'ml-2': $index !== 0,
+                'badge-danger': choice.party === 'Republican',
+                'badge-primary': choice.party === 'Democrat'
+              }">
+            {{choice.person.name}}
+            <button type="button" class="close" ng-click="omnibox.unchoose(choice)">
+              &times;
+            </button>
+          </span>
+        </div>
+
+        <div class="show" ngc-omnibox-suggestions>
+
+          <div class="dropdown-menu">
+
+            <dl ngc-omnibox-suggestions-category>
+              <dt>
+                <h6 class="dropdown-header">{{suggestion.state}}</h6>
+              </dt>
+              <dd>
+                <ngc-omnibox-suggestions-item class="dropdown-item"
+                    ng-class="{'active': omnibox.isHighlighted(suggestion)}">
+                  <strong class="d-block">
+                    {{suggestion.person.firstname}} {{suggestion.person.lastname}}
+                  </strong>
+                  <em>{{suggestion.description}} &mdash; {{suggestion.party}}</em>
+                </ngc-omnibox-suggestions-item>
+              </dd>
+            </dl>
+
+            <div class="progress" ngc-omnibox-suggestions-loading>
+              <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+            </div>
+
+            <div ngc-omnibox-suggestions-empty class="dropdown-item">
+              <span class="no-results">No results...</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </ngc-omnibox>
+
+      <p>
+        Model value:
+        <pre><code style="white-space: pre-line">{{demo.model}}</code></pre>
+      </p>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js"></script>
+    <script src="https://rawgit.com/wouter2203/fuzzy-search/master/dist/FuzzySearch.js"></script>
+    <script src="../dist/ngc-omnibox.js"></script>
+    <script src="./category-results.js"></script>
+  </body>
+</html>
