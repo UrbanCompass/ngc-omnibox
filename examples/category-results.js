@@ -76,6 +76,8 @@
             results = searcher.search(query).filter(filterOutChosen);
           }
 
+          results = formatResults(results);
+
           if (results && results.length) {
             // Search through our suggestions to try and find a Senator's full name that starts with
             // our query. If our query is the beginning of someone's name, then we can hint as to
@@ -101,13 +103,13 @@
 
             if (hintMatch) {
               return $q.resolve({
-                suggestions: formatResults(results),
+                suggestions: results,
                 hint: hintMatch.person.firstname + ' ' + hintMatch.person.lastname
               });
             }
           }
 
-          return $q.resolve(formatResults(results));
+          return $q.resolve(results);
         });
       };
     });
