@@ -94,7 +94,13 @@ export default class NgcOmniboxController {
   }
 
   set ngModel(newModel) {
-    this._ngModel = newModel;
+    if (newModel === '' || newModel === null || typeof newModel === 'undefined') {
+      this._ngModel = null;
+      this.query = '';
+      this.onInputChange();
+    } else {
+      this._ngModel = newModel;
+    }
 
     if (Array.isArray(this._ngModel)) {
       const currentPrototype = Object.getPrototypeOf(this._ngModel);
