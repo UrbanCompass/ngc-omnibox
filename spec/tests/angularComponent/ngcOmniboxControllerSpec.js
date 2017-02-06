@@ -158,59 +158,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
-  describe('when navigating suggestions sequentially', () => {
-    it('should highlight the next suggestion', () => {
-      omniboxController.suggestions = ['test', 'me'];
-
-      expect(omniboxController.highlightedIndex).toBe(-1);
-
-      omniboxController.highlightNextSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(0);
-
-      omniboxController.highlightNextSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(1);
-    });
-
-    it('should highlight the previous suggestion', () => {
-      omniboxController.suggestions = ['test', 'me', 'too'];
-
-      omniboxController.highlightedIndex = 1;
-
-      omniboxController.highlightPreviousSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(0);
-    });
-
-    it('should wrap around the selection if match is required', () => {
-      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
-      omniboxController.highlightedIndex = 0;
-      omniboxController.requireMatch = true;
-
-      omniboxController.highlightPreviousSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(3);
-
-      omniboxController.highlightNextSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(0);
-    });
-
-    it('should select nothing when wrapping around the selection if match isn\'t  required', () => {
-      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
-      omniboxController.highlightedIndex = 0;
-      omniboxController.requireMatch = false;
-
-      omniboxController.highlightPreviousSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(-1);
-
-      omniboxController.highlightPreviousSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(3);
-
-      omniboxController.highlightNextSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(-1);
-
-      omniboxController.highlightNextSuggestion();
-      expect(omniboxController.highlightedIndex).toBe(0);
-    });
-  });
-
   describe('when highlighting a specific suggestions', () => {
     beforeEach(() => {
       omniboxController.suggestions = ['one', 'two', 'three'];
@@ -264,6 +211,72 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.highlightSuggestion('two');
       expect(omniboxController.isHighlighted('two')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+  });
+
+  describe('when navigating suggestions sequentially', () => {
+    it('should highlight the next suggestion', () => {
+      omniboxController.suggestions = ['test', 'me'];
+
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(0);
+
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(1);
+    });
+
+    it('should highlight the previous suggestion', () => {
+      omniboxController.suggestions = ['test', 'me', 'too'];
+
+      omniboxController.highlightedIndex = 1;
+
+      omniboxController.highlightPreviousSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(0);
+    });
+
+    it('should wrap around the selection if match is required', () => {
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
+      omniboxController.highlightedIndex = 0;
+      omniboxController.requireMatch = true;
+
+      omniboxController.highlightPreviousSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(3);
+
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(0);
+    });
+
+    it('should select nothing when wrapping around the selection if match isn\'t  required', () => {
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
+      omniboxController.highlightedIndex = 0;
+      omniboxController.requireMatch = false;
+
+      omniboxController.highlightPreviousSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightPreviousSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(3);
+
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(0);
+    });
+
+    it('should highlight nothing if all suggestions are non-selectable', () => {
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
+      omniboxController.isSelectable = () => false;
+
+      omniboxController.highlightedIndex = 0;
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightedIndex = 3;
+      omniboxController.highlightPreviousSuggestion();
       expect(omniboxController.highlightedIndex).toBe(-1);
     });
   });
