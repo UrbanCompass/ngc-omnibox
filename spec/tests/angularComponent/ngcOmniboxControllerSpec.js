@@ -211,6 +211,63 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
+  describe('when highlighting a specific suggestions', () => {
+    beforeEach(() => {
+      omniboxController.suggestions = ['one', 'two', 'three'];
+      omniboxController.highlightedIndex = -1;
+    });
+
+    it('should know if a specific suggestion is highlighted if the index changes', () => {
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+
+      omniboxController.highlightedIndex = 0;
+      expect(omniboxController.isHighlighted('one')).toBe(true);
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+
+      omniboxController.highlightedIndex = 1;
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.isHighlighted('two')).toBe(true);
+    });
+
+    it('should highlight a specific suggestion', () => {
+      omniboxController.highlightSuggestion('two');
+
+      expect(omniboxController.highlightedIndex).toBe(1);
+      expect(omniboxController.isHighlighted('two')).toBe(true);
+    });
+
+    it('should not highlight if highlighting is disabled', () => {
+      omniboxController.isHighlightingDisabled = true;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightSuggestion('two');
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+
+    it('should only highlight if isSelectable() is true', () => {
+      omniboxController.isSelectable = () => true;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(true);
+      expect(omniboxController.highlightedIndex).toBe(0);
+
+      omniboxController.isSelectable = () => false;
+      omniboxController.highlightedIndex = -1;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightSuggestion('two');
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+  });
+
   describe('suggestion visibility', () => {
     beforeEach(() => {
       omniboxController.suggestions = null;
