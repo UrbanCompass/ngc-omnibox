@@ -256,6 +256,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.ngModel = ['my', 'new', 'model'];
       expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
+
+    it('should clear out the query when the ngModel is cleared', () => {
+      omniboxController.query = 'my query';
+      omniboxController.ngModel = '';
+
+      expect(omniboxController.query).toBe('');
+      expect(omniboxController.ngModel).toBe(null);
+    });
   });
 
   describe('modifying the ngModel should be detected when', () => {
