@@ -65,11 +65,13 @@ export default class NgcOmniboxController {
 
   set fieldElement(el) {
     if (this._fieldElement) {
-      this._fieldElement.removeEventListener('focus', this.highlightNoChoice.bind(this));
+      this._fieldElement.removeEventListener('focus', this._highlightNoChoice);
     }
 
+    this._highlightNoChoice = () => this.highlightedChoice = null;
+
     this._fieldElement = el;
-    this._fieldElement.addEventListener('focus', this.highlightNoChoice.bind(this));
+    this._fieldElement.addEventListener('focus', this.highlightNoChoice);
   }
 
   get fieldElement() {
@@ -293,7 +295,7 @@ export default class NgcOmniboxController {
     if (index < this.ngModel.length - 1) {
       this.highlightedChoice = this.ngModel[index + 1];
     } else {
-      this.highlightNoChoice();
+      this.highlightedChoice = null;
     }
   }
 
@@ -311,7 +313,7 @@ export default class NgcOmniboxController {
     if (index > 0) {
       this.highlightedChoice = this.ngModel[index - 1];
     } else {
-      this.highlightNoChoice();
+      this.highlightedChoice = null;
     }
   }
 
@@ -330,15 +332,6 @@ export default class NgcOmniboxController {
   highlightLastChoice() {
     if (this.multiple) {
       this.highlightedChoice = this.ngModel[this.ngModel.length - 1];
-    }
-  }
-
-  /**
-   * Un-highlights all choices.
-   */
-  highlightNoChoice() {
-    if (this.multiple) {
-      this.highlightedChoice = null;
     }
   }
 

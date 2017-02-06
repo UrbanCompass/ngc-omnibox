@@ -410,13 +410,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.highlightedChoice).toBe('three');
     });
 
-    it('should highlight no choice', () => {
-      omniboxController.highlightedChoice = 'foo';
-
-      omniboxController.highlightNoChoice();
-      expect(omniboxController.highlightedChoice).toBe(null);
-    });
-
     it('should check if a choice is highlighted', () => {
       omniboxController.highlightedChoice = 'one';
 
