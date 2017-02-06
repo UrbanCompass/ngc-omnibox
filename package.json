@@ -6,7 +6,7 @@
   "scripts": {
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
-    "test": "istanbul cover --include-all-sources babel-node node_modules/.bin/jasmine && eslint .",
+    "test": "nyc babel-node node_modules/.bin/jasmine && eslint .",
     "prepublish": "npm run bundle"
   },
   "repository": {
@@ -22,6 +22,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-loader": "^6.2.10",
+    "babel-plugin-istanbul": "^3.1.2",
     "babel-preset-env": "^1.0.2",
     "babel-root-import": "^4.1.5",
     "eslint": "^3.12.1",
@@ -32,6 +33,7 @@
     "jasmine": "^2.5.2",
     "jasmine-node": "^1.14.5",
     "jsdom": "^9.9.1",
+    "nyc": "^10.1.2",
     "webpack": "^2.2.0-rc.0"
   },
   "dependencies": {
