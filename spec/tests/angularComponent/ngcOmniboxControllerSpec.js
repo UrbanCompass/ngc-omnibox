@@ -183,6 +183,13 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.isHighlighted('two')).toBe(true);
     });
 
+    it('should be able to highlight none', () => {
+      omniboxController.highlightedIndex = 2;
+
+      omniboxController.highlightNone();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+
     it('should not highlight if highlighting is disabled', () => {
       omniboxController.isHighlightingDisabled = true;
 
@@ -193,6 +200,10 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.highlightSuggestion('two');
       expect(omniboxController.isHighlighted('two')).toBe(false);
       expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightedIndex = 1;
+      omniboxController.highlightNone();
+      expect(omniboxController.highlightedIndex).toBe(1);
     });
 
     it('should only highlight if isSelectable() is true', () => {
