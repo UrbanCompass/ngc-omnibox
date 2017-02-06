@@ -1,4 +1,4 @@
-import {KEY, isSelectKey, isVerticalMovementKey} from '../coreComponent/keyboard.js';
+import {KEY, isSelectKey, isVerticalMovementKey} from '../keyboard.js';
 
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
