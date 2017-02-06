@@ -8,7 +8,9 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     removeAttribute() {},
     setAttribute() {},
     querySelector() {},
-    querySelectorAll() {}
+    querySelectorAll() {},
+    focus() {},
+    blur() {}
   };
 
   beforeEach(() => {
@@ -348,6 +350,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     beforeEach(() => {
       omniboxController.multiple = true;
       omniboxController.ngModel = ['one', 'two', 'three'];
+      omniboxController.fieldElement = Object.assign({}, fakeEl);
     });
 
     it('should not try to highlight a choice when multiple is false', () => {
@@ -417,6 +420,20 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.isChoiceHighlighted('two')).toBe(false);
       expect(omniboxController.isChoiceHighlighted('three')).toBe(false);
       expect(omniboxController.isChoiceHighlighted(null)).toBe(false);
+    });
+
+    it('should focus the component when highlighting a choice', () => {
+      spyOn(omniboxController.element, 'focus');
+
+      omniboxController.highlightedChoice = 'one';
+      expect(omniboxController.element.focus).toHaveBeenCalled();
+    });
+
+    it('should focus the field when highlighting no choice', () => {
+      spyOn(omniboxController.fieldElement, 'focus');
+
+      omniboxController.highlightedChoice = null;
+      expect(omniboxController.fieldElement.focus).toHaveBeenCalled();
     });
   });
 });
