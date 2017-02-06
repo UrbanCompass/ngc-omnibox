@@ -2,16 +2,16 @@ import NgcOmniboxController from '~/angularComponent/ngcOmniboxController.js';
 
 describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   let omniboxController, document;
+  const fakeEl = {
+    addEventListener() {},
+    removeEventListener() {},
+    removeAttribute() {},
+    setAttribute() {},
+    querySelector() {},
+    querySelectorAll() {}
+  };
 
   beforeEach(() => {
-    const fakeEl = {
-      addEventListener() {},
-      removeEventListener() {},
-      removeAttribute() {},
-      setAttribute() {},
-      querySelector() {},
-      querySelectorAll() {}
-    };
 
     document = Object.assign({}, fakeEl);
     document.styleSheets = [{insertRule: jasmine.createSpy(() => {})}];
@@ -28,6 +28,21 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   it('should remove the focus ring when the component is focused', () => {
     expect(document.styleSheets[0].insertRule)
         .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
+  });
+
+  it('should listen for field element focus events when the field is set', () => {
+    const fieldEl = Object.assign({}, fakeEl);
+    spyOn(fieldEl, 'addEventListener');
+    spyOn(fieldEl, 'removeEventListener');
+
+    omniboxController.fieldElement = fieldEl;
+    expect(fieldEl.addEventListener).toHaveBeenCalled();
+
+    const newFieldEl = Object.assign({}, fieldEl);
+    omniboxController.fieldElement = newFieldEl;
+
+    expect(fieldEl.removeEventListener).toHaveBeenCalled();
+    expect(newFieldEl.addEventListener).toHaveBeenCalled();
   });
 
   describe('when populating suggestions via the source function', () => {
