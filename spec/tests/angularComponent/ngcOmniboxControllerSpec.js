@@ -141,7 +141,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
-  describe('when navigating via the keyboard', () => {
+  describe('when navigating suggestions sequentially', () => {
     it('should highlight the next suggestion', () => {
       omniboxController.suggestions = ['test', 'me'];
 
@@ -326,6 +326,89 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController._onNgModelChange();
 
       expect(omniboxController.hasChoices).toBe(false);
+    });
+  });
+
+  describe('when navigating choices', () => {
+    beforeEach(() => {
+      omniboxController.multiple = true;
+      omniboxController.ngModel = ['one', 'two', 'three'];
+    });
+
+    it('should not try to highlight a choice when multiple is false', () => {
+      omniboxController.multiple = false;
+
+      expect(omniboxController.highlightedChoice).toBe(null);
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+    });
+
+    it('should highlight the next choice', () => {
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe(null); // No wrapping around
+    });
+
+    it('should highlight the previous choice', () => {
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null); // No wrapping around
+
+      omniboxController.highlightedChoice = 'three';
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+    });
+
+    it('should highlight the first choice', () => {
+      omniboxController.highlightFirstChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightedChoice = 'two';
+      omniboxController.highlightFirstChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+    });
+
+    it('should highlight the last choice', () => {
+      omniboxController.highlightLastChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+
+      omniboxController.highlightedChoice = 'two';
+      omniboxController.highlightLastChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+    });
+
+    it('should highlight no choice', () => {
+      omniboxController.highlightedChoice = 'foo';
+
+      omniboxController.highlightNoChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+    });
+
+    it('should check if a choice is highlighted', () => {
+      omniboxController.highlightedChoice = 'one';
+
+      expect(omniboxController.isChoiceHighlighted('one')).toBe(true);
+      expect(omniboxController.isChoiceHighlighted('two')).toBe(false);
+      expect(omniboxController.isChoiceHighlighted('three')).toBe(false);
+      expect(omniboxController.isChoiceHighlighted(null)).toBe(false);
     });
   });
 });

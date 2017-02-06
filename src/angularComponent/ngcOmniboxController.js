@@ -280,17 +280,6 @@ export default class NgcOmniboxController {
   }
 
   /**
-   * Highlights the submitted choice.
-   *
-   * @param {Object} choice
-   */
-  highlightChoice(choice) {
-    if (this.multiple) {
-      this.highlightedChoice = choice;
-    }
-  }
-
-  /**
    * Highlights the next suggestion after the currently higlighted one. If the last one is
    * highlighted then the field is focused.
    */
