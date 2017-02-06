@@ -6,7 +6,8 @@
   "scripts": {
     "bundle": "webpack --progress --colors",
     "dev": "webpack --progress --colors --watch",
-    "test": "nyc babel-node node_modules/.bin/jasmine && eslint .",
+    "test": "nyc babel-node node_modules/.bin/jasmine && eslint . && npm run report-coverage",
+    "report-coverage": "nyc report --reporter=lcov > coverage.lcov",
     "prepublish": "npm run bundle"
   },
   "repository": {
