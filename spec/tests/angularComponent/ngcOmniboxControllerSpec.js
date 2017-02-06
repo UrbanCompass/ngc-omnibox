@@ -1,7 +1,7 @@
 import NgcOmniboxController from '~/angularComponent/ngcOmniboxController.js';
 
 describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
-  let omniboxController;
+  let omniboxController, document;
 
   beforeEach(() => {
     const fakeEl = {
@@ -13,9 +13,21 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       querySelectorAll() {}
     };
 
-    omniboxController = new NgcOmniboxController([fakeEl], [fakeEl], {$apply() {}});
+    document = Object.assign({}, fakeEl);
+    document.styleSheets = [{insertRule: jasmine.createSpy(() => {})}];
+
+    omniboxController = new NgcOmniboxController([document], [fakeEl], {$apply() {}});
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
     omniboxController.isSelectable = () => {};
+  });
+
+  it('should inject $document, $element, and $scope', () => {
+    expect(NgcOmniboxController.$inject.join(',')).toBe('$document,$element,$scope');
+  });
+
+  it('should remove the focus ring when the component is focused', () => {
+    expect(document.styleSheets[0].insertRule)
+        .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
   });
 
   describe('when populating suggestions via the source function', () => {
