@@ -449,6 +449,11 @@ export default class NgcOmniboxController {
     this._suggestionsUiList.length = 0;
     this.hint = null;
 
+    // Clear out our current suggestions while we load in the new ones
+    if (Array.isArray(this.suggestions)) {
+      this.suggestions.length = 0;
+    }
+
     this.highlightedIndex = -1; // Forcibly select nothing
     this._showLoading();
     this.hideSuggestions = false;
