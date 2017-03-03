@@ -1,21 +1,50 @@
 import NgcOmniboxController from '~/angularComponent/ngcOmniboxController.js';
 
 describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
-  let omniboxController;
+  let omniboxController, document;
+  const fakeEl = {
+    addEventListener() {},
+    removeEventListener() {},
+    removeAttribute() {},
+    setAttribute() {},
+    querySelector() {},
+    querySelectorAll() {},
+    focus() {},
+    blur() {}
+  };
 
   beforeEach(() => {
-    const fakeEl = {
-      addEventListener() {},
-      removeEventListener() {},
-      removeAttribute() {},
-      setAttribute() {},
-      querySelector() {},
-      querySelectorAll() {}
-    };
 
-    omniboxController = new NgcOmniboxController([fakeEl], [fakeEl], {$apply() {}});
+    document = Object.assign({}, fakeEl);
+    document.styleSheets = [{insertRule: jasmine.createSpy(() => {})}];
+
+    omniboxController = new NgcOmniboxController([document], [fakeEl], {$apply() {}});
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
     omniboxController.isSelectable = () => {};
+  });
+
+  it('should inject $document, $element, and $scope', () => {
+    expect(NgcOmniboxController.$inject.join(',')).toBe('$document,$element,$scope');
+  });
+
+  it('should remove the focus ring when the component is focused', () => {
+    expect(document.styleSheets[0].insertRule)
+        .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
+  });
+
+  it('should listen for field element focus events when the field is set', () => {
+    const fieldEl = Object.assign({}, fakeEl);
+    spyOn(fieldEl, 'addEventListener');
+    spyOn(fieldEl, 'removeEventListener');
+
+    omniboxController.fieldElement = fieldEl;
+    expect(fieldEl.addEventListener).toHaveBeenCalled();
+
+    const newFieldEl = Object.assign({}, fieldEl);
+    omniboxController.fieldElement = newFieldEl;
+
+    expect(fieldEl.removeEventListener).toHaveBeenCalled();
+    expect(newFieldEl.addEventListener).toHaveBeenCalled();
   });
 
   describe('when populating suggestions via the source function', () => {
@@ -129,7 +158,75 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
   });
 
-  describe('when navigating via the keyboard', () => {
+  describe('when highlighting a specific suggestions', () => {
+    beforeEach(() => {
+      omniboxController.suggestions = ['one', 'two', 'three'];
+      omniboxController.highlightedIndex = -1;
+    });
+
+    it('should know if a specific suggestion is highlighted if the index changes', () => {
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+
+      omniboxController.highlightedIndex = 0;
+      expect(omniboxController.isHighlighted('one')).toBe(true);
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+
+      omniboxController.highlightedIndex = 1;
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.isHighlighted('two')).toBe(true);
+    });
+
+    it('should highlight a specific suggestion', () => {
+      omniboxController.highlightSuggestion('two');
+
+      expect(omniboxController.highlightedIndex).toBe(1);
+      expect(omniboxController.isHighlighted('two')).toBe(true);
+    });
+
+    it('should be able to highlight none', () => {
+      omniboxController.highlightedIndex = 2;
+
+      omniboxController.highlightNone();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+
+    it('should not highlight if highlighting is disabled', () => {
+      omniboxController.isHighlightingDisabled = true;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightSuggestion('two');
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightedIndex = 1;
+      omniboxController.highlightNone();
+      expect(omniboxController.highlightedIndex).toBe(1);
+    });
+
+    it('should only highlight if isSelectable() is true', () => {
+      omniboxController.isSelectable = () => true;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(true);
+      expect(omniboxController.highlightedIndex).toBe(0);
+
+      omniboxController.isSelectable = () => false;
+      omniboxController.highlightedIndex = -1;
+
+      omniboxController.highlightSuggestion('one');
+      expect(omniboxController.isHighlighted('one')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightSuggestion('two');
+      expect(omniboxController.isHighlighted('two')).toBe(false);
+      expect(omniboxController.highlightedIndex).toBe(-1);
+    });
+  });
+
+  describe('when navigating suggestions sequentially', () => {
     it('should highlight the next suggestion', () => {
       omniboxController.suggestions = ['test', 'me'];
 
@@ -179,6 +276,19 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
       omniboxController.highlightNextSuggestion();
       expect(omniboxController.highlightedIndex).toBe(0);
+    });
+
+    it('should highlight nothing if all suggestions are non-selectable', () => {
+      omniboxController.suggestions = ['test', 'me', 'again', 'please'];
+      omniboxController.isSelectable = () => false;
+
+      omniboxController.highlightedIndex = 0;
+      omniboxController.highlightNextSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(-1);
+
+      omniboxController.highlightedIndex = 3;
+      omniboxController.highlightPreviousSuggestion();
+      expect(omniboxController.highlightedIndex).toBe(-1);
     });
   });
 
@@ -244,6 +354,14 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.ngModel = ['my', 'new', 'model'];
       expect(omniboxController._onNgModelChange).toHaveBeenCalled();
     });
+
+    it('should clear out the query when the ngModel is cleared', () => {
+      omniboxController.query = 'my query';
+      omniboxController.ngModel = '';
+
+      expect(omniboxController.query).toBe('');
+      expect(omniboxController.ngModel).toBe(null);
+    });
   });
 
   describe('modifying the ngModel should be detected when', () => {
@@ -306,6 +424,97 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController._onNgModelChange();
 
       expect(omniboxController.hasChoices).toBe(false);
+    });
+  });
+
+  describe('when navigating choices', () => {
+    beforeEach(() => {
+      omniboxController.multiple = true;
+      omniboxController.ngModel = ['one', 'two', 'three'];
+      omniboxController.fieldElement = Object.assign({}, fakeEl);
+    });
+
+    it('should not try to highlight a choice when multiple is false', () => {
+      omniboxController.multiple = false;
+
+      expect(omniboxController.highlightedChoice).toBe(null);
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+    });
+
+    it('should highlight the next choice', () => {
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+
+      omniboxController.highlightNextChoice();
+      expect(omniboxController.highlightedChoice).toBe(null); // No wrapping around
+    });
+
+    it('should highlight the previous choice', () => {
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null); // No wrapping around
+
+      omniboxController.highlightedChoice = 'three';
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightPreviousChoice();
+      expect(omniboxController.highlightedChoice).toBe(null);
+    });
+
+    it('should highlight the first choice', () => {
+      omniboxController.highlightFirstChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+
+      omniboxController.highlightedChoice = 'two';
+      omniboxController.highlightFirstChoice();
+      expect(omniboxController.highlightedChoice).toBe('one');
+    });
+
+    it('should highlight the last choice', () => {
+      omniboxController.highlightLastChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+
+      omniboxController.highlightedChoice = 'two';
+      omniboxController.highlightLastChoice();
+      expect(omniboxController.highlightedChoice).toBe('three');
+    });
+
+    it('should check if a choice is highlighted', () => {
+      omniboxController.highlightedChoice = 'one';
+
+      expect(omniboxController.isChoiceHighlighted('one')).toBe(true);
+      expect(omniboxController.isChoiceHighlighted('two')).toBe(false);
+      expect(omniboxController.isChoiceHighlighted('three')).toBe(false);
+      expect(omniboxController.isChoiceHighlighted(null)).toBe(false);
+    });
+
+    it('should focus the component when highlighting a choice', () => {
+      spyOn(omniboxController.element, 'focus');
+
+      omniboxController.highlightedChoice = 'one';
+      expect(omniboxController.element.focus).toHaveBeenCalled();
+    });
+
+    it('should focus the field when highlighting no choice', () => {
+      spyOn(omniboxController.fieldElement, 'focus');
+
+      omniboxController.highlightedChoice = null;
+      expect(omniboxController.fieldElement.focus).toHaveBeenCalled();
     });
   });
 });

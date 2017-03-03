@@ -4,6 +4,8 @@ import ngcModifySuggestionsTemplateFactory from '~/angularComponent/ngcModifySug
 
 /* eslint-disable indent */
 
+const noItemTemplate = '<ngc-omnibox-suggestions></ngc-omnibox-suggestions>';
+
 const unCategorizedTemplate = [
   '<ngc-omnibox-suggestions-item>',
     '{{suggestion.sample_item_text}}',
@@ -100,6 +102,15 @@ const noResultsElTemplateOutput = [
 describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () => {
   const templateCache = {put: () => {}};
   let ngcModifySuggestionsTemplate;
+
+  it('should throw an error if there is no ngc-omnibox-suggestions-item element', () => {
+    const document = jsdom.jsdom(noItemTemplate).defaultView.document;
+    const element = document.querySelector('ngc-omnibox-suggestions');
+
+    ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
+    expect(() => ngcModifySuggestionsTemplate(element))
+        .toThrowError('An ngcOmniboxSuggestionsItem is required.');
+  });
 
   it('should modify an un-categorized subcomponent', () => {
     const elementTemplate =
