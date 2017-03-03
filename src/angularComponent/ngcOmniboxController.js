@@ -159,6 +159,20 @@ export default class NgcOmniboxController {
     return this._highlightedIndex;
   }
 
+  set hideSuggestions(hide) {
+    this._hideSuggestions = hide;
+
+    // Clear out the suggestions when we hide the panel. This stops from showing old results for
+    // a hot second when we re-open the panel
+    if (hide === true && Array.isArray(this.suggestions)) {
+      this.suggestions.length = 0;
+    }
+  }
+
+  get hideSuggestions() {
+    return this._hideSuggestions;
+  }
+
   /**
   * Highlights a particular suggestion item.
   *
