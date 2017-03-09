@@ -218,6 +218,14 @@ behavior of the omnibox:
 The following &-callback functions are available for binding on the `ngc-omnibox` component in
 response to events:
 
+- `onFocus({event})`: An expression that's called when the component gets focus. This includes not
+just the input field, but the component in general. This is necessary since selecting the choices
+might blur the input field, but not the component itself. If you need to know when just the input
+field receives focus, you can use the `target` property of the event object to figure it out.
+- `onBlur({event})`: An expression that's called when the component loses focus. This also includes
+the entire component, not just the field. This blur event also has logic to reduce the noise that
+sometimes happens where it'll lose focus then immediately regain it, so the blur is called only
+after a timeout to make sure it doesn't re-receive focus first.
 - `onChosen({choice})`: An expression that's called when a suggestion is chosen. In its locals it
 has access to `choice`, which is the item that was chosen.
 - `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a

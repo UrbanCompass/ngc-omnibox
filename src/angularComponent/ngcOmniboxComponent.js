@@ -61,6 +61,8 @@ export default {
     isSelectable: '&',
     canShowSuggestions: '&',
     requireMatch: '<?',
+    onFocus: '&',
+    onBlur: '&',
     onChosen: '&',
     onUnchosen: '&',
     onShowSuggestions: '&',
