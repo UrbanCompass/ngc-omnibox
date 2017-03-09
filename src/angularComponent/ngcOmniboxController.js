@@ -43,18 +43,21 @@ export default class NgcOmniboxController {
       $scope.$apply();
     });
 
-    if (this.hideOnBlur !== 'false') {
-      let blurTimeout;
-      this.element.addEventListener('focus', () => {
-        clearTimeout(blurTimeout);
-      }, true);
-      this.element.addEventListener('blur', () => {
-        blurTimeout = setTimeout(() => {
+    let blurTimeout;
+    this.element.addEventListener('focus', (event) => {
+      clearTimeout(blurTimeout);
+      this.onFocus({event});
+    }, true);
+    this.element.addEventListener('blur', (event) => {
+      blurTimeout = setTimeout(() => {
+        if (this.hideOnBlur !== 'false') {
           this.hideSuggestions = true;
           $scope.$apply();
-        }, SUGGESTIONS_BLUR_THRESHOLD);
-      }, true);
-    }
+        }
+
+        this.onBlur({event});
+      }, SUGGESTIONS_BLUR_THRESHOLD);
+    }, true);
 
     // Remove the focus ring when the overall component is focused
     const styleSheets = this.doc.styleSheets;
