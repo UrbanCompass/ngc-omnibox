@@ -230,9 +230,9 @@ after a timeout to make sure it doesn't re-receive focus first.
 has access to `choice`, which is the item that was chosen.
 - `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a
 choice). In its locals it has access to `choice`, which is the item that was unchosen.
-- `onSuggestionsShown({suggestions})`: An expression that's called when the suggestions UI is shown.
+- `onShowSuggestions({suggestions})`: An expression that's called when the suggestions UI is shown.
 In its locals it has access to `suggestions`.
-- `onSuggestionsHidden({suggestions})`: An expression that's called when the suggestions UI is
+- `onHideSuggestions({suggestions})`: An expression that's called when the suggestions UI is
 hidden. In its locals it has access to `suggestions`.
 
 ## Omnibox Controller
