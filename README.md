@@ -291,6 +291,7 @@ startIndex override what the current suggestion should be.
 
 #### Choices (only work when `multiple` is set to `true`)
 
+- `omnibox.highlightChoice(choice)`: Highlights a choice from the list of choices.
 - `omnibox.highlightPreviousChoice()`: Highlights the previous suggestion before the currently
 higlighted one. If the first one is highlighted then the field is focused.
 - `omnibox.highlightNextChoice()`: Highlights the next suggestion after the currently higlighted
