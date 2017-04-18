@@ -446,6 +446,24 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       expect(omniboxController.highlightedChoice).toBe(null);
     });
 
+    it('should highlight a specific choice', () => {
+      expect(omniboxController.highlightedChoice).toBe(null);
+
+      omniboxController.highlightChoice('two');
+      expect(omniboxController.highlightedChoice).toBe('two');
+    });
+
+    it('should only highlight a choice that exists in the list of choices', () => {
+      omniboxController.highlightChoice('two');
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightChoice('bogus');
+      expect(omniboxController.highlightedChoice).toBe('two');
+
+      omniboxController.highlightChoice('three');
+      expect(omniboxController.highlightedChoice).toBe('three');
+    });
+
     it('should highlight the next choice', () => {
       omniboxController.highlightNextChoice();
       expect(omniboxController.highlightedChoice).toBe('one');
