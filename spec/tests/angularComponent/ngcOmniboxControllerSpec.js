@@ -457,7 +457,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.highlightChoice('two');
       expect(omniboxController.highlightedChoice).toBe('two');
 
-      omniboxController.highlightChoice('four');
+      omniboxController.highlightChoice('bogus');
       expect(omniboxController.highlightedChoice).toBe('two');
 
       omniboxController.highlightChoice('three');
