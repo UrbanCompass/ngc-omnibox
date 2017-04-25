@@ -47,6 +47,18 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     expect(newFieldEl.addEventListener).toHaveBeenCalled();
   });
 
+  it('should clear out the query when the ngModel changes when a match is required', () => {
+    omniboxController.ngModel = ['one'];
+    omniboxController.query = 'my query';
+    omniboxController.ngModel.push('two');
+
+    expect(omniboxController.query).toBe('my query');
+
+    omniboxController.requireMatch = true;
+    omniboxController.ngModel.push('three');
+    expect(omniboxController.query).toBe('');
+  });
+
   describe('when populating suggestions via the source function', () => {
     it('it should empty out the suggestions when resolving to a falsy value', (done, fail) => {
       omniboxController.query = 'my query';
