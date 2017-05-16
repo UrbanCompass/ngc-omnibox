@@ -52,6 +52,7 @@ export default class NgcOmniboxController {
       blurTimeout = setTimeout(() => {
         if (this.hideOnBlur !== 'false') {
           this.hideSuggestions = true;
+          this.highlightedChoice = null;
           $scope.$apply();
         }
 
