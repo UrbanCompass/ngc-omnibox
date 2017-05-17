@@ -56,10 +56,10 @@ export default class NgcOmniboxController {
           $scope.$apply();
         }
 
-        // Focus/blur events are finicky, especially when when the blur event fires when there's no
-        // other focus target (such as hitting the ESC key, manually calling blur(), or on mobile
-        // when hitting "Done" on the keyboard): the field can still be the focused element. This is
-        // a problem since it means if the user then immediately tries to focus the field again, the
+        // Focus/blur events are finicky, especially when the blur event fires when there's no other
+        // focus target (such as hitting the ESC key, manually calling blur(), or on mobile when
+        // hitting "Done" on the keyboard): the field can still be the focused element. This is a
+        // problem since it means if the user then immediately tries to focus the field again, the
         // focus event won't fire (since technically the field is already focused). To combat this,
         // we check here to make absolutely certain that the field isn't currently focused and if it
         // is, we'll focus our main component element which a.) has a tabindex so we know it's
