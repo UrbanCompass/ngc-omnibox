@@ -10,7 +10,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     querySelector() {},
     querySelectorAll() {},
     focus() {},
-    blur() {}
+    blur() {},
+    contains() {}
   };
 
   beforeEach(() => {
@@ -534,6 +535,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should focus the component when highlighting a choice', () => {
+      omniboxController.doc.activeElement = omniboxController.element;
       spyOn(omniboxController.element, 'focus');
 
       omniboxController.highlightedChoice = 'one';
@@ -541,6 +543,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should focus the field when highlighting no choice', () => {
+      omniboxController.doc.activeElement = omniboxController.element;
       spyOn(omniboxController.fieldElement, 'focus');
 
       omniboxController.highlightedChoice = null;
