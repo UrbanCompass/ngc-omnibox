@@ -627,6 +627,7 @@ export default class NgcOmniboxController {
 
     this._loadingTimeout = setTimeout(() => {
       this.shouldShowLoadingElement = true;
+      this.$scope && this.$scope.$apply();
     }, LOADING_SCREEN_THRESHOLD);
   }
 
