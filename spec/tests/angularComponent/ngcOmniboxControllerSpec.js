@@ -22,6 +22,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     omniboxController = new NgcOmniboxController([document], [fakeEl], {$apply() {}});
     omniboxController._suggestionElements = [fakeEl, fakeEl, fakeEl, fakeEl];
     omniboxController.isSelectable = () => {};
+    omniboxController.onChosen = () => {};
+    omniboxController.onUnchosen = () => {};
   });
 
   it('should inject $document, $element, and $scope', () => {
@@ -411,6 +413,79 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.ngModel.splice(1, 1);
       expect(omniboxController.ngModel.toString()).toBe('one,three');
       expect(omniboxController._onNgModelChange).toHaveBeenCalled();
+    });
+  });
+
+  describe('choosing and unchoosing', () => {
+    beforeEach(() => {
+      omniboxController.ngModel = ['one', 'two'];
+    });
+
+    it('should set the ngModel to the choice when multiple is off', () => {
+      omniboxController.choose('three');
+
+      expect(omniboxController.ngModel).toEqual('three');
+    });
+
+    it('should push the choice to an array when multiple is on', () => {
+      omniboxController.multiple = true;
+      omniboxController.choose('three');
+
+      expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
+    });
+
+    it('should update the ngModel when onChosen returns true', () => {
+      omniboxController.multiple = true;
+      omniboxController.onChosen = () => true;
+      omniboxController.choose('three');
+
+      expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
+    });
+
+    it('should not update the ngModel when onChosen returns false', () => {
+      omniboxController.multiple = true;
+      omniboxController.onChosen = () => false;
+      omniboxController.choose('three');
+
+      expect(omniboxController.ngModel).toEqual(['one', 'two']);
+    });
+
+    it('should not update the ngModel if an item is not selectable', () => {
+      omniboxController.multiple = true;
+      omniboxController.isSelectable = () => false;
+      omniboxController.choose('three');
+
+      expect(omniboxController.ngModel).toEqual(['one', 'two']);
+    });
+
+    it('should set the ngModel to null when unchoosing if multiple is off', () => {
+      omniboxController.ngModel = 'one';
+      omniboxController.unchoose('one');
+
+      expect(omniboxController.ngModel).toEqual(null);
+    });
+
+    it('should remove a choice from the ngModel array when unchoosing if multiple is on', () => {
+      omniboxController.multiple = true;
+      omniboxController.unchoose('two');
+
+      expect(omniboxController.ngModel).toEqual(['one']);
+    });
+
+    it('should update the ngModel when onUnchosen returns true', () => {
+      omniboxController.multiple = true;
+      omniboxController.onUnchosen = () => true;
+      omniboxController.unchoose('two');
+
+      expect(omniboxController.ngModel).toEqual(['one']);
+    });
+
+    it('should not update the ngModel when onUnchosen returns false', () => {
+      omniboxController.multiple = true;
+      omniboxController.onUnchosen = () => false;
+      omniboxController.unchoose('two');
+
+      expect(omniboxController.ngModel).toEqual(['one', 'two']);
     });
   });
 
