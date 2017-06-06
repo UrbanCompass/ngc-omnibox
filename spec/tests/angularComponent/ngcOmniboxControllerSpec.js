@@ -417,86 +417,87 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
   });
 
   describe('choosing and unchoosing', () => {
-    beforeEach(() => {
-      omniboxController.multiple = true;
-      omniboxController.ngModel = ['one', 'two'];
+    describe('when multiple is off', () => {
+      beforeEach(() => {
+        omniboxController.multiple = false;
+        omniboxController.ngModel = 'one';
+      });
+
+      it('should set the ngModel to the choice when multiple is off', () => {
+        omniboxController.choose('three');
+        expect(omniboxController.ngModel).toEqual('three');
+      });
+
+      it('should set the ngModel to null when unchoosing if multiple is off', () => {
+        omniboxController.unchoose('one');
+        expect(omniboxController.ngModel).toEqual(null);
+      });
     });
 
-    it('should set the ngModel to the choice when multiple is off', () => {
-      omniboxController.multiple = false;
-      omniboxController.ngModel = 'one';
-      omniboxController.choose('three');
+    describe('when multiple is on', () => {
+      beforeEach(() => {
+        omniboxController.multiple = true;
+        omniboxController.ngModel = ['one', 'two'];
+      });
 
-      expect(omniboxController.ngModel).toEqual('three');
-    });
-
-    it('should push the choice to an array when multiple is on', () => {
-      omniboxController.choose('three');
-
-      expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
-    });
-
-    it('should not update the ngModel when onChosen event prevents default', () => {
-      omniboxController.onChosen = ({$event}) => $event.preventDefault();
-      omniboxController.choose('three');
-
-      expect(omniboxController.ngModel).toEqual(['one', 'two']);
-    });
-
-    it('should update the ngModel when onChosen event prevents then peforms default', (done) => {
-      omniboxController.onChosen = ({$event}) => {
-        $event.preventDefault();
-        expect(omniboxController.ngModel).toEqual(['one', 'two']);
-
-        $event.performDefault();
+      it('should push the choice to an array', () => {
+        omniboxController.choose('three');
         expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
+      });
 
-        done();
-      };
+      it('should not update the ngModel when onChosen event prevents default', () => {
+        omniboxController.onChosen = ({$event}) => $event.preventDefault();
+        omniboxController.choose('three');
 
-      omniboxController.choose('three');
-    });
-
-    it('should not update the ngModel when choosing if an item is not selectable', () => {
-      omniboxController.isSelectable = () => false;
-      omniboxController.choose('three');
-
-      expect(omniboxController.ngModel).toEqual(['one', 'two']);
-    });
-
-    it('should set the ngModel to null when unchoosing if multiple is off', () => {
-      omniboxController.multiple = false;
-      omniboxController.ngModel = 'one';
-      omniboxController.unchoose('one');
-
-      expect(omniboxController.ngModel).toEqual(null);
-    });
-
-    it('should remove a choice from the ngModel array when unchoosing if multiple is on', () => {
-      omniboxController.unchoose('two');
-
-      expect(omniboxController.ngModel).toEqual(['one']);
-    });
-
-    it('should not update the ngModel when onUnchosen event prevents default', () => {
-      omniboxController.onUnchosen = ({$event}) => $event.preventDefault();
-      omniboxController.unchoose('two');
-
-      expect(omniboxController.ngModel).toEqual(['one', 'two']);
-    });
-
-    it('should update the ngModel when onUnchosen event prevents then peforms default', (done) => {
-      omniboxController.onUnchosen = ({$event}) => {
-        $event.preventDefault();
         expect(omniboxController.ngModel).toEqual(['one', 'two']);
+      });
 
-        $event.performDefault();
+      it('should update the ngModel when onChosen event prevents then peforms default', (done) => {
+        omniboxController.onChosen = ({$event}) => {
+          $event.preventDefault();
+          expect(omniboxController.ngModel).toEqual(['one', 'two']);
+
+          $event.performDefault();
+          expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
+
+          done();
+        };
+
+        omniboxController.choose('three');
+      });
+
+      it('should not update the ngModel when choosing if an item is not selectable', () => {
+        omniboxController.isSelectable = () => false;
+        omniboxController.choose('three');
+
+        expect(omniboxController.ngModel).toEqual(['one', 'two']);
+      });
+
+      it('should remove a choice from the ngModel array when unchoosing', () => {
+        omniboxController.unchoose('two');
         expect(omniboxController.ngModel).toEqual(['one']);
+      });
 
-        done();
-      };
+      it('should not update the ngModel when onUnchosen event prevents default', () => {
+        omniboxController.onUnchosen = ({$event}) => $event.preventDefault();
+        omniboxController.unchoose('two');
 
-      omniboxController.unchoose('two');
+        expect(omniboxController.ngModel).toEqual(['one', 'two']);
+      });
+
+      it('should update the ngModel when onUnchosen event prevents then peforms default', (done) => {
+        omniboxController.onUnchosen = ({$event}) => {
+          $event.preventDefault();
+          expect(omniboxController.ngModel).toEqual(['one', 'two']);
+
+          $event.performDefault();
+          expect(omniboxController.ngModel).toEqual(['one']);
+
+          done();
+        };
+
+        omniboxController.unchoose('two');
+      });
     });
   });
 
