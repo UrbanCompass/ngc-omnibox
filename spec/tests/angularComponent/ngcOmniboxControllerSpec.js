@@ -418,24 +418,25 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   describe('choosing and unchoosing', () => {
     beforeEach(() => {
+      omniboxController.multiple = true;
       omniboxController.ngModel = ['one', 'two'];
     });
 
     it('should set the ngModel to the choice when multiple is off', () => {
+      omniboxController.multiple = false;
+      omniboxController.ngModel = 'one';
       omniboxController.choose('three');
 
       expect(omniboxController.ngModel).toEqual('three');
     });
 
     it('should push the choice to an array when multiple is on', () => {
-      omniboxController.multiple = true;
       omniboxController.choose('three');
 
       expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
     });
 
     it('should not update the ngModel when onChosen event prevents default', () => {
-      omniboxController.multiple = true;
       omniboxController.onChosen = ({$event}) => $event.preventDefault();
       omniboxController.choose('three');
 
@@ -443,7 +444,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should update the ngModel when onChosen event prevents then peforms default', (done) => {
-      omniboxController.multiple = true;
       omniboxController.onChosen = ({$event}) => {
         $event.preventDefault();
         expect(omniboxController.ngModel).toEqual(['one', 'two']);
@@ -458,7 +458,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should not update the ngModel when choosing if an item is not selectable', () => {
-      omniboxController.multiple = true;
       omniboxController.isSelectable = () => false;
       omniboxController.choose('three');
 
@@ -466,6 +465,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should set the ngModel to null when unchoosing if multiple is off', () => {
+      omniboxController.multiple = false;
       omniboxController.ngModel = 'one';
       omniboxController.unchoose('one');
 
@@ -473,14 +473,12 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should remove a choice from the ngModel array when unchoosing if multiple is on', () => {
-      omniboxController.multiple = true;
       omniboxController.unchoose('two');
 
       expect(omniboxController.ngModel).toEqual(['one']);
     });
 
     it('should not update the ngModel when onUnchosen event prevents default', () => {
-      omniboxController.multiple = true;
       omniboxController.onUnchosen = ({$event}) => $event.preventDefault();
       omniboxController.unchoose('two');
 
@@ -488,7 +486,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     });
 
     it('should update the ngModel when onUnchosen event prevents then peforms default', (done) => {
-      omniboxController.multiple = true;
       omniboxController.onUnchosen = ({$event}) => {
         $event.preventDefault();
         expect(omniboxController.ngModel).toEqual(['one', 'two']);
