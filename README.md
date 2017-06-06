@@ -226,10 +226,18 @@ field receives focus, you can use the `target` property of the event object to f
 the entire component, not just the field. This blur event also has logic to reduce the noise that
 sometimes happens where it'll lose focus then immediately regain it, so the blur is called only
 after a timeout to make sure it doesn't re-receive focus first.
-- `onChosen({choice})`: An expression that's called when a suggestion is chosen. In its locals it
-has access to `choice`, which is the item that was chosen.
-- `onUnchosen({choice})`: An expression that's called when a suggestion is unchosen (removed as a
-choice). In its locals it has access to `choice`, which is the item that was unchosen.
+- `onChosen({choice, $event})`: An expression that's called when a suggestion is chosen. In its
+locals it has access to `choice`, which is the item that was chosen, and an `$event` object. The
+`$event` object has the following properties: `isDefaultPrevented`, `preventDefault()`, and
+`performDefault()`. If `isDefaultPrevented` is set to true by calling `preventDefault()` from this
+callback function, then the choice is not automatically added to the ngModel. If you then do want
+the choice to be added, you can call `performDefault()` to do so.
+- `onUnchosen({choice, $event})`: An expression that's called when a suggestion is unchosen (removed as a
+choice). In its locals it has access to `choice`, which is the item that was unchosen, and an
+`$event` object. The `$event` object has the following properties: `isDefaultPrevented`,
+`preventDefault()`, and  `performDefault()`. If `isDefaultPrevented` is set to true by calling
+`preventDefault()` from this callback function, then the choice is not automatically removed from
+the ngModel. If you then do want the choice to be removed, you can call `performDefault()` to do so.
 - `onShowSuggestions({suggestions})`: An expression that's called when the suggestions UI is shown.
 In its locals it has access to `suggestions`.
 - `onHideSuggestions({suggestions})`: An expression that's called when the suggestions UI is

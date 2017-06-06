@@ -395,18 +395,28 @@ export default class NgcOmniboxController {
   choose(item, shouldFocusField = true) {
     if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
         this.isSelectable({suggestion: item}) !== false) {
-      if (this.multiple) {
-        this.ngModel = this.ngModel || [];
-        this.ngModel.push(item);
-      } else {
-        this.ngModel = item;
-      }
 
-      this.onChosen({choice: item});
+      const $event = {
+        isDefaultPrevented: false,
+        preventDefault: () => $event.isDefaultPrevented = true,
+        performDefault: () => {
+          $event.isDefaultPrevented = false;
 
-      this.query = '';
-      shouldFocusField && this.focus();
-      this.hideSuggestions = true;
+          if (this.multiple) {
+            this.ngModel = this.ngModel || [];
+            this.ngModel.push(item);
+          } else {
+            this.ngModel = item;
+          }
+
+          this.query = '';
+          shouldFocusField && this.focus();
+          this.hideSuggestions = true;
+        }
+      };
+
+      this.onChosen({choice: item, $event});
+      !$event.isDefaultPrevented && $event.performDefault();
     }
   }
 
@@ -419,15 +429,22 @@ export default class NgcOmniboxController {
    */
   unchoose(item, shouldFocusField = true) {
     if (item) {
-      if (Array.isArray(this.ngModel)) {
-        this.ngModel.splice(this.ngModel.indexOf(item), 1);
-      } else if (!this.multiple) {
-        this.ngModel = null;
-      }
+      const $event = {
+        isDefaultPrevented: false,
+        preventDefault: () => $event.isDefaultPrevented = true,
+        performDefault: () => {
+          if (Array.isArray(this.ngModel)) {
+            this.ngModel.splice(this.ngModel.indexOf(item), 1);
+          } else if (!this.multiple) {
+            this.ngModel = null;
+          }
 
-      this.onUnchosen({choice: item});
+          shouldFocusField && this.focus();
+        }
+      };
 
-      shouldFocusField && this.focus();
+      this.onUnchosen({choice: item, $event});
+      !$event.isDefaultPrevented && $event.performDefault();
     }
   }
 
