@@ -466,6 +466,21 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
         omniboxController.choose('three');
       });
 
+      it('should not add dupes to ngModel when onChosen event prevents/peforms default', (done) => {
+        omniboxController.onChosen = ({$event}) => {
+          $event.preventDefault();
+
+          omniboxController.ngModel.push('three');
+
+          $event.performDefault();
+          expect(omniboxController.ngModel).toEqual(['one', 'two', 'three']);
+
+          done();
+        };
+
+        omniboxController.choose('three');
+      });
+
       it('should not update the ngModel when choosing if an item is not selectable', () => {
         omniboxController.isSelectable = () => false;
         omniboxController.choose('three');
