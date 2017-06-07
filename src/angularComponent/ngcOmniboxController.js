@@ -393,8 +393,7 @@ export default class NgcOmniboxController {
    * @param {Boolean} shouldFocusField -- Whether to focus the input field after choosing
    */
   choose(item, shouldFocusField = true) {
-    if (item && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0) &&
-        this.isSelectable({suggestion: item}) !== false) {
+    if (item && this.isSelectable({suggestion: item}) !== false) {
 
       const $event = {
         isDefaultPrevented: false,
@@ -402,21 +401,21 @@ export default class NgcOmniboxController {
         performDefault: () => {
           $event.isDefaultPrevented = false;
 
-          if (this.multiple) {
+          if (this.multiple && !(Array.isArray(this.ngModel) && this.ngModel.indexOf(item) >= 0)) {
             this.ngModel = this.ngModel || [];
             this.ngModel.push(item);
-          } else {
+          } else if (!this.multiple) {
             this.ngModel = item;
           }
-
-          this.query = '';
-          shouldFocusField && this.focus();
-          this.hideSuggestions = true;
         }
       };
 
       this.onChosen({choice: item, $event});
       !$event.isDefaultPrevented && $event.performDefault();
+
+      this.query = '';
+      shouldFocusField && this.focus();
+      this.hideSuggestions = true;
     }
   }
 
@@ -433,7 +432,7 @@ export default class NgcOmniboxController {
         isDefaultPrevented: false,
         preventDefault: () => $event.isDefaultPrevented = true,
         performDefault: () => {
-          if (Array.isArray(this.ngModel)) {
+          if (this.multiple && Array.isArray(this.ngModel)) {
             this.ngModel.splice(this.ngModel.indexOf(item), 1);
           } else if (!this.multiple) {
             this.ngModel = null;
