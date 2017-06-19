@@ -152,14 +152,14 @@ are made to your data.
 
 The following bindings are available on the main `<ngc-omnibox>` component:
 
-- `source({query, suggestions}) {Promise}` _(Required)_: An expression that populates the list of
-suggestions by returning a `Promise` that resolves to an array of suggestions. The individual
-suggestions can be of any type, but the list of suggestions must be an array. If you wish to provide
-nested suggestions (such as category headers, or a tree structure) then you must provide a key
-called `children` on your suggestion which will then be looped through to find more children, or the
-end of the list. In its locals it has access to a string called `query` with the current query in
-the input field, and an array called `suggestions`, which is the current list of suggestions being
-displayed.
+- `source({query, suggestions, omnibox}) {Promise}` _(Required)_: An expression that populates the
+list of suggestions by returning a `Promise` that resolves to an array of suggestions. The
+individual suggestions can be of any type, but the list of suggestions must be an array. If you wish
+to provide nested suggestions (such as category headers, or a tree structure) then you must provide
+a key called `children` on your suggestion which will then be looped through to find more children,
+or the end of the list. In its locals it has access to a string called `query` with the current
+query in the input field, and an array called `suggestions`, which is the current list of
+suggestions being displayed.
 To display a hint to the user in addition to suggestions, resolve the promise with an object that
 has keys for `hint` and `suggestions`: `{hint: 'My hint', suggestions: [...]}`. A hint is displayed
 to the right of the text that has been input by the user. Pressing RIGHT on the keyboard replaces
@@ -184,15 +184,15 @@ you need to support a "free-text" suggestion with multiple on, be sure to add it
 function as a suggestion.
 - `hideOnBlur {Boolean}`: Whether the list of suggestions should automatically hide when the
 component itself loses focus. Hitting ESC will always close the list of suggestions.
-- `isSelectable({suggestion}) {Boolean}`: An expression that should evaluate to a Boolean that
-determines if a suggestion is able to be interacted with. This expression will be executed whenever
-a suggestion is attempted to be highlighted either by the keyboard or mouse. In its locals it has
-access to an object called `suggestion` which is the current suggestion that is being interacted
-with. A non-selectable suggestion cannot be clicked on, hovered over, or interacted with via the
-keyboard.
-- `canShowSuggestions({query}) {Boolean}`: An expression that should evaluate to a Boolean that
-determines whether or not the list of suggestions can be displayed. In its locals it has access to a
-string called `query` which is the current query being searched on.
+- `isSelectable({suggestion, omnibox}) {Boolean}`: An expression that should evaluate to a Boolean
+that determines if a suggestion is able to be interacted with. This expression will be executed
+whenever a suggestion is attempted to be highlighted either by the keyboard or mouse. In its locals
+it has access to an object called `suggestion` which is the current suggestion that is being
+interacted with. A non-selectable suggestion cannot be clicked on, hovered over, or interacted with
+via the keyboard.
+- `canShowSuggestions({query, omnibox}) {Boolean}`: An expression that should evaluate to a Boolean
+that determines whether or not the list of suggestions can be displayed. In its locals it has access
+to a string called `query` which is the current query being searched on.
 - `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
 matched suggestion is required for the field (defaults to `false`). This has a few effects on the
 behavior of the omnibox:
@@ -218,30 +218,31 @@ behavior of the omnibox:
 The following &-callback functions are available for binding on the `ngc-omnibox` component in
 response to events:
 
-- `onFocus({event})`: An expression that's called when the component gets focus. This includes not
-just the input field, but the component in general. This is necessary since selecting the choices
-might blur the input field, but not the component itself. If you need to know when just the input
-field receives focus, you can use the `target` property of the event object to figure it out.
-- `onBlur({event})`: An expression that's called when the component loses focus. This also includes
-the entire component, not just the field. This blur event also has logic to reduce the noise that
-sometimes happens where it'll lose focus then immediately regain it, so the blur is called only
-after a timeout to make sure it doesn't re-receive focus first.
-- `onChosen({choice, $event})`: An expression that's called when a suggestion is chosen. In its
-locals it has access to `choice`, which is the item that was chosen, and an `$event` object. The
+- `onFocus({event, omnibox})`: An expression that's called when the component gets focus. This
+includes not just the input field, but the component in general. This is necessary since selecting
+the choices might blur the input field, but not the component itself. If you need to know when just
+the input field receives focus, you can use the `target` property of the event object to figure it
+out.
+- `onBlur({event, omnibox})`: An expression that's called when the component loses focus. This also
+includes the entire component, not just the field. This blur event also has logic to reduce the
+noise that sometimes happens where it'll lose focus then immediately regain it, so the blur is
+called only after a timeout to make sure it doesn't re-receive focus first.
+- `onChosen({choice, $event, omnibox})`: An expression that's called when a suggestion is chosen. In
+its locals it has access to `choice`, which is the item that was chosen, and an `$event` object. The
 `$event` object has the following properties: `isDefaultPrevented`, `preventDefault()`, and
 `performDefault()`. If `isDefaultPrevented` is set to true by calling `preventDefault()` from this
 callback function, then the choice is not automatically added to the ngModel. If you then do want
 the choice to be added, you can call `performDefault()` to do so.
-- `onUnchosen({choice, $event})`: An expression that's called when a suggestion is unchosen (removed as a
-choice). In its locals it has access to `choice`, which is the item that was unchosen, and an
-`$event` object. The `$event` object has the following properties: `isDefaultPrevented`,
+- `onUnchosen({choice, $event, omnibox})`: An expression that's called when a suggestion is unchosen
+(removed as a choice). In its locals it has access to `choice`, which is the item that was unchosen,
+and an `$event` object. The `$event` object has the following properties: `isDefaultPrevented`,
 `preventDefault()`, and  `performDefault()`. If `isDefaultPrevented` is set to true by calling
 `preventDefault()` from this callback function, then the choice is not automatically removed from
 the ngModel. If you then do want the choice to be removed, you can call `performDefault()` to do so.
-- `onShowSuggestions({suggestions})`: An expression that's called when the suggestions UI is shown.
-In its locals it has access to `suggestions`.
-- `onHideSuggestions({suggestions})`: An expression that's called when the suggestions UI is
-hidden. In its locals it has access to `suggestions`.
+- `onShowSuggestions({suggestions, omnibox})`: An expression that's called when the suggestions UI
+is shown. In its locals it has access to `suggestions`.
+- `onHideSuggestions({suggestions, omnibox})`: An expression that's called when the suggestions UI
+is hidden. In its locals it has access to `suggestions`.
 
 ## Omnibox Controller
 
