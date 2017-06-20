@@ -1,4 +1,4 @@
-import {KEY, isSelectKey, isVerticalMovementKey} from '../keyboard.js';
+import {KEY, isModifierKey, isSelectKey, isVerticalMovementKey} from '../keyboard.js';
 
 // Protects against multiple key events firing in a row without disallowing holding down the key
 const KEY_REPEAT_DELAY = 150;
@@ -595,7 +595,9 @@ export default class NgcOmniboxController {
     }
   }
 
-  _handleKeyUp({keyCode, shiftKey}) {
+  _handleKeyUp(event) {
+    const {keyCode} = event;
+
     if (this.hasChoices) {
       if (this.doc.activeElement === this._fieldElement) {
         this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
@@ -636,7 +638,7 @@ export default class NgcOmniboxController {
           const choice = this.highlightedChoice;
           this.highlightNextChoice();
           this.unchoose(choice, false);
-        } else {
+        } else if (!isModifierKey(event)) {
           // We can assume the user's keypress isn't meant to modify the highlighted choice and
           // they instead just want to type as normal on the field, so we'll deselect the choice
           // and focus the field which allows the user to type as normal
@@ -645,7 +647,7 @@ export default class NgcOmniboxController {
           // The field didn't have focus on keydown so it wasn't able to write out the character
           // the user pressed, so we need to do that manually
           const str = String.fromCharCode(keyCode);
-          this._fieldElement.value += !shiftKey ? str.toLowerCase() : str;
+          this._fieldElement.value += !event.shiftKey ? str.toLowerCase() : str;
         }
       }
     }
