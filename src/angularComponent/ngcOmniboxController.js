@@ -46,7 +46,7 @@ export default class NgcOmniboxController {
     let blurTimeout;
     this.element.addEventListener('focus', (event) => {
       clearTimeout(blurTimeout);
-      this.onFocus({event});
+      this.onFocus({event, omnibox: this});
     }, true);
     this.element.addEventListener('blur', (event) => {
       blurTimeout = setTimeout(() => {
@@ -56,7 +56,7 @@ export default class NgcOmniboxController {
           $scope.$apply();
         }
 
-        this.onBlur({event});
+        this.onBlur({event, omnibox: this});
       }, SUGGESTIONS_BLUR_THRESHOLD);
     }, true);
 
@@ -190,7 +190,7 @@ export default class NgcOmniboxController {
 
     const [uiItemMatch] = this._suggestionsUiList.filter((uiItem) => uiItem.data === item);
 
-    if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data}) !== false) {
+    if (uiItemMatch && this.isSelectable({suggestion: uiItemMatch.data, omnibox: this}) !== false) {
       this.highlightedIndex = uiItemMatch.index;
     }
   }
@@ -224,7 +224,7 @@ export default class NgcOmniboxController {
     }
 
     const suggestion = this._suggestionsUiList[newIndex];
-    if (suggestion && this.isSelectable({suggestion: suggestion.data}) === false) {
+    if (suggestion && this.isSelectable({suggestion: suggestion.data, omnibox: this}) === false) {
       if (typeof startHighlightIndex !== 'number') {
         startHighlightIndex = newIndex;
       }
@@ -266,7 +266,7 @@ export default class NgcOmniboxController {
     }
 
     const suggestion = this._suggestionsUiList[newIndex];
-    if (suggestion && this.isSelectable({suggestion: suggestion.data}) === false) {
+    if (suggestion && this.isSelectable({suggestion: suggestion.data, omnibox: this}) === false) {
       if (typeof startHighlightIndex !== 'number') {
         startHighlightIndex = newIndex;
       }
@@ -393,7 +393,7 @@ export default class NgcOmniboxController {
    * @param {Boolean} shouldFocusField -- Whether to focus the input field after choosing
    */
   choose(item, shouldFocusField = true) {
-    if (item && this.isSelectable({suggestion: item}) !== false) {
+    if (item && this.isSelectable({suggestion: item, omnibox: this}) !== false) {
 
       const $event = {
         isDefaultPrevented: false,
@@ -410,7 +410,7 @@ export default class NgcOmniboxController {
         }
       };
 
-      this.onChosen({choice: item, $event});
+      this.onChosen({choice: item, $event, omnibox: this});
       !$event.isDefaultPrevented && $event.performDefault();
 
       this.query = '';
@@ -442,7 +442,7 @@ export default class NgcOmniboxController {
         }
       };
 
-      this.onUnchosen({choice: item, $event});
+      this.onUnchosen({choice: item, $event, omnibox: this});
       !$event.isDefaultPrevented && $event.performDefault();
     }
   }
@@ -457,14 +457,16 @@ export default class NgcOmniboxController {
 
     this._shouldShowSuggestions = !this.hideSuggestions &&
         (this.shouldShowLoadingElement || !!this.suggestions) &&
-        this.canShowSuggestions({query: this.query}) !== false;
+        this.canShowSuggestions({query: this.query, omnibox: this}) !== false;
 
     if (this._shouldShowSuggestions &&
         this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
-      this.onShowSuggestions && this.onShowSuggestions({suggestions: this.suggestions});
+      this.onShowSuggestions && this.onShowSuggestions({suggestions: this.suggestions,
+        omnibox: this});
     } else if (!this._shouldShowSuggestions &&
         this._shouldShowSuggestions !== shouldShowSuggestionsCurrently) {
-      this.onHideSuggestions && this.onHideSuggestions({suggestions: this.suggestions});
+      this.onHideSuggestions && this.onHideSuggestions({suggestions: this.suggestions,
+        omnibox: this});
     }
 
     return this._shouldShowSuggestions;
@@ -483,7 +485,7 @@ export default class NgcOmniboxController {
     this._showLoading();
     this.hideSuggestions = false;
 
-    const promise = this.source({query: this.query, suggestions: this.suggestions});
+    const promise = this.source({query: this.query, suggestions: this.suggestions, omnibox: this});
     this._sourceFunctionPromise = promise;
 
     return promise.then((suggestions) => {
