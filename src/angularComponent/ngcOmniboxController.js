@@ -482,6 +482,7 @@ export default class NgcOmniboxController {
     this.hint = null;
 
     this.highlightedIndex = -1; // Forcibly select nothing
+    this.highlightedChoice = null;
     this._showLoading();
     this.hideSuggestions = false;
 
@@ -594,7 +595,7 @@ export default class NgcOmniboxController {
     }
   }
 
-  _handleKeyUp({keyCode}) {
+  _handleKeyUp({keyCode, shiftKey}) {
     if (this.hasChoices) {
       if (this.doc.activeElement === this._fieldElement) {
         this.selectionStartKeyUp = this.doc.activeElement.selectionStart;
@@ -635,6 +636,16 @@ export default class NgcOmniboxController {
           const choice = this.highlightedChoice;
           this.highlightNextChoice();
           this.unchoose(choice, false);
+        } else {
+          // We can assume the user's keypress isn't meant to modify the highlighted choice and
+          // they instead just want to type as normal on the field, so we'll deselect the choice
+          // and focus the field which allows the user to type as normal
+          this.highlightedChoice = null;
+          this._fieldElement.focus();
+          // The field didn't have focus on keydown so it wasn't able to write out the character
+          // the user pressed, so we need to do that manually
+          const str = String.fromCharCode(keyCode);
+          this._fieldElement.value += !shiftKey ? str.toLowerCase() : str;
         }
       }
     }

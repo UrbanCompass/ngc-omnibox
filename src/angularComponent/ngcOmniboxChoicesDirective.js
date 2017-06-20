@@ -46,7 +46,6 @@ export default function ngcOmniboxChoicesDirective() {
         token.setAttribute('tabindex', -1);
         token.setAttribute('ng-repeat', 'choice in omnibox.ngModel');
         token.setAttribute('ng-focus', 'omnibox.highlightedChoice = choice');
-        token.setAttribute('ng-blur', 'omnibox.highlightedChoice = null');
       } else {
         throw new Error('ngc-omnibox-choices requires a root HTML element');
       }
