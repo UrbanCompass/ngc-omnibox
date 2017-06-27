@@ -521,7 +521,9 @@ export default class NgcOmniboxController {
     if (!this.query) {
       this.hideSuggestions = true;
       this.hint = null;
-    } else {
+    }
+
+    if (this.canShowSuggestions({query: this.query, omnibox: this}) !== false) {
       this.updateSuggestions();
     }
   }
