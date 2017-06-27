@@ -24,6 +24,8 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     omniboxController.isSelectable = () => {};
     omniboxController.onChosen = () => {};
     omniboxController.onUnchosen = () => {};
+    omniboxController.canShowSuggestions = () => {};
+    omniboxController.source = () => Promise.resolve([]);
   });
 
   it('should inject $document, $element, and $scope', () => {
