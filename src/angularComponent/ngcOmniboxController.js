@@ -523,7 +523,8 @@ export default class NgcOmniboxController {
       this.hint = null;
     }
 
-    if (this.canShowSuggestions({query: this.query, omnibox: this}) !== false) {
+    const isFieldFocused = this.doc.activeElement === this._fieldElement;
+    if (isFieldFocused && this.canShowSuggestions({query: this.query, omnibox: this}) !== false) {
       this.updateSuggestions();
     }
   }
