@@ -76,7 +76,7 @@ export default function ngcOmniboxFieldDirective($document, $window) {
       return {
         pre(scope, iElement, iAttrs, {omnibox}) {
           scope.omnibox = omnibox;
-          omnibox.fieldElement = input;
+          omnibox.fieldElement = iElement[0].querySelector('input');
 
           scope.$watch('omnibox.hint', (hint) => {
             const position = $window.getComputedStyle(el).position;

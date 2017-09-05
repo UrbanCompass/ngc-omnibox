@@ -1,6 +1,6 @@
 {
   "name": "ngc-omnibox",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A modern, flexible, Angular 1.x autocomplete library with limited assumptions.",
   "main": "dist/ngc-omnibox.js",
   "scripts": {
@@ -21,20 +21,20 @@
   },
   "homepage": "https://github.com/UrbanCompass/ngc-omnibox#readme",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-loader": "^6.2.10",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^6.4.1",
     "babel-plugin-istanbul": "^3.1.2",
-    "babel-preset-env": "^1.0.2",
-    "babel-root-import": "^4.1.5",
-    "eslint": "^3.12.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jasmine": "^2.2.0",
-    "html-loader": "^0.4.4",
-    "jasmine": "^2.5.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-root-import": "^4.1.8",
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jasmine": "^2.8.4",
+    "html-loader": "^0.4.5",
+    "jasmine": "^2.8.0",
     "jasmine-node": "^1.14.5",
-    "jsdom": "^9.9.1",
-    "nyc": "^10.1.2",
-    "webpack": "^2.2.0-rc.0"
+    "jsdom": "^9.12.0",
+    "nyc": "^10.3.2",
+    "webpack": "^2.7.0"
   },
   "dependencies": {
     "angular": "^1.5.6"
