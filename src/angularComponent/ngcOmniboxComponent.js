@@ -25,6 +25,8 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  *     controls whether the `ngModel` will be an array (multiple is on) or a single choice (off).
  * - `hideOnBlur {Boolean}`: Whether the list of suggestions should automatically hide when the
  *       component itself loses focus. Hitting ESC will always close the list of suggestions.
+ * - `hideOnChosen {Boolean}`: Whether the list of suggestions should automatically hide when the
+ *       user chooses a suggestion. Defaults to true.
  * - `isSelectable({suggestion}) {Boolean}`: An expression that should evaluate to a Boolean that
  *       determines if a suggestion is able to be interacted with. This expression will be executed
  *       whenever a suggestion is attempted to be highlighted either by the keyboard or mouse. It
@@ -58,6 +60,7 @@ export default {
     ngDisabled: '&',
     multiple: '<?',
     hideOnBlur: '@',
+    hideOnChosen: '<?',
     isSelectable: '&',
     canShowSuggestions: '&',
     requireMatch: '<?',

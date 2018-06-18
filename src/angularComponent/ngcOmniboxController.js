@@ -51,6 +51,9 @@ export default class NgcOmniboxController {
     this.element.addEventListener('blur', (event) => {
       blurTimeout = setTimeout(() => {
         if (this.hideOnBlur !== 'false') {
+          if (this.requireMatch && this.hideOnChosen === false) {
+            this.query = '';
+          }
           this.hideSuggestions = true;
           this.highlightedChoice = null;
           $scope.$apply();
@@ -413,9 +416,11 @@ export default class NgcOmniboxController {
       this.onChosen({choice: item, $event, omnibox: this});
       !$event.isDefaultPrevented && $event.performDefault();
 
-      this.query = '';
       shouldFocusField && this.focus();
-      this.hideSuggestions = true;
+      if (this.hideOnChosen !== false) {
+        this.query = '';
+        this.hideSuggestions = true;
+      }
     }
   }
 
