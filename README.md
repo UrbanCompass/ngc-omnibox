@@ -25,7 +25,7 @@ A simple implementation that renders a list of suggestions:
   <ngc-omnibox-field></ngc-omnibox-field>
 
   <ngc-omnibox-suggestions>
-    <ngc-omnibox-suggestion-item>{{suggestion.title}}</ngc-omnibox-suggestion-item>
+    <ngc-omnibox-suggestions-item>{{suggestion.title}}</ngc-omnibox-suggestions-item>
 
     <ngc-omnibox-suggestion-loading>Loading...</ngc-omnibox-suggestion-loading>
     <ngc-omnibox-suggestion-empty>No results...</ngc-omnibox-suggestion-empty>
@@ -56,9 +56,9 @@ category:
         Category: {{suggestion.title}}
       </ngc-omnibox-suggestion-header>
 
-      <ngc-omnibox-sugestion-item>
+      <ngc-omnibox-suggestions-item>
         {{suggestion.title}} - {{suggestion.subtitle}}
-      <ngc-omnibox-suggestion-item>
+      <ngc-omnibox-suggestions-item>
     </ngc-omnibox-category>
 
     <ngc-omnibox-suggestion-loading>Loading...</ngc-omnibox-suggestion-loading>
@@ -328,8 +328,8 @@ _Note that since we're parsing a String as HTML, the filter will throw a warning
   <ngc-omnibox-field></ngc-omnibox-field>
 
   <ngc-omnibox-suggestions>
-    <ngc-omnibox-suggestion-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query">
-    </ngc-omnibox-suggestion-item>
+    <ngc-omnibox-suggestions-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query">
+    </ngc-omnibox-suggestions-item>
   </ngc-omnibox-suggestions>
 </ngc-omnibox>
 ```
@@ -346,8 +346,8 @@ be [found on MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
   <ngc-omnibox-field></ngc-omnibox-field>
 
   <ngc-omnibox-suggestions>
-    <ngc-omnibox-suggestion-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query:'<em class=\'my-highlighted-text\'>$&</em>'">
-    </ngc-omnibox-suggestion-item>
+    <ngc-omnibox-suggestions-item ng-bind-html="suggestion.title | ngcOmniboxHighlightMatch:omnibox.query:'<em class=\'my-highlighted-text\'>$&</em>'">
+    </ngc-omnibox-suggestions-item>
   </ngc-omnibox-suggestions>
 </ngc-omnibox>
 ```
