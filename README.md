@@ -184,6 +184,8 @@ you need to support a "free-text" suggestion with multiple on, be sure to add it
 function as a suggestion.
 - `hideOnBlur {Boolean}`: Whether the list of suggestions should automatically hide when the
 component itself loses focus. Hitting ESC will always close the list of suggestions.
+- `hideOnChosen {Boolean}`: Whether the list of suggestions should automatically hide when the
+user chooses a suggestion. Defaults to true.
 - `isSelectable({suggestion, omnibox}) {Boolean}`: An expression that should evaluate to a Boolean
 that determines if a suggestion is able to be interacted with. This expression will be executed
 whenever a suggestion is attempted to be highlighted either by the keyboard or mouse. In its locals
