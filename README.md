@@ -214,6 +214,10 @@ behavior of the omnibox:
        highlight the first suggestion, and going to the beginning and hitting up will highlight the
        last.
     4. Hitting ESC will close the list of suggestions and clear the field.
+- `scrollIntoViewAlignToTop {Boolean}`: An expression that should evaluate to a Boolean that
+determines the value of AlignToTop that is given into scrollIntoView() when scrolling Omnibox
+suggestions into view.  Defaults to false.  It's useful to configure this when using the Omnibox
+inside of a scrollable container.
 
 ## Omnibox Event Bindings
 

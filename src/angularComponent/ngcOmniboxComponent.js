@@ -38,6 +38,10 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  *       scope, access to a string called `query` which is the current query being searched on.
  * - `requireMatch {Boolean}`: An expression that should evaluate to a Boolean that determines if a
  *       matched suggestion is required for the field (defaults to `false`).
+ * - `scrollIntoViewAlignToTop {Boolean}`: An expression that should evaluate to a Boolean that
+ *       determines the value of AlignToTop that is given into scrollIntoView() when scrolling
+ *       Omnibox suggestions into view.  Defaults to false.  It's useful to configure this when
+ *       using the Omnibox inside of a scrollable container.
  *
  * The component has no template, all content that does not map to one of the sub-components will
  * be displayed in the final output as-is and un-modified.
@@ -69,6 +73,7 @@ export default {
     onChosen: '&',
     onUnchosen: '&',
     onShowSuggestions: '&',
-    onHideSuggestions: '&'
+    onHideSuggestions: '&',
+    scrollIntoViewAlignToTop: '<?'
   }
 };
