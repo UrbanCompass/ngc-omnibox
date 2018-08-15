@@ -713,7 +713,7 @@ export default class NgcOmniboxController {
   _onNgModelChange() {
     this.hasChoices = !!this.multiple && Array.isArray(this._ngModel) && !!this._ngModel.length;
 
-    if (this.requireMatch) {
+    if (this.requireMatch && this.hideOnChosen !== false) {
       this.query = '';
     }
   }
