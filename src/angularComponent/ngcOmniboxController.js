@@ -361,7 +361,7 @@ export default class NgcOmniboxController {
     }
   }
 
-/**
+  /**
  * Highlights the first choice in the list of choices.
  */
   highlightLastChoice() {

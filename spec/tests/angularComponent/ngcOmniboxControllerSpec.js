@@ -34,7 +34,7 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
 
   it('should remove the focus ring when the component is focused', () => {
     expect(document.styleSheets[0].insertRule)
-        .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
+      .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
   });
 
   it('should listen for field element focus events when the field is set', () => {

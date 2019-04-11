@@ -62,7 +62,7 @@ export default function ngcOmniboxFieldDirective($document, $window) {
       input.setAttribute('ng-blur', 'omniboxField.ngBlur()');
 
       inputHint.setAttribute('ng-if',
-          'omnibox.query && omnibox.hint && omnibox.query !== omnibox.hint');
+        'omnibox.query && omnibox.hint && omnibox.query !== omnibox.hint');
       inputHint.setAttribute('tabindex', -1);
       inputHint.setAttribute('readonly', true);
       inputHint.setAttribute('ng-model', 'omnibox.hint');
