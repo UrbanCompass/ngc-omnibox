@@ -17,13 +17,13 @@
               /* eslint-enable max-len, lines-around-comment */
               $http.get('https://www.govtrack.us/api/v2/role?current=true&role_type=senator')
             ])
-            .then(function (responses) {
-              states = responses[0].data;
-              searcher = new FuzzySearch(responses[1].data.objects,
+              .then(function (responses) {
+                states = responses[0].data;
+                searcher = new FuzzySearch(responses[1].data.objects,
                   ['party', 'person.firstname', 'person.lastname']);
 
-              resolve(searcher);
-            });
+                resolve(searcher);
+              });
           }
         });
       }

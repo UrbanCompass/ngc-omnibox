@@ -9,12 +9,12 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxHighlightMatchFilter', () => {
 
     it('should surround a match with strong tags by default', () => {
       expect(ngcOmniboxHighlightMatch('This is my text', 'is my'))
-          .toBe('This <strong>is my</strong> text');
+        .toBe('This <strong>is my</strong> text');
     });
 
     it('should surround a match with arbitrary markup', () => {
       expect(ngcOmniboxHighlightMatch('This is my text', 'is my', '<em class="strong">$&</em>'))
-          .toBe('This <em class="strong">is my</em> text');
+        .toBe('This <em class="strong">is my</em> text');
     });
   });
 

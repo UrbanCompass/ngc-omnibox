@@ -109,7 +109,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
     expect(() => ngcModifySuggestionsTemplate(element))
-        .toThrowError('An ngcOmniboxSuggestionsItem is required.');
+      .toThrowError('An ngcOmniboxSuggestionsItem is required.');
   });
 
   it('should modify an un-categorized subcomponent', () => {
@@ -164,6 +164,6 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
     expect(() => ngcModifySuggestionsTemplate(element))
-        .toThrowError('Cannot include more than one instance of \'ngc-omnibox-suggestions-item\'');
+      .toThrowError('Cannot include more than one instance of \'ngc-omnibox-suggestions-item\'');
   });
 });

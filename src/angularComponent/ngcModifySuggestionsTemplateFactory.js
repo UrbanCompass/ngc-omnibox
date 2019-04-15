@@ -11,7 +11,7 @@
 ngcModifySuggestionsTemplateFactory.$inject = ['$document', '$templateCache'];
 export default function ngcModifySuggestionsTemplateFactory($document, $templateCache) {
   return function ngcModifySuggestionsTemplate(element,
-      templateCacheName = `category-tmpl-${new Date().getTime() * Math.random()}`) {
+    templateCacheName = `category-tmpl-${new Date().getTime() * Math.random()}`) {
     const doc = $document[0];
 
     const categoryEl = getSubcomponent(element, 'ngc-omnibox-suggestions-category');
@@ -35,7 +35,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
     } else if (categoryEl) {
       const categoryContainer = doc.createElement('div');
       categoryContainer.setAttribute('ng-repeat',
-          'suggestion in suggestion.children || omnibox.suggestions');
+        'suggestion in suggestion.children || omnibox.suggestions');
       categoryEl.parentNode.insertBefore(categoryContainer, categoryEl);
 
       categoryEl.setAttribute('ng-if', 'suggestion.children');
@@ -50,9 +50,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       if (itemHeader) {
         itemHeader.setAttribute('suggestion', 'suggestion');
         itemHeader.setAttribute('ng-attr-aria-selected',
-            '{{suggestionItem.isHighlighted() || undefined}}');
+          '{{suggestionItem.isHighlighted() || undefined}}');
         itemHeader.setAttribute('ng-attr-aria-readonly',
-            '{{suggestionItem.isSelectable() === false || undefined}}');
+          '{{suggestionItem.isSelectable() === false || undefined}}');
         itemHeader.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
         itemHeader.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
         itemHeader.setAttribute('ng-click', 'suggestionItem.handleClick()');
@@ -63,9 +63,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-if', '!suggestion.children');
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected',
-          '{{suggestionItem.isHighlighted() || undefined}}');
+        '{{suggestionItem.isHighlighted() || undefined}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
-          '{{suggestionItem.isSelectable() === false || undefined}}');
+        '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
       itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
       itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
@@ -77,9 +77,9 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
       itemEl.setAttribute('ng-repeat', 'suggestion in omnibox.suggestions');
       itemEl.setAttribute('suggestion', 'suggestion');
       itemEl.setAttribute('ng-attr-aria-selected',
-          '{{suggestionItem.isHighlighted() || undefined}}');
+        '{{suggestionItem.isHighlighted() || undefined}}');
       itemEl.setAttribute('ng-attr-aria-readonly',
-          '{{suggestionItem.isSelectable() === false || undefined}}');
+        '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
       itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
       itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
