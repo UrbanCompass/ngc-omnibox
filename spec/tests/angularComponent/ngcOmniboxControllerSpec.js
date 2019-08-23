@@ -32,11 +32,6 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
     expect(NgcOmniboxController.$inject.join(',')).toBe('$document,$element,$scope');
   });
 
-  it('should remove the focus ring when the component is focused', () => {
-    expect(document.styleSheets[0].insertRule)
-      .toHaveBeenCalledWith('ngc-omnibox:focus {outline: none}', 0);
-  });
-
   it('should listen for field element focus events when the field is set', () => {
     const fieldEl = Object.assign({}, fakeEl);
     spyOn(fieldEl, 'addEventListener');
