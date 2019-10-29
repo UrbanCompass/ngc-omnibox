@@ -399,8 +399,9 @@ export default class NgcOmniboxController {
    *
    * @param {Object} item
    * @param {Boolean} shouldFocusField -- Whether to focus the input field after choosing
+   * @param {Object | undefined} sourceEvent -- Original angular event that triggered this choose
    */
-  choose(item, shouldFocusField = true) {
+  choose(item, shouldFocusField = true, sourceEvent = undefined) {
     if (item && this.isSelectable({suggestion: item, omnibox: this}) !== false) {
 
       const $event = {
@@ -415,7 +416,8 @@ export default class NgcOmniboxController {
           } else if (!this.multiple) {
             this.ngModel = item;
           }
-        }
+        },
+        sourceEvent
       };
 
       this.onChosen({choice: item, $event, omnibox: this});
@@ -598,9 +600,9 @@ export default class NgcOmniboxController {
         const selection = this._suggestionsUiList[this.highlightedIndex];
 
         if (selection) {
-          this.choose(selection.data);
+          this.choose(selection.data, true, event);
         } else if (!this.multiple && !this.requireMatch) {
-          this.choose(this.query);
+          this.choose(this.query, true, event);
         }
       }
     } else if (keyCode === KEY.DOWN) {

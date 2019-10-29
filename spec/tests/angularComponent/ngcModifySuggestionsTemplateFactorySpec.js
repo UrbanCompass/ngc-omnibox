@@ -18,7 +18,8 @@ const unCategorizedTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>'
 ].join('');
@@ -40,7 +41,7 @@ const categorizedTemplateOutput = [
           'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
           'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
           'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
-          'ng-click="suggestionItem.handleClick()">',
+          'ng-click="suggestionItem.handleClick($event)">',
         '{{suggestion.sample_category_title}}',
       '</h5>',
       '<div ng-repeat="suggestion in suggestion.children" ng-include="\'category-tmpl\'"></div>',
@@ -50,7 +51,7 @@ const categorizedTemplateOutput = [
         'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
         'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
         'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
-        'ng-click="suggestionItem.handleClick()">',
+        'ng-click="suggestionItem.handleClick($event)">',
       '{{suggestion.sample_item_text}}',
     '</ngc-omnibox-suggestions-item>',
   '</div>'
@@ -69,7 +70,8 @@ const loadingElTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>',
   '<ngc-omnibox-suggestions-loading role="progressbar" ng-if="omnibox.shouldShowLoadingElement">',
@@ -89,7 +91,8 @@ const noResultsElTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>',
   //                                                            vv I think this is a bug in jsdom

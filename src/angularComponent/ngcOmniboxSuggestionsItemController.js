@@ -8,8 +8,8 @@ export default class ngcOmniboxSuggestionsItemController {
     this.omnibox.highlightNone();
   }
 
-  handleClick() {
-    this.omnibox.choose(this.suggestion);
+  handleClick($event) {
+    this.omnibox.choose(this.suggestion, true, $event);
   }
 
   /**
