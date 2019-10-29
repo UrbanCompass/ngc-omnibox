@@ -1,4 +1,4 @@
-import jsdom from 'jsdom';
+import {JSDOM} from 'jsdom';
 
 import ngcModifySuggestionsTemplateFactory from '~/angularComponent/ngcModifySuggestionsTemplateFactory.js';
 
@@ -104,7 +104,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   let ngcModifySuggestionsTemplate;
 
   it('should throw an error if there is no ngc-omnibox-suggestions-item element', () => {
-    const document = jsdom.jsdom(noItemTemplate).defaultView.document;
+    const document = new JSDOM(noItemTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -115,7 +115,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify an un-categorized subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${unCategorizedTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -125,7 +125,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a categorized subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${categorizedTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -135,7 +135,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a loading subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${loadingElTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -145,7 +145,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a no-results subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${noResultsElTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -159,7 +159,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
         <ngc-omnibox-suggestions-item></ngc-omnibox-suggestions-item>
       </ngc-omnibox-suggestions>
     `;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
