@@ -1,4 +1,4 @@
-import jsdom from 'jsdom';
+import {JSDOM} from 'jsdom';
 
 import ngcModifySuggestionsTemplateFactory from '~/angularComponent/ngcModifySuggestionsTemplateFactory.js';
 
@@ -18,7 +18,8 @@ const unCategorizedTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>'
 ].join('');
@@ -40,7 +41,7 @@ const categorizedTemplateOutput = [
           'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
           'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
           'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
-          'ng-click="suggestionItem.handleClick()">',
+          'ng-click="suggestionItem.handleClick($event)">',
         '{{suggestion.sample_category_title}}',
       '</h5>',
       '<div ng-repeat="suggestion in suggestion.children" ng-include="\'category-tmpl\'"></div>',
@@ -50,7 +51,7 @@ const categorizedTemplateOutput = [
         'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
         'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
         'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
-        'ng-click="suggestionItem.handleClick()">',
+        'ng-click="suggestionItem.handleClick($event)">',
       '{{suggestion.sample_item_text}}',
     '</ngc-omnibox-suggestions-item>',
   '</div>'
@@ -69,7 +70,8 @@ const loadingElTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>',
   '<ngc-omnibox-suggestions-loading role="progressbar" ng-if="omnibox.shouldShowLoadingElement">',
@@ -89,7 +91,8 @@ const noResultsElTemplateOutput = [
       'ng-attr-aria-selected="{{suggestionItem.isHighlighted() || undefined}}" ',
       'ng-attr-aria-readonly="{{suggestionItem.isSelectable() === false || undefined}}" ',
       'ng-mouseenter="suggestionItem.handleMouseEnter()" ',
-      'ng-mouseleave="suggestionItem.handleMouseLeave()" ng-click="suggestionItem.handleClick()">',
+      'ng-mouseleave="suggestionItem.handleMouseLeave()" ',
+      'ng-click="suggestionItem.handleClick($event)">',
     '{{suggestion.sample_item_text}}',
   '</ngc-omnibox-suggestions-item>',
   //                                                            vv I think this is a bug in jsdom
@@ -104,7 +107,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   let ngcModifySuggestionsTemplate;
 
   it('should throw an error if there is no ngc-omnibox-suggestions-item element', () => {
-    const document = jsdom.jsdom(noItemTemplate).defaultView.document;
+    const document = new JSDOM(noItemTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -115,7 +118,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify an un-categorized subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${unCategorizedTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -125,7 +128,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a categorized subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${categorizedTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -135,7 +138,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a loading subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${loadingElTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -145,7 +148,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
   it('should modify a no-results subcomponent', () => {
     const elementTemplate =
         `<ngc-omnibox-suggestions>${noResultsElTemplate}</ngc-omnibox-suggestions>`;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);
@@ -159,7 +162,7 @@ describe('ngcOmnibox.angularComponent.ngcModifySuggestionsTemplateFactory', () =
         <ngc-omnibox-suggestions-item></ngc-omnibox-suggestions-item>
       </ngc-omnibox-suggestions>
     `;
-    const document = jsdom.jsdom(elementTemplate).defaultView.document;
+    const document = new JSDOM(elementTemplate).window.document;
     const element = document.querySelector('ngc-omnibox-suggestions');
 
     ngcModifySuggestionsTemplate = ngcModifySuggestionsTemplateFactory([document], templateCache);

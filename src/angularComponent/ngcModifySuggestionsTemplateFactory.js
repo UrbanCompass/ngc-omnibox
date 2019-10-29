@@ -55,7 +55,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
           '{{suggestionItem.isSelectable() === false || undefined}}');
         itemHeader.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
         itemHeader.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
-        itemHeader.setAttribute('ng-click', 'suggestionItem.handleClick()');
+        itemHeader.setAttribute('ng-click', 'suggestionItem.handleClick($event)');
       }
 
       categoryContainer.appendChild(categoryEl);
@@ -68,7 +68,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
         '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
       itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
-      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
+      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick($event)');
 
       $templateCache.put(templateCacheName, categoryContainer.innerHTML);
 
@@ -82,7 +82,7 @@ export default function ngcModifySuggestionsTemplateFactory($document, $template
         '{{suggestionItem.isSelectable() === false || undefined}}');
       itemEl.setAttribute('ng-mouseenter', 'suggestionItem.handleMouseEnter()');
       itemEl.setAttribute('ng-mouseleave', 'suggestionItem.handleMouseLeave()');
-      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick()');
+      itemEl.setAttribute('ng-click', 'suggestionItem.handleClick($event)');
 
       return element.innerHTML;
     }

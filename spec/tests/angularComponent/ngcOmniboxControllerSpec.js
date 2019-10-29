@@ -425,6 +425,15 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
         expect(omniboxController.ngModel).toEqual('three');
       });
 
+      it('should attach event source data to the event when provided', () => {
+        omniboxController.onChosen = ({$event}) => {
+          expect($event.sourceEvent).toEqual({type: 'click'});
+
+        };
+        omniboxController.choose('three', true, {type: 'click'});
+        expect(omniboxController.ngModel).toEqual('three');
+      });
+
       it('should set the ngModel to null when unchoosing if multiple is off', () => {
         omniboxController.unchoose('one');
         expect(omniboxController.ngModel).toEqual(null);
