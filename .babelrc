@@ -10,7 +10,13 @@
   "plugins": [
     ["babel-plugin-root-import", {
       "rootPathSuffix": "src"
-    }],
-    "istanbul"
-  ]
+    }]
+  ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
 }
