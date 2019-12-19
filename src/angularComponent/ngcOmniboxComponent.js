@@ -42,6 +42,8 @@ import NgcOmniboxController from './ngcOmniboxController.js';
  *       determines the value of AlignToTop that is given into scrollIntoView() when scrolling
  *       Omnibox suggestions into view.  Defaults to false.  It's useful to configure this when
  *       using the Omnibox inside of a scrollable container.
+ * - `shouldScrollIntoView {Boolean}`: An expression that should evaluate to a Boolean that
+ *       determines whether to scroll suggestions into view at all. Defaults to true.
  *
  * The component has no template, all content that does not map to one of the sub-components will
  * be displayed in the final output as-is and un-modified.
@@ -74,6 +76,7 @@ export default {
     onUnchosen: '&',
     onShowSuggestions: '&',
     onHideSuggestions: '&',
-    scrollIntoViewAlignToTop: '<?'
+    scrollIntoViewAlignToTop: '<?',
+    shouldScrollIntoView: '<?'
   }
 };

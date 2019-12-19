@@ -218,6 +218,8 @@ behavior of the omnibox:
 determines the value of AlignToTop that is given into scrollIntoView() when scrolling Omnibox
 suggestions into view.  Defaults to false.  It's useful to configure this when using the Omnibox
 inside of a scrollable container.
+- `shouldScrollIntoView {Boolean}`: An expression that should evaluate to a Boolean that
+determines whether to scroll suggestions into view at all. Defaults to true.
 
 ## Omnibox Event Bindings
 
