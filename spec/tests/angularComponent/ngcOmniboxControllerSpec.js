@@ -657,5 +657,20 @@ describe('ngcOmnibox.angularComponent.ngcOmniboxController', () => {
       omniboxController.highlightedChoice = null;
       expect(omniboxController.fieldElement.focus).toHaveBeenCalled();
     });
+
+    it('should call scrollSuggestionIntoView by default', () => {
+      const scrollSuggestionIntoViewSpy = spyOn(omniboxController, '_scrollSuggestionIntoView');
+      omniboxController.suggestions = ['test', 'me'];
+      omniboxController.highlightNextSuggestion();
+      expect(scrollSuggestionIntoViewSpy).toHaveBeenCalled();
+    });
+
+    it('should not call scrollSuggestionIntoView when shouldScrollIntoView is false', () => {
+      const scrollSuggestionIntoViewSpy = spyOn(omniboxController, '_scrollSuggestionIntoView');
+      omniboxController.shouldScrollIntoView = false;
+      omniboxController.suggestions = ['test', 'me'];
+      omniboxController.highlightNextSuggestion();
+      expect(scrollSuggestionIntoViewSpy).not.toHaveBeenCalled();
+    });
   });
 });

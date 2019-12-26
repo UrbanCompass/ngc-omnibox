@@ -240,7 +240,9 @@ export default class NgcOmniboxController {
       return this.highlightPreviousSuggestion(startHighlightIndex);
     }
 
-    this._scrollSuggestionIntoView();
+    if (this.shouldScrollIntoView !== false) {
+      this._scrollSuggestionIntoView();
+    }
 
     return newIndex;
   }
@@ -282,7 +284,9 @@ export default class NgcOmniboxController {
       return this.highlightNextSuggestion(startHighlightIndex);
     }
 
-    this._scrollSuggestionIntoView();
+    if (this.shouldScrollIntoView !== false) {
+      this._scrollSuggestionIntoView();
+    }
 
     return newIndex;
   }
@@ -726,9 +730,6 @@ export default class NgcOmniboxController {
   }
 
   _scrollSuggestionIntoView() {
-    if (this.shouldScrollIntoView === false) {
-      return;
-    }
     // Disable highlighting while scrolling so the mouse doesn't accidentally highlight a new item
     this.isHighlightingDisabled = true;
 
