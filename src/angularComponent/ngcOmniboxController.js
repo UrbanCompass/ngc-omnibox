@@ -601,7 +601,7 @@ export default class NgcOmniboxController {
 
         if (selection) {
           this.choose(selection.data, true, event);
-        } else if (!this.multiple && !this.requireMatch) {
+        } else if (!this.requireMatch) {
           this.choose(this.query, true, event);
         }
       }
